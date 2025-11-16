@@ -1,24 +1,35 @@
 #include <string>
 using namespace std;
 
-string RLECompression(string text) {
-    int dupCount = 1;
-    char prevChar = text[0];
+// Compress a string using RLE compression
+string RLECompression(string str) {
 
-    string compressedText = "";
-    for (int i = 1; i < text.length(); i++) {
-        char currentChar = text[i];
-        if (prevChar == currentChar) {
-            dupCount++;
-            if (i == text.length() - 1) {
-                compressedText = compressedText + to_string(dupCount) + prevChar;
+    // The compressed string we will build char by char
+    string compressedStr = "";
+
+    // Counts how many times a char appears consecutively
+    // Initialized to 1 since each char appears at least once
+    int dupCount = 1;
+
+    // Walk through the string char by char
+    for (int i = 0; i < str.length(); i++) {
+        char currentChar = str[i];
+
+        // Check if the next char exists
+        if (i + 1 < str.length()) {
+            char nextChar = str[i + 1];
+            // If the current and next chars equal, update the duplication count
+            if (currentChar == nextChar) {
+                dupCount++;
+                continue;
             }
-        } else {
-            compressedText = compressedText + to_string(dupCount) + prevChar;
-            prevChar = currentChar;
-            dupCount = 1;
         }
+
+        // When a sequence ends, add the char and how many times it's duplicated to the compressed string 
+        compressedStr = compressedStr + to_string(dupCount) + currentChar;
+
+        // Reset the duplication count back to 1
+        dupCount = 1;
     }
-    
-    return compressedText;
+    return compressedStr;
 }

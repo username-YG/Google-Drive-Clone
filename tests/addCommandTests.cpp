@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include "../src/addCommand.h"
 
-// Test the RLECompression on text without digits
-TEST(SanityTests, NoDigitsText) {
+// Test the RLECompression on strings without digits
+TEST(SanityTests, NoDigitsStrings) {
     EXPECT_EQ(RLECompression("AAAAAAA"), "7A");
     EXPECT_EQ(RLECompression("AAAABBBCCDAA"), "4A3B2C1D2A");
     EXPECT_EQ(RLECompression("aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz"),
