@@ -2,4 +2,4 @@
 using namespace std;
 
 // Compress a string using RLE compression
-string RLECompression(string text);
+string RLECompression(const string& str);

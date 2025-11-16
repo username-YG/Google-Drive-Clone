@@ -2,7 +2,7 @@
 using namespace std;
 
 // Compress a string using RLE compression
-string RLECompression(string str) {
+string RLECompression(const string& str) {
 
     // The compressed string we will build char by char
     string compressedStr = "";
