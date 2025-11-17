@@ -5,6 +5,6 @@
 using namespace std;
 
 // Return the RLE-Decompressed text of a compressed input string
-string RLEDecompression(string input);
+string RLEDecompression(const string& input);
 
 #endif
