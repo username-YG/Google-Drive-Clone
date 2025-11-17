@@ -5,7 +5,7 @@
 using namespace std;
 
 // Return the RLE-Decompressed text of a compressed input string
-string RLEDecompression(string input) {
+string RLEDecompression(const string& input) {
     string output;
     int n = input.length();
     for (int i = 0; i < n; ) {
