@@ -3,7 +3,7 @@
 
 using namespace std;
 
-string RLEDecompression(string input) {
+string RLEDecompression(const string& input) {
     string output;
     int n = input.length();
     for (int i = 0; i < n; ) {
