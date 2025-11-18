@@ -22,7 +22,7 @@ public:
             // Update the first argument to be the substring from the start of the string until the first space
             arguments[0] = args.substr(0, index);
             if (index < args.length() - 1) {
-                // Update the second argument to be the substring after the space and untill the end of the string
+                // Update the second argument to be the substring after the space and until the end of the string
                 arguments[1] = args.substr(index + 1);
             }
         }
