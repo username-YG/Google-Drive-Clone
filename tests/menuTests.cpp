@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "../src/cliMenu.cpp"
 
-TEST(GetSanityTest, BasicAssertions) {
+TEST(MenuTest, ParsingInput) {
     // Create an object of CLIMenu to access parse_input
     CLIMenu menu;
 
