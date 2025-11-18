@@ -2,14 +2,14 @@ FROM gcc:latest
 
 RUN apt-get update && apt-get install -y cmake
 
-COPY . /usr/src/getSanityTests
+COPY . /usr/src/getNegativeTests
 
-WORKDIR /usr/src/getSanityTests
+WORKDIR /usr/src/getNegativeTests
 
 RUN mkdir build
-WORKDIR /usr/src/getSanityTests/build
+WORKDIR /usr/src/getNegativeTests/build
 
 RUN cmake .. && make
 
 # Run tests
-CMD ["./getSanityTests"]
+CMD ["./getNegativeTests"]

@@ -14,6 +14,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(getSanityTests src/get.cpp tests/getSanityTests.cpp)
+add_executable(getNegativeTests src/get.cpp tests/getNegativeTests.cpp)
 
-target_link_libraries(getSanityTests gtest_main)
+target_link_libraries(getNegativeTests gtest_main)
