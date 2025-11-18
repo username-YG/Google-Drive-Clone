@@ -2,12 +2,11 @@ FROM gcc:latest
 
 RUN apt-get update && apt-get install -y cmake
 
-COPY . /usr/src/addCommandTests
-WORKDIR /usr/src/addCommandTests
+COPY . /usr/src/getCommandTests
+WORKDIR /usr/src/getCommandTests
 
 RUN mkdir build
-WORKDIR /usr/src/addCommandTests/build
-
+WORKDIR /usr/src/getCommandTests/build
 RUN cmake .. && make
 
-CMD ["./addCommandTests"]
+CMD ["./getCommandTests"]
