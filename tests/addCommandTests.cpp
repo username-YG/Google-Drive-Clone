@@ -12,15 +12,15 @@ TEST(AddSanityTests, NoDigitsStrings) {
 
 // Test the RLECompression on strings with digits
 TEST(AddSanityTests, WithDigitsStrings) {
-    EXPECT_EQ(RLECompression("44444AABBBBBBBBBB6666666666", "5\\42A10B10\\6"));
-    EXPECT_EQ(RLECompression("AAAA66666BBBCCD9999999999999999999999AA", "4A5\\63B2C1D22\\92A"));
+    EXPECT_EQ(RLECompression("44444AABBBBBBBBBB6666666666"), "5\\42A10B10\\6");
+    EXPECT_EQ(RLECompression("AAAA66666BBBCCD9999999999999999999999AA"), "4A5\\63B2C1D22\\92A");
     EXPECT_EQ(RLECompression("2W3\\\\4Y"), "WW\\\\\\YYYY");
-    EXPECT_EQ(RLECompression("\\444AAAAAAA777777777zzzzzzzzzz", "1\\\\3\\47A9\\710z"));
-    EXPECT_EQ(RLECompression("\\\\\\\\\\\\\\\\\\\\    22222!!!33", "10\\\\4 5\\23!2\\3")); 
-    EXPECT_EQ(RLECompression("234", "1\\21\\31\\4"));
-    EXPECT_EQ(RLECompression("\\\\5", "2\\\\1\\5"));
-    EXPECT_EQ(RLECompression("  \t\t\tZ", "2\\ 3\\\t1Z"));
-    EXPECT_EQ(RLECompression("\\78", "1\\\\1\\71\\8"));
+    EXPECT_EQ(RLECompression("\\444AAAAAAA777777777zzzzzzzzzz"), "1\\\\3\\47A9\\710z");
+    EXPECT_EQ(RLECompression("\\\\\\\\\\\\\\\\\\\\    22222!!!33"), "10\\\\4 5\\23!2\\3"); 
+    EXPECT_EQ(RLECompression("234"), "1\\21\\31\\4");
+    EXPECT_EQ(RLECompression("\\\\5"), "2\\\\1\\5");
+    EXPECT_EQ(RLECompression("  \t\t\tZ"), "2\\ 3\\\t1Z");
+    EXPECT_EQ(RLECompression("\\78"), "1\\\\1\\71\\8");
 }
 
 // Test the RLECompression on edge cases
