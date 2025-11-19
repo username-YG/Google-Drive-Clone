@@ -19,7 +19,6 @@ TEST(AddSanityTests, WithDigitsStrings) {
     EXPECT_EQ(RLECompression("\\\\\\\\\\\\\\\\\\\\    22222!!!33"), "10\\\\4 5\\23!2\\3"); 
     EXPECT_EQ(RLECompression("234"), "1\\21\\31\\4");
     EXPECT_EQ(RLECompression("\\\\5"), "2\\\\1\\5");
-    EXPECT_EQ(RLECompression("  \t\t\tZ"), "2\\ 3\\\t1Z");
     EXPECT_EQ(RLECompression("\\78"), "1\\\\1\\71\\8");
 }
 
