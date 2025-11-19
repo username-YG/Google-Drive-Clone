@@ -8,13 +8,14 @@ TEST(AddSanityTests, NoDigitsStrings) {
     EXPECT_EQ(RLECompression("aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz"), "2a2b2c2d2e2f2g2h2i2j2k2l2m2n2o2p2q2r2s2t2u2v2w2x2y2z");
     EXPECT_EQ(RLECompression("WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW"), "12W1B12W3B24W1B14W");
     EXPECT_EQ(RLECompression(",,,,    !!!! aaaa"), "4,4 4!1 4a");
+    EXPECT_EQ(RLECompression("\t\t\t"), "3\t");
 }
 
 // Test the RLECompression on strings with digits
 TEST(AddSanityTests, WithDigitsStrings) {
     EXPECT_EQ(RLECompression("44444AABBBBBBBBBB6666666666"), "5\\42A10B10\\6");
     EXPECT_EQ(RLECompression("AAAA66666BBBCCD9999999999999999999999AA"), "4A5\\63B2C1D22\\92A");
-    EXPECT_EQ(RLECompression("2W3\\\\4Y"), "WW\\\\\\YYYY");
+    EXPECT_EQ(RLECompression("WW\\\\\\YYYY"), "2W3\\\\4Y");
     EXPECT_EQ(RLECompression("\\444AAAAAAA777777777zzzzzzzzzz"), "1\\\\3\\47A9\\710z");
     EXPECT_EQ(RLECompression("\\\\\\\\\\\\\\\\\\\\    22222!!!33"), "10\\\\4 5\\23!2\\3"); 
     EXPECT_EQ(RLECompression("234"), "1\\21\\31\\4");

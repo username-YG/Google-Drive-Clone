@@ -25,11 +25,19 @@ string RLECompression(const string& str) {
             }
         }
 
-        // When a sequence ends, add the char and how many times it's duplicated to the compressed string 
-        compressedStr = compressedStr + to_string(dupCount) + currentChar;
+        // Escape digits to avoid confusion with dup counters
+        // Escape '\\' to to avoid confusion with escape characters
+        string escape = "";
+        if (isdigit(currentChar) || currentChar == '\\') {
+            escape = "\\";
+        }
+
+        // When a sequence ends, append its char and how many times it's duplicated 
+        compressedStr += to_string(dupCount) + escape + currentChar;
 
         // Reset the duplication count back to 1
         dupCount = 1;
     }
+    
     return compressedStr;
 }
