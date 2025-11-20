@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "iMenu.cpp"
+#include "IMenu.cpp"
 
 using namespace std;
 
