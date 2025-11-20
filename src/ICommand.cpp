@@ -4,5 +4,5 @@
 class ICommand {
     public:
         // The function gets a vector of arguments and returns output
-        virtual std::string execute(std::vector<std::string> args) const = 0;
+        virtual std::string execute(const std::string& args) const = 0;
 };

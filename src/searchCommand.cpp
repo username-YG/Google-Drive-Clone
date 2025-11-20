@@ -8,7 +8,7 @@ using namespace std;
 
 class searchCommand: public ICommand {
     public:
-        string execute(vector<string> args) const {
+        string execute(const string& args) const override {
             return string();
         }
 };
