@@ -14,6 +14,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(addTests src/addCommand.cpp tests/addCommandTests.cpp)
+add_executable(addTests src/addCommand.cpp src/RLE.cpp tests/addCommandTests.cpp)
 
 target_link_libraries(addTests gtest_main)

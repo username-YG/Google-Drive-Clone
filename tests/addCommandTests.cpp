@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/addCommand.cpp"
+#include <map>
 
 // Sanity tests for the function that saves text to file
 TEST(AddUnitTests, SaveToFileSanityTest) {
@@ -41,6 +42,33 @@ TEST(AddUnitTests, ParseingTest) {
     EXPECT_EQ(add.parseArgs("filename.txt "), vector<string>({"filename.txt", ""}));
     EXPECT_THROW(add.parseArgs("filename.txt"), invalid_argument);
     EXPECT_THROW(add.parseArgs(""), invalid_argument);
+}
+
+// Ensure correct parsing of command arguments
+TEST(AddIntegrationTest, SanityTests) {
+    map<string, string> IOMap = {
+        {"testfile AAAAAAA", "7A"},
+        {"testfile WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW", "12W1B12W3B24W1B14W"},
+        {"testfile 44444AABBBBBBBBBB6666666666", "5\\42A10B10\\6"},
+        {"testfile \\\\\\\\\\\\\\\\\\\\    22222!!!33", "10\\\\4 5\\23!2\\3"},
+        {"testfile ", ""}
+    };
+    addCommand add;
+    for (auto const& [key, val] : IOMap) {
+        string output = add.execute(key);
+        EXPECT_EQ(output, "");
+        string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
+        ifstream file(path + "/testfile");
+        // Make sure the file exists
+        ASSERT_TRUE(file.is_open());
+        // Read the file and compare with the correct content
+        stringstream buffer;
+        buffer << file.rdbuf();
+        EXPECT_EQ(buffer.str(), val);
+        // Close and remove the dir
+        file.close();
+        filesystem::remove_all(path + "/testpath");
+    }
 }
 
 // Init and run all tests
