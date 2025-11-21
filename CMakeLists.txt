@@ -1,19 +1,30 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(my_project)
+project(searchFilesTests)
 
-set(CMAKE_CXX_STANDARD 11)
+# Use C++17 for std::filesystem
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Find pthreads
+find_package(Threads REQUIRED)
+
+# GoogleTest
 include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
 )
 
-# For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(addCommandTests src/addCommand.cpp tests/addCommandTests.cpp)
+# Add your sources and tests
+add_executable(searchFilesTests
+    src/get.cpp
+    src/search.cpp
+    tests/searchFilesTests.cpp
+)
 
-target_link_libraries(addCommandTests gtest_main)
+# Link GTest and pthread
+target_link_libraries(searchFilesTests gtest_main Threads::Threads)
