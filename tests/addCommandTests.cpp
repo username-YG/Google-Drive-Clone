@@ -1,10 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/addCommand.cpp"
 
-#include <fstream>
-#include <map>
-#include <filesystem>
-
 // Sanity tests for the function that saves text to file
 TEST(AddUnitTests, SaveToFileSanityTest) {
     vector<string> texts = {
@@ -33,8 +29,18 @@ TEST(AddUnitTests, SaveToFileSanityTest) {
 TEST(AddUnitTests, SaveToFileEdgeTest) {
     addCommand add;
     add.saveToFile("testpath/testfile", "Hello world");
-    EXPECT_THROW(add.saveToFile("testpath/testfile", "Hello world"), std::invalid_argument);
+    EXPECT_THROW(add.saveToFile("testpath/testfile", "Hello world"), invalid_argument);
     filesystem::remove_all("testpath");
+}
+
+// Ensure correct parsing of command arguments
+TEST(AddUnitTests, ParseingTest) {
+    addCommand add;
+    EXPECT_EQ(add.parseArgs("filename.txt hello world"), vector<string>({"filename.txt", "hello world"}));
+    EXPECT_EQ(add.parseArgs("filename.txt  "), vector<string>({"filename.txt", " "}));
+    EXPECT_EQ(add.parseArgs("filename.txt "), vector<string>({"filename.txt", ""}));
+    EXPECT_THROW(add.parseArgs("filename.txt"), invalid_argument);
+    EXPECT_THROW(add.parseArgs(""), invalid_argument);
 }
 
 // Init and run all tests
