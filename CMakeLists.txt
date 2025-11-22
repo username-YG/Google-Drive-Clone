@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(my_project)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -14,6 +14,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(RLEAllTests src/RLE.cpp tests/RLETests.cpp)
+add_executable(getCommandUnitTests src/RLE.cpp src/getCommand.cpp tests/getCommandTests.cpp)
 
-target_link_libraries(RLEAllTests gtest_main)
+target_link_libraries(getCommandUnitTests gtest_main)

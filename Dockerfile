@@ -9,4 +9,4 @@ RUN mkdir build
 WORKDIR /usr/src/getCommandTests/build
 RUN cmake .. && make
 
-CMD ["./RLEAllTests"]
+CMD ["./getCommandUnitTests"]
