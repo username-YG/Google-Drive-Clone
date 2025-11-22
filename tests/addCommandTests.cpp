@@ -14,13 +14,9 @@ TEST(AddUnitTests, SaveToFileSanityTest) {
     for (const auto& text : texts) {
         add.saveToFile("testpath/testfile", text);
         ifstream file("testpath/testfile");
-        // Make sure the file exists
         ASSERT_TRUE(file.is_open());
-        // Read the file and compare the content with text
-        stringstream buffer;
-        buffer << file.rdbuf();
-        EXPECT_EQ(buffer.str(), text);
-        // Close and remove the dir
+        // Read the file and compare it's content with text
+        EXPECT_EQ(string(istreambuf_iterator<char>(file) , {}), text);
         file.close();
         filesystem::remove_all("testpath");
     }
@@ -54,20 +50,15 @@ TEST(AddIntegrationTest, SanityTests) {
         {"testfile ", ""}
     };
     addCommand add;
-    for (auto const& [key, val] : IOMap) {
-        string output = add.execute(key);
-        EXPECT_EQ(output, "");
-        string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
+    string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
+    for (auto const& [key, value] : IOMap) {
+        EXPECT_EQ(add.execute(key), "");
         ifstream file(path + "/testfile");
-        // Make sure the file exists
         ASSERT_TRUE(file.is_open());
-        // Read the file and compare with the correct content
-        stringstream buffer;
-        buffer << file.rdbuf();
-        EXPECT_EQ(buffer.str(), val);
-        // Close and remove the dir
+        // Read the file and compare it's content with value
+        EXPECT_EQ(string((istreambuf_iterator<char>(file)) , {}), value);
         file.close();
-        filesystem::remove_all(path + "/testpath");
+        filesystem::remove_all(path);
     }
 }
 

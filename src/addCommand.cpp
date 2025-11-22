@@ -1,4 +1,5 @@
-#include "ICommand.cpp"
+#include "ICommand.h"
+
 #include "RLE.h"
 
 #include <string>
@@ -18,9 +19,8 @@ class addCommand: public ICommand {
             string content = parsed[1];
             string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
 
-            
-            //saveToFile(path + filename, RLECompression(content));
-            return RLECompression(content);
+            saveToFile(path + "/" + filename, RLECompression(content));
+            return string();
         }
 
     private:
