@@ -1,4 +1,4 @@
-#include "ICommand.h"
+#include "ICommand.cpp"
 
 #include "RLE.h"
 
