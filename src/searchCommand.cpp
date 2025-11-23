@@ -31,6 +31,10 @@ bool searchCommand::IsContainsContent(const string& fileContent, const string& c
 // Search for files containing the given content
 std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const string& content) const {
 
+    if (content == "") {
+        throw std::runtime_error("Content must not be empty.");
+    }
+
     if (root_path.empty()) {
         throw std::runtime_error("Root path cannot be empty.");
     }

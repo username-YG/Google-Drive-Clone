@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 
-int main() {
+int main(int argc, char **argv) {
     ICompression* comp = new RLE();
     IMenu *menu = new CLIMenu();
     map<string, ICommand*> commands = {
