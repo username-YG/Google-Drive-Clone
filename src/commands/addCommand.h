@@ -2,7 +2,7 @@
 #define ADD_H
 
 #include "ICommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 #include <string>
 #include <vector>
 

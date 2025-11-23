@@ -1,10 +1,10 @@
 #include "App.h"
-#include "addCommand.h"
-#include "getCommand.h"
-#include "searchCommand.h"
-#include "cliMenu.h"
-#include "ICompression.h"
-#include "RLE.h"
+#include "commands/addCommand.h"
+#include "commands/getCommand.h"
+#include "commands/searchCommand.h"
+#include "menus/cliMenu.h"
+#include "../compressions/ICompression.h"
+#include "compressions/RLE.h"
 
 #include <map>
 #include <string>

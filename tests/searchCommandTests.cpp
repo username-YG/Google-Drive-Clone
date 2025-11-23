@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../src/searchCommand.h"
-#include "../src/RLE.h"
+#include "../src/commands/searchCommand.h"
+#include "../src/compressions/RLE.h"
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>

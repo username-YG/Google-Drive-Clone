@@ -15,11 +15,11 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(tests
-                src/addCommand.cpp
-                src/getCommand.cpp
-                src/searchCommand.cpp
-                src/RLE.cpp
-                src/cliMenu.cpp
+                src/commands/addCommand.cpp
+                src/commands/getCommand.cpp
+                src/commands/searchCommand.cpp
+                src/compressions/RLE.cpp
+                src/menus/cliMenu.cpp
                 src/App.cpp
                 tests/addCommandTests.cpp
                 tests/getCommandTests.cpp

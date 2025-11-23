@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/cliMenu.h"
+#include "../src/menus/cliMenu.h"
 
 TEST(MenuTest, ParsingInput) {
     // Create an object of CLIMenu to access parse_input

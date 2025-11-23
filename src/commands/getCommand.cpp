@@ -1,5 +1,5 @@
 #include "getCommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 
 #include <stdexcept>
 #include <vector>

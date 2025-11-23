@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/RLE.h"
+#include "../src/compressions/RLE.h"
 
 // Test the RLECompression on strings without digits
 TEST(RLECompressSanityTests, NoDigitsStrings) {

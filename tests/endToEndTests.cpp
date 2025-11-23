@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include "../src/App.h"
-#include "../src/cliMenu.h"
-#include "../src/addCommand.h"
-#include "../src/getCommand.h"
-#include "../src/searchCommand.h"
-#include "../src/RLE.h"
+#include "../src/menus/cliMenu.h"
+#include "../src/commands/addCommand.h"
+#include "../src/commands/getCommand.h"
+#include "../src/commands/searchCommand.h"
+#include "../src/compressions/RLE.h"
 
 #include <map>
 #include <string>

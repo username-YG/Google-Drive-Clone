@@ -1,5 +1,5 @@
 #include "searchCommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 
 #include <iostream>
 #include <fstream>

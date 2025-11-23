@@ -1,5 +1,5 @@
 #include "addCommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 
 #include <stdexcept>
 #include <fstream>

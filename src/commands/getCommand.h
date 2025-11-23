@@ -2,7 +2,7 @@
 #define GET_H
 
 #include "ICommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 #include <string>
 
 using namespace std;

@@ -2,7 +2,7 @@
 #define SEARCH_H
 
 #include "ICommand.h"
-#include "ICompression.h"
+#include "../compressions/ICompression.h"
 using namespace std;
 
 class searchCommand: public ICommand {

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../src/addCommand.h"
-#include "../src/RLE.h"
+#include "../src/commands/addCommand.h"
+#include "../src/compressions/RLE.h"
 #include <fstream>
 #include <filesystem>
 #include <map>
