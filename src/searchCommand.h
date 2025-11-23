@@ -8,6 +8,7 @@ using namespace std;
 class searchCommand: public ICommand {
     friend class isContain_sanityTests_Test;
     friend class searchFilesFromPath_sanityTests_Test;
+    friend class searchFilesFromPath_edgeCaseTests_Test;
 
     public:
         searchCommand(ICompression* comp);

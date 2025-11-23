@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
+#include <stdexcept>
 
 // checks sanity of functionality of IsContain function
 TEST(isContain, sanityTests) {
@@ -45,7 +46,7 @@ TEST(searchFilesFromPath, sanityTests) {
 
     searchCommand search(new RLE());
     std::vector<std::string> expected1 = {"a.txt", "b.txt", "c.txt"};
-    std::vector<std::string> actual1 = search.SearchFilesFromPath(path_c_str, "");
+    std::vector<std::string> actual1 = search.SearchFilesFromPath(path_c_str, "string");
     std::vector<std::string> expected2 = {};
     std::vector<std::string> actual2 = search.SearchFilesFromPath(path_c_str, "hello world");
     std::vector<std::string> expected3 = {"a.txt"};
@@ -69,4 +70,19 @@ TEST(searchFilesFromPath, sanityTests) {
     EXPECT_EQ(actual4, expected4);
 
     std::filesystem::remove_all(path_c_str);
+}
+
+// checks edge cases of SearchFilesFromPath function
+TEST(searchFilesFromPath, edgeCaseTests) {
+    searchCommand search(new RLE());
+    EXPECT_THROW(search.SearchFilesFromPath("testpath", "content"), std::runtime_error);
+    EXPECT_THROW(search.SearchFilesFromPath("", "content"), std::runtime_error);
+    EXPECT_THROW(search.SearchFilesFromPath("testpath", ""), std::runtime_error);
+    filesystem::create_directories("testpath");
+    ofstream a("testpath/a.txt");
+    if (a) {
+        a << "1c1o1n1t1e1n1t";
+        a.close();
+    }
+    EXPECT_EQ(search.SearchFilesFromPath("testpath", "content"), std::vector<std::string>({"a.txt"}));
 }
