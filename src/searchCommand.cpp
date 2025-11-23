@@ -1,5 +1,5 @@
 #include "searchCommand.h"
-#include "RLE.h"
+#include "ICompression.h"
 
 #include <iostream>
 #include <fstream>
@@ -7,8 +7,10 @@
 #include <filesystem>
 #include <stdexcept>
 
+searchCommand::searchCommand(ICompression* comp) : comp(comp) {}
+
 string searchCommand::execute(const string& args) const {
-    const char* path_c_str = getenv("APP_PATH");
+    const char* path_c_str = getenv("APP_PATH") ? getenv("APP_PATH") : "";
     const vector<string> foundFiles = SearchFilesFromPath(path_c_str, args);
     string output;
     for (const auto& file : foundFiles)
@@ -60,7 +62,7 @@ std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, 
                                         std::istreambuf_iterator<char>());
 
                 // decompress the compressed content
-                std::string decompressedContent = RLEDecompression(fileContent);
+                std::string decompressedContent = comp->decompress(fileContent);
 
                 // check if the file contains the requested content
                 if (IsContainsContent(decompressedContent, content)) {

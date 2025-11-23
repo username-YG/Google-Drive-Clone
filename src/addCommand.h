@@ -2,6 +2,7 @@
 #define ADD_H
 
 #include "ICommand.h"
+#include "ICompression.h"
 #include <string>
 #include <vector>
 
@@ -9,9 +10,11 @@ using namespace std;
 
 class addCommand: public ICommand {
     public:
+        addCommand(ICompression* comp);
         string execute(const string& args) const override;
 
     private:
+        ICompression* comp;
         void saveToFile(const string& pathStr, const string& content) const;
         vector<string> parseArgs(const string& args) const;
 

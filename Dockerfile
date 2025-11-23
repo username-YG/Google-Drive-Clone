@@ -10,4 +10,4 @@ WORKDIR /usr/src/mytest/build
 
 RUN cmake .. && make
 
-CMD ["./endToEndTests"]
+CMD ["./tests"]

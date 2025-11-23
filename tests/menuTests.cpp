@@ -12,9 +12,3 @@ TEST(MenuTest, ParsingInput) {
     EXPECT_EQ(menu.parse_input("upload file1.txt file2.txt"), vector<string>({"upload", "file1.txt file2.txt"}));
     EXPECT_EQ(menu.parse_input("delete   file3.txt"), vector<string>({"delete", "  file3.txt"}));
 }
-
-// Initiate and run the tests for the menu parsing
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

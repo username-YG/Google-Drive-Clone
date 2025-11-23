@@ -1,10 +1,12 @@
 #include "getCommand.h"
-#include "RLE.h"
+#include "ICompression.h"
 
 #include <stdexcept>
 #include <vector>
 #include <fstream>
 #include <iostream>
+
+getCommand::getCommand(ICompression* comp) : comp(comp) {}
 
 void getCommand::isValidFilename(const string& filename) const {
     // Checking if the filename is an empty string
@@ -42,7 +44,7 @@ string getCommand::execute(const string& args) const {
     // Getting the file's content from the specified environment variable path
     string fileContent = getFileContent(filename, getenv("APP_PATH"));
     // Decompressing the RLE compressed content of the file
-    string decompressedContent = RLEDecompression(fileContent);
+    string decompressedContent = comp->decompress(fileContent);
     // Returning the original decompressed content
     return decompressedContent + "\n";
 }

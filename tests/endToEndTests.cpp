@@ -4,6 +4,7 @@
 #include "../src/addCommand.h"
 #include "../src/getCommand.h"
 #include "../src/searchCommand.h"
+#include "../src/RLE.h"
 
 #include <map>
 #include <string>
@@ -23,9 +24,9 @@ TEST(AppCliRleTests, EndToEndTests) {
     };
 
     map<string, ICommand*> commands = {
-        {"add", new addCommand()},
-        {"get", new getCommand()},
-        {"search", new searchCommand()}
+        {"add", new addCommand(new RLE())},
+        {"get", new getCommand(new RLE())},
+        {"search", new searchCommand(new RLE())}
     };
 
     // Backup cin and cout buffers
@@ -49,6 +50,7 @@ TEST(AppCliRleTests, EndToEndTests) {
     }
 }
 
+// Init and run all tests
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

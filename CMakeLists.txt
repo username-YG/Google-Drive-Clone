@@ -14,14 +14,19 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(endToEndTests
+add_executable(tests
                 src/addCommand.cpp
                 src/getCommand.cpp
                 src/searchCommand.cpp
                 src/RLE.cpp
                 src/cliMenu.cpp
                 src/App.cpp
+                tests/addCommandTests.cpp
+                tests/getCommandTests.cpp
+                tests/searchCommandTests.cpp
+                tests/menuTests.cpp
+                tests/RLETests.cpp
                 tests/endToEndTests.cpp
                 )
 
-target_link_libraries(endToEndTests gtest_main)
+target_link_libraries(tests gtest_main)

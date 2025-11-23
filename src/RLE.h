@@ -1,13 +1,12 @@
 #ifndef RLE_H
 #define RLE_H
 
-#include <string>
-using namespace std;
+#include "ICompression.h"
 
-// Compress a string using RLE compression
-string RLECompression(const string& str);
-
-// Return the RLE-Decompressed text of a compressed input string
-string RLEDecompression(const string& input);
+class RLE : public ICompression {
+    public:
+        string compress(const string& str) const override;
+        string decompress(const string& str) const override;
+};
 
 #endif

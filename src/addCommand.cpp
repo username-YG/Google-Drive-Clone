@@ -1,9 +1,11 @@
 #include "addCommand.h"
-#include "RLE.h"
+#include "ICompression.h"
 
 #include <stdexcept>
 #include <fstream>
 #include <filesystem>
+
+addCommand::addCommand(ICompression* comp) : comp(comp) {}
 
 string addCommand::execute(const string& args) const {
     // Get filename and content from args and path from environment variable
@@ -12,7 +14,7 @@ string addCommand::execute(const string& args) const {
     string content = parsed[1];
     string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
 
-    saveToFile(path + "/" + filename, RLECompression(content));
+    saveToFile(path + "/" + filename, comp->compress(content));
     return string();
 }
 

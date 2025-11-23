@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/getCommand.h"
+#include "../src/RLE.h"
 #include <stdexcept>
 #include <string>
 #include <fstream>
@@ -10,7 +11,7 @@ using namespace std;
 
 // Test the splitArgs function
 TEST(FilenameValiditySanityTest, FilenameValidityCheck) {
-    getCommand cmd;
+    getCommand cmd(new RLE());
 
     // Valid filenames - no exceptions should be thrown
     EXPECT_NO_THROW(cmd.isValidFilename("valid_filename.txt"));
@@ -19,7 +20,7 @@ TEST(FilenameValiditySanityTest, FilenameValidityCheck) {
 }
 
 TEST(FilenameValidityNegativeTest, FilenameValidityCheck) {
-    getCommand cmd;
+    getCommand cmd(new RLE());
 
     // Invalid filenames - exceptions should be thrown
     EXPECT_THROW(cmd.isValidFilename("invalid filename.txt"), std::invalid_argument);
@@ -29,7 +30,7 @@ TEST(FilenameValidityNegativeTest, FilenameValidityCheck) {
 }
 
 TEST(GettingFileContentSanityTest, GettingFileContent) {
-    getCommand cmd;
+    getCommand cmd(new RLE());
 
     // Creating and openning temporary file1 for the getFileContent method testing
     string filename1 = "testfile1.txt";
@@ -85,7 +86,7 @@ TEST(GettingFileContentSanityTest, GettingFileContent) {
 }
 
 TEST(GettingFileContentNegativeTest, GettingFileContent) {
-    getCommand cmd;
+    getCommand cmd(new RLE());
 
     // Testing getFileContent method with non-existing files
     EXPECT_THROW(cmd.getFileContent("non_existing_file.txt", "."), runtime_error);
@@ -93,10 +94,10 @@ TEST(GettingFileContentNegativeTest, GettingFileContent) {
 }
 
 TEST(GetCommandIntegrationTest, ExecuteMethod) {
-    getCommand cmd;
+    getCommand cmd(new RLE());
 
     // Getting the path from the environment variable
-    string path = getenv("APP_PATH");
+    string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
     filesystem::create_directories(path);
 
     // Creating and openning temporary file for the execute method testing
@@ -139,9 +140,4 @@ TEST(GetCommandIntegrationTest, ExecuteMethod) {
     if (!filesystem::remove_all(path)) {
         throw runtime_error("Could not delete test files in: " + path);
     }
-}
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
