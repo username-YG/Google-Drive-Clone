@@ -13,4 +13,4 @@ RUN mkdir build
 WORKDIR /usr/src/searchCommandTests/build
 RUN cmake .. && make
 
-CMD ["./searchCommandTests"]
+CMD ["./getCommandUnitTests"]

@@ -1,9 +1,2 @@
-search
-docker-compose.yml
-tests/searchFilesTests.cpp
-tests/containTextsTests.cpp
-src/search
-src/search.cpp
-/.vscode
-/.idea
-/cmake-build-debug
+.vscode
+include
