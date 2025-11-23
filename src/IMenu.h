@@ -1,11 +1,16 @@
+#ifndef IMENU_H
+#define IMENU_H
+
 #include <vector>
 #include <string>
 
 using namespace std;
 
 class IMenu {
-public:
-    // Defining the interface methods
-    virtual vector<string> nextCommand() = 0;
-    virtual void displayOutput(const string& output) = 0;
+    public:
+        // Next command returns the command name and args
+        virtual vector<string> nextCommand() const = 0;
+        virtual void displayOutput(const string& output) const = 0;
 };
+
+#endif

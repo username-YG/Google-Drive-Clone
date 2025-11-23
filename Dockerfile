@@ -2,15 +2,12 @@ FROM gcc:latest
 
 RUN apt-get update && apt-get install -y cmake
 
-COPY . /usr/src/searchCommandTests
-WORKDIR /usr/src/searchCommandTests
-
-COPY tests/Files /tests/Files
-
-ENV SEARCH_PATH=/tests/Files
+COPY . /usr/src/mytest
+WORKDIR /usr/src/mytest
 
 RUN mkdir build
-WORKDIR /usr/src/searchCommandTests/build
+WORKDIR /usr/src/mytest/build
+
 RUN cmake .. && make
 
-CMD ["./getCommandUnitTests"]
+CMD ["./endToEndTests"]

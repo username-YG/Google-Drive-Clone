@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include "../src/searchCommand.h"
-#include <vector>
 #include <algorithm>
 #include <cstdlib>
 
@@ -17,10 +16,10 @@ TEST(isContain, sanityTests) {
 // checks sanity of functionality of SearchFilesFromPath function
 TEST(searchFilesFromPath, sanityTests) {
 
-    const char* path_c_str = std::getenv("SEARCH_PATH");
+    const char* path_c_str = std::getenv("APP_PATH");
 
     // checks the environment variable really loaded
-    ASSERT_NE(path_c_str, nullptr) << "SEARCH_PATH environment variable is not set in Docker!";
+    ASSERT_NE(path_c_str, nullptr) << "APP_PATH environment variable is not set in Docker!";
 
     std::vector<std::string> expected1 = {"a.txt", "b.txt", "c.txt"};
     std::vector<std::string> actual1 = SearchFilesFromPath(path_c_str, "");

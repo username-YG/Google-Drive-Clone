@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/getCommand.cpp"
+#include "../src/getCommand.h"
 #include <stdexcept>
 #include <string>
 #include <fstream>
@@ -96,7 +96,7 @@ TEST(GetCommandIntegrationTest, ExecuteMethod) {
     getCommand cmd;
 
     // Getting the path from the environment variable
-    string path = getenv("GET_PATH");
+    string path = getenv("APP_PATH");
     filesystem::create_directories(path);
 
     // Creating and openning temporary file for the execute method testing
@@ -130,9 +130,9 @@ TEST(GetCommandIntegrationTest, ExecuteMethod) {
     file3.close();
 
     // Testing execute method
-    EXPECT_EQ(cmd.execute("testfile_execute_1.txt"), "AAAABBBCCDAA");
-    EXPECT_EQ(cmd.execute("testfile_execute_2.txt"), "5555555555YYYYYa");
-    EXPECT_EQ(cmd.execute("testfile_execute_3.txt"), "\\AA33333ZZZZ");
+    EXPECT_EQ(cmd.execute("testfile_execute_1.txt"), "AAAABBBCCDAA\n");
+    EXPECT_EQ(cmd.execute("testfile_execute_2.txt"), "5555555555YYYYYa\n");
+    EXPECT_EQ(cmd.execute("testfile_execute_3.txt"), "\\AA33333ZZZZ\n");
 
     // Deleting the temporary files after having finished the tests
     // Checking if the files were deleted successfully, if not - throwing an exception

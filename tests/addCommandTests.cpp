@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/addCommand.cpp"
+#include "../src/addCommand.h"
 #include <map>
 
 // Sanity tests for the function that saves text to file

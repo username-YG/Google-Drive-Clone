@@ -1,38 +1,33 @@
-#include "ICommand.cpp"
-#include <string>
+#include "searchCommand.h"
 #include "RLE.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <filesystem>
-#include <vector>
 #include <stdexcept>
-#include "searchCommand.h"
 
-using namespace std;
-
-class searchCommand: public ICommand {
-    public:
-        string execute(const string& args) const {
-            const char* path_c_str = std::getenv("SEARCH_PATH");
-            const std::vector<string> foundFiles = SearchFilesFromPath(path_c_str, args);
-            for (const auto& file : foundFiles)
-            {
-                std::cout << file << std::endl;
-            }
-        }
-};
+string searchCommand::execute(const string& args) const {
+    const char* path_c_str = getenv("APP_PATH");
+    const vector<string> foundFiles = SearchFilesFromPath(path_c_str, args);
+    string output;
+    for (const auto& file : foundFiles)
+    {
+        output += file + "\n";
+    }
+    return output;
+}
 
 using string = std::string;
 namespace fs = std::filesystem;
 
-bool IsContainsContent(const string& fileContent, const string& content) {
+bool searchCommand::IsContainsContent(const string& fileContent, const string& content) const {
     // if fileContent contains content, return true; otherwise, return false
     return fileContent.find(content) != string::npos;
 }
 
 // Search for files containing the given content
-std::vector<string> SearchFilesFromPath(const string& root_path, const string& content) {
+std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const string& content) const {
 
     if (root_path.empty()) {
         throw std::runtime_error("Root path cannot be empty.");
