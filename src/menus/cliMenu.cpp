@@ -26,7 +26,7 @@ vector<string> CLIMenu::parse_input(const string& args) const {
 vector<string> CLIMenu::nextCommand() const {
     string input;
     // Get the next command from the user
-    getline(std::cin, input);
+    getline(cin, input);
     // Parse the input into arguments
     vector<string> args_vector = parse_input(input);
     return args_vector;

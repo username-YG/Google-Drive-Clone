@@ -9,12 +9,11 @@
 class App {
     private:
         IMenu* menu;
-        std::map<std::string, ICommand*> commands;
-
+        map<string, ICommand*> commands;
         void iteration();
 
     public:
-        App(IMenu* menu, std::map<std::string, ICommand*> commands);
+        App(IMenu* menu, map<string, ICommand*> commands);
         void run();
 
         friend class AppCliRleTests_EndToEndTests_Test;

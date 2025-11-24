@@ -56,21 +56,21 @@ TEST(RLEDecompressSanityTest, TextWithNumericsCompression) {
 TEST(RLEDecompressNegativeTest, TextWithoutNumericsCompression) {
     RLE rle;
     // Test invalid RLE-Decompression inputs for basic text without numeric characters
-    EXPECT_THROW(rle.decompress("0A"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("3A5!w"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("Q"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("2A3"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("&A"), std::invalid_argument);
+    EXPECT_THROW(rle.decompress("0A"), invalid_argument);
+    EXPECT_THROW(rle.decompress("3A5!w"), invalid_argument);
+    EXPECT_THROW(rle.decompress("Q"), invalid_argument);
+    EXPECT_THROW(rle.decompress("2A3"), invalid_argument);
+    EXPECT_THROW(rle.decompress("&A"), invalid_argument);
 }
 
 TEST(RLEDecompressNegativeTest, TextWithNumericsCompression) {
     RLE rle;
     // Test invalid RLE-Decompression inputs for text with numeric characters
-    EXPECT_THROW(rle.decompress("0\\5A"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("3A\\3"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("Q33"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("2A43"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("4\\&A\\4"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("4\\A"), std::invalid_argument);
-    EXPECT_THROW(rle.decompress("1B5\\y5\\7"), std::invalid_argument);
+    EXPECT_THROW(rle.decompress("0\\5A"), invalid_argument);
+    EXPECT_THROW(rle.decompress("3A\\3"), invalid_argument);
+    EXPECT_THROW(rle.decompress("Q33"), invalid_argument);
+    EXPECT_THROW(rle.decompress("2A43"), invalid_argument);
+    EXPECT_THROW(rle.decompress("4\\&A\\4"), invalid_argument);
+    EXPECT_THROW(rle.decompress("4\\A"), invalid_argument);
+    EXPECT_THROW(rle.decompress("1B5\\y5\\7"), invalid_argument);
 }

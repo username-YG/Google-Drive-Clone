@@ -7,8 +7,6 @@
 #include <cstdio>
 #include <filesystem>
 
-using namespace std;
-
 // Test the splitArgs function
 TEST(FilenameValiditySanityTest, FilenameValidityCheck) {
     getCommand cmd(new RLE());
@@ -23,10 +21,10 @@ TEST(FilenameValidityNegativeTest, FilenameValidityCheck) {
     getCommand cmd(new RLE());
 
     // Invalid filenames - exceptions should be thrown
-    EXPECT_THROW(cmd.isValidFilename("invalid filename.txt"), std::invalid_argument);
-    EXPECT_THROW(cmd.isValidFilename("invalid  filename.doc"), std::invalid_argument);
-    EXPECT_THROW(cmd.isValidFilename("invalid "), std::invalid_argument);
-    EXPECT_THROW(cmd.isValidFilename(""), std::invalid_argument);
+    EXPECT_THROW(cmd.isValidFilename("invalid filename.txt"), invalid_argument);
+    EXPECT_THROW(cmd.isValidFilename("invalid  filename.doc"), invalid_argument);
+    EXPECT_THROW(cmd.isValidFilename("invalid "), invalid_argument);
+    EXPECT_THROW(cmd.isValidFilename(""), invalid_argument);
 }
 
 TEST(GettingFileContentSanityTest, GettingFileContent) {

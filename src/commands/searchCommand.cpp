@@ -17,6 +17,7 @@ string searchCommand::execute(const string& args) const {
     {
         output += foundFiles[i];
         // Add spaces filenames and enter at the end
+        
         output += (i + 1 == foundFiles.size()) ? "\n" : " ";
     }
     return output;

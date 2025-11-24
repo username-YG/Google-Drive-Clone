@@ -10,8 +10,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 TEST(AppCliRleTests, EndToEndTests) {
     map<string, string> IOMap = {
         {"add testfile1 AAAAAAA", ""},

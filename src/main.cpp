@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 
+// Run the app with RLE and CLI and add, get, search commands
 int main(int argc, char **argv) {
     ICompression* comp = new RLE();
     IMenu *menu = new CLIMenu();

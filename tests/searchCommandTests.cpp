@@ -25,9 +25,9 @@ TEST(searchFilesFromPath, sanityTests) {
     filesystem::create_directories(path_c_str);
 
     // create tests files
-    ofstream a(std::string(path_c_str) + "/a.txt");
-    ofstream b(std::string(path_c_str) + "/b.txt");
-    ofstream c(std::string(path_c_str) + "/c.txt");
+    ofstream a(string(path_c_str) + "/a.txt");
+    ofstream b(string(path_c_str) + "/b.txt");
+    ofstream c(string(path_c_str) + "/c.txt");
     if (a) {
         a << "1s1t1r1i1n1g1\\1";
         a.close();
@@ -45,23 +45,23 @@ TEST(searchFilesFromPath, sanityTests) {
     ASSERT_NE(path_c_str, nullptr) << "APP_PATH environment variable is not set in Docker!";
 
     searchCommand search(new RLE());
-    std::vector<std::string> expected1 = {"a.txt", "b.txt", "c.txt"};
-    std::vector<std::string> actual1 = search.SearchFilesFromPath(path_c_str, "string");
-    std::vector<std::string> expected2 = {};
-    std::vector<std::string> actual2 = search.SearchFilesFromPath(path_c_str, "hello world");
-    std::vector<std::string> expected3 = {"a.txt"};
-    std::vector<std::string> actual3 = search.SearchFilesFromPath(path_c_str, "string1");
-    std::vector<std::string> expected4 = {"b.txt"};
-    std::vector<std::string> actual4 = search.SearchFilesFromPath(path_c_str, "string2");
+    vector<string> expected1 = {"a.txt", "b.txt", "c.txt"};
+    vector<string> actual1 = search.SearchFilesFromPath(path_c_str, "string");
+    vector<string> expected2 = {};
+    vector<string> actual2 = search.SearchFilesFromPath(path_c_str, "hello world");
+    vector<string> expected3 = {"a.txt"};
+    vector<string> actual3 = search.SearchFilesFromPath(path_c_str, "string1");
+    vector<string> expected4 = {"b.txt"};
+    vector<string> actual4 = search.SearchFilesFromPath(path_c_str, "string2");
     // 1. Sort both vectors alphabetically
-    std::sort(expected1.begin(), expected1.end());
-    std::sort(actual1.begin(), actual1.end());
-    std::sort(expected2.begin(), expected2.end());
-    std::sort(actual2.begin(), actual2.end());
-    std::sort(expected3.begin(), expected3.end());
-    std::sort(actual3.begin(), actual3.end());
-    std::sort(expected4.begin(), expected4.end());
-    std::sort(actual4.begin(), actual4.end());
+    sort(expected1.begin(), expected1.end());
+    sort(actual1.begin(), actual1.end());
+    sort(expected2.begin(), expected2.end());
+    sort(actual2.begin(), actual2.end());
+    sort(expected3.begin(), expected3.end());
+    sort(actual3.begin(), actual3.end());
+    sort(expected4.begin(), expected4.end());
+    sort(actual4.begin(), actual4.end());
 
     // 2. Compare the sorted vectors
     EXPECT_EQ(actual1, expected1);
@@ -69,20 +69,20 @@ TEST(searchFilesFromPath, sanityTests) {
     EXPECT_EQ(actual3, expected3);
     EXPECT_EQ(actual4, expected4);
 
-    std::filesystem::remove_all(path_c_str);
+    filesystem::remove_all(path_c_str);
 }
 
 // checks edge cases of SearchFilesFromPath function
 TEST(searchFilesFromPath, edgeCaseTests) {
     searchCommand search(new RLE());
-    EXPECT_THROW(search.SearchFilesFromPath("testpath", "content"), std::runtime_error);
-    EXPECT_THROW(search.SearchFilesFromPath("", "content"), std::runtime_error);
-    EXPECT_THROW(search.SearchFilesFromPath("testpath", ""), std::runtime_error);
+    EXPECT_THROW(search.SearchFilesFromPath("testpath", "content"), runtime_error);
+    EXPECT_THROW(search.SearchFilesFromPath("", "content"), runtime_error);
+    EXPECT_THROW(search.SearchFilesFromPath("testpath", ""), runtime_error);
     filesystem::create_directories("testpath");
     ofstream a("testpath/a.txt");
     if (a) {
         a << "1c1o1n1t1e1n1t";
         a.close();
     }
-    EXPECT_EQ(search.SearchFilesFromPath("testpath", "content"), std::vector<std::string>({"a.txt"}));
+    EXPECT_EQ(search.SearchFilesFromPath("testpath", "content"), vector<string>({"a.txt"}));
 }

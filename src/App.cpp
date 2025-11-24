@@ -17,6 +17,7 @@ void App::iteration() {
 }
 
 void App::run() {
+    // The app runs forever
     while (true) {
         iteration();
     }
