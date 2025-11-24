@@ -30,4 +30,17 @@ Currently, our application supports the following commands:
 
 ## Running Instructions
 1. Clone the project repository from the Git.
-2. ....
+2. Open the Dockerfile Desktop
+3. Run in your terminal the line: "docker-compose run --rm app" (without the "")
+Now you are able to use the program as much as you'd like!
+Note for the checker: you can run the tests using the command "docker-compose run --rm gtests"
+
+## Code Examples:
+<img width="1600" height="626" alt="image" src="https://github.com/user-attachments/assets/ce8db6cd-2ad6-4364-a562-6985c5771214" />
+<img width="1600" height="569" alt="image" src="https://github.com/user-attachments/assets/88f3b9df-35c6-43ad-a086-5f9fa28f4db4" />
+<img width="1600" height="631" alt="image" src="https://github.com/user-attachments/assets/3241f4fd-bd57-4fad-9be6-201f5898c1fe" />
+
+Enjoy!
+
+
+
