@@ -1,10 +1,8 @@
-#include <string>
+#include "RLE.h"
 #include <stdexcept>
 
-using namespace std;
-
 // Compress a string using RLE compression
-string RLECompression(const string& str) {
+string RLE::compress(const string& str) const {
 
     // Counts how many times a char appears consecutively
     size_t count = 1;
@@ -32,7 +30,7 @@ string RLECompression(const string& str) {
 }
 
 // Return the RLE-Decompressed text of a compressed input string
-string RLEDecompression(const string& input) {
+string RLE::decompress(const string& input) const {
     string output;
     size_t n = input.length(), count = 0, index = 0;
 

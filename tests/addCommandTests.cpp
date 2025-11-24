@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
-#include "../src/addCommand.cpp"
+#include "../src/commands/addCommand.h"
+#include "../src/compressions/RLE.h"
+#include <fstream>
+#include <filesystem>
 #include <map>
 
 // Sanity tests for the function that saves text to file
@@ -10,7 +13,7 @@ TEST(AddUnitTests, SaveToFileSanityTest) {
         "Hello.\nWorld.\nHow\tAre\tYou?\n",
         ""
     };
-    addCommand add;
+    addCommand add(new RLE());
     for (const auto& text : texts) {
         add.saveToFile("testpath/testfile", text);
         ifstream file("testpath/testfile");
@@ -24,7 +27,7 @@ TEST(AddUnitTests, SaveToFileSanityTest) {
 
 // Saving an existing file invalid
 TEST(AddUnitTests, SaveToFileEdgeTest) {
-    addCommand add;
+    addCommand add(new RLE());
     add.saveToFile("testpath/testfile", "Hello world");
     EXPECT_THROW(add.saveToFile("testpath/testfile", "Hello world"), invalid_argument);
     filesystem::remove_all("testpath");
@@ -32,7 +35,7 @@ TEST(AddUnitTests, SaveToFileEdgeTest) {
 
 // Ensure correct parsing of command arguments
 TEST(AddUnitTests, ParseingTest) {
-    addCommand add;
+    addCommand add(new RLE());
     EXPECT_EQ(add.parseArgs("filename.txt hello world"), vector<string>({"filename.txt", "hello world"}));
     EXPECT_EQ(add.parseArgs("filename.txt  "), vector<string>({"filename.txt", " "}));
     EXPECT_EQ(add.parseArgs("filename.txt "), vector<string>({"filename.txt", ""}));
@@ -49,7 +52,7 @@ TEST(AddIntegrationTest, SanityTests) {
         {"testfile \\\\\\\\\\\\\\\\\\\\    22222!!!33", "10\\\\4 5\\23!2\\3"},
         {"testfile ", ""}
     };
-    addCommand add;
+    addCommand add(new RLE());
     string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";
     for (auto const& [key, value] : IOMap) {
         EXPECT_EQ(add.execute(key), "");
@@ -60,10 +63,4 @@ TEST(AddIntegrationTest, SanityTests) {
         file.close();
         filesystem::remove_all(path);
     }
-}
-
-// Init and run all tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
