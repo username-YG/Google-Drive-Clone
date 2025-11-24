@@ -13,15 +13,16 @@ string searchCommand::execute(const string& args) const {
     const char* path_c_str = getenv("APP_PATH") ? getenv("APP_PATH") : "";
     const vector<string> foundFiles = SearchFilesFromPath(path_c_str, args);
     string output;
-    for (const auto& file : foundFiles)
+    for (size_t i = 0; i < foundFiles.size(); i++)
     {
-        output += file + "\n";
+        output += foundFiles[i];
+        // Add spaces filenames and enter at the end
+        output += (i + 1 == foundFiles.size()) ? "\n" : " ";
     }
     return output;
 }
 
-using string = std::string;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 bool searchCommand::IsContainsContent(const string& fileContent, const string& content) const {
     // if fileContent contains content, return true; otherwise, return false
@@ -29,18 +30,18 @@ bool searchCommand::IsContainsContent(const string& fileContent, const string& c
 }
 
 // Search for files containing the given content
-std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const string& content) const {
+vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const string& content) const {
 
     if (content == "" || root_path.empty()) {
-        throw std::runtime_error("Content and root path must not be empty.");
+        throw runtime_error("Content and root path must not be empty.");
     }
 
-    std::vector<string> results;
+    vector<string> results;
 
     try {
         // check the directory exists
         if (!fs::exists(root_path) || !fs::is_directory(root_path)) {
-            throw std::runtime_error("Path does not exist or is not a directory: " + root_path);
+            throw runtime_error("Path does not exist or is not a directory: " + root_path);
         }
 
         // recursive iterator to go through all files and directories under root_path
@@ -49,20 +50,20 @@ std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, 
             if (entry.is_regular_file()) {
 
                 // open the file
-                std::ifstream file(entry.path());
+                ifstream file(entry.path());
 
                 // if didnt open
                 if (!file.is_open()) {
-                    std::cerr << "Warning: Could not open file " << entry.path().string() << std::endl;
+                    cerr << "Warning: Could not open file " << entry.path().string() << endl;
                     continue;
                 }
 
                 // take the content of the file
-                std::string fileContent((std::istreambuf_iterator<char>(file)),
-                                        std::istreambuf_iterator<char>());
+                string fileContent((istreambuf_iterator<char>(file)),
+                                        istreambuf_iterator<char>());
 
                 // decompress the compressed content
-                std::string decompressedContent = comp->decompress(fileContent);
+                string decompressedContent = comp->decompress(fileContent);
 
                 // check if the file contains the requested content
                 if (IsContainsContent(decompressedContent, content)) {
@@ -71,7 +72,7 @@ std::vector<string> searchCommand::SearchFilesFromPath(const string& root_path, 
             }
         }
     } catch (const fs::filesystem_error& e) {
-        throw std::runtime_error("FileSystem error during search: " + std::string(e.what()));
+        throw runtime_error("FileSystem error during search: " + string(e.what()));
     }
 
     return results;

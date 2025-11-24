@@ -3,7 +3,7 @@
 #include "commands/getCommand.h"
 #include "commands/searchCommand.h"
 #include "menus/cliMenu.h"
-#include "../compressions/ICompression.h"
+#include "compressions/ICompression.h"
 #include "compressions/RLE.h"
 
 #include <map>

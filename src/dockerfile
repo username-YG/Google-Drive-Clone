@@ -6,6 +6,6 @@ WORKDIR /usr/googledrive/app
 RUN mkdir build
 WORKDIR /usr/googledrive/app/build
 
-RUN g++ -std=c++17 ../**.cpp -o app
+RUN g++ -std=c++17 $(find .. -name '*.cpp') -o app
 
 CMD ["./app"]

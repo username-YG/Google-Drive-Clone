@@ -2,17 +2,22 @@ services:
   app:
     # The path in which files will be saved
     environment:
-      - APP_PATH="mypath"
+      - APP_PATH=/mypath
     # Defines a interactive shell
     stdin_open: true
     tty: true
     build:
       context: ./src
       dockerfile: dockerfile
+    volumes:
+      - appfiles:/mypath
 
   gtests:
     environment:
-      - APP_PATH="mypath"
+      - APP_PATH=/mypath
     build:
       context: .
       dockerfile: dockerfile
+
+volumes:
+  appfiles:
