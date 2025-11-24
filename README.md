@@ -33,7 +33,7 @@ Currently, our application supports the following commands:
 ```shell
 git clone https://github.com/username-YG/Google-Drive-Project-ASP
 ```
-2. Open Docker Desktop
+2. Open Docker Desktop and go into the directory of the cloned repository
 3. Run in your terminal the line:
 ```shell
 docker-compose run --rm app
