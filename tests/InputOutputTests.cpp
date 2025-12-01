@@ -35,8 +35,7 @@ TEST(IOTests, SocketTests) {
     SocketInputOutput socketIO(testSock[0], testSock[1]);
     for (const auto& text : texts) {
         socketIO.returnOutput(text);
-        string input = socketIO.getInput();
-        EXPECT_EQ(input.substr(input.find(' ') + 1), text);
+        EXPECT_EQ(socketIO.getInput(), text);
     }
 
     close(testSock[0]);
