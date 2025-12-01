@@ -19,7 +19,7 @@ add_executable(tests
                 src/commands/getCommand.cpp
                 src/commands/searchCommand.cpp
                 src/compressions/RLE.cpp
-                src/InputOutput/StreamInputOutput.cpp
+                src/InputOutputs/StreamInputOutput.cpp
                 src/App.cpp
                 tests/addCommandTests.cpp
                 tests/getCommandTests.cpp

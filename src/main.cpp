@@ -2,7 +2,7 @@
 #include "commands/addCommand.h"
 #include "commands/getCommand.h"
 #include "commands/searchCommand.h"
-#include "InputOutput/StreamInputOutput.h"
+#include "InputOutputs/StreamInputOutput.h"
 #include "compressions/ICompression.h"
 #include "compressions/RLE.h"
 

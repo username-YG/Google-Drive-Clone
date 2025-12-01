@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/InputOutput/StreamInputOutput.h"
+#include "../src/InputOutputs/StreamInputOutput.h"
 #include <map>
 
 // Testing the IO from stream functionality

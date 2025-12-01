@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/App.h"
-#include "../src/InputOutput/StreamInputOutput.h"
+#include "../src/InputOutputs/StreamInputOutput.h"
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
 #include "../src/commands/searchCommand.h"
