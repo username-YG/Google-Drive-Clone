@@ -25,6 +25,7 @@ add_executable(tests
                 tests/getCommandTests.cpp
                 tests/searchCommandTests.cpp
                 tests/RLETests.cpp
+                tests/InputOutputTests.cpp
                 tests/appTests.cpp
                 )
 
