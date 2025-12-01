@@ -1,22 +1,25 @@
 #ifndef APP_H
 #define APP_H
 
-#include "menus/IMenu.h"
+#include "InputOutput/IInputOutput.h"
 #include "commands/ICommand.h"
 #include <map>
 #include <string>
+#include <vector>
 
 class App {
     private:
-        IMenu* menu;
+        IInputOutput* IO;
         map<string, ICommand*> commands;
         void iteration();
+        static vector<string> parse_input(const string& args);
 
     public:
-        App(IMenu* menu, map<string, ICommand*> commands);
+        App(IInputOutput* IO, map<string, ICommand*> commands);
         void run();
 
-        friend class AppCliRleTests_EndToEndTests_Test;
+        friend class AppClIRleTests_EndToEndTests_Test;
+        friend class ParsingTests_AllTests_Test;
 };
 
 #endif

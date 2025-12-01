@@ -19,14 +19,13 @@ add_executable(tests
                 src/commands/getCommand.cpp
                 src/commands/searchCommand.cpp
                 src/compressions/RLE.cpp
-                src/menus/cliMenu.cpp
+                src/InputOutput/StreamInputOutput.cpp
                 src/App.cpp
                 tests/addCommandTests.cpp
                 tests/getCommandTests.cpp
                 tests/searchCommandTests.cpp
-                tests/menuTests.cpp
                 tests/RLETests.cpp
-                tests/endToEndTests.cpp
+                tests/appTests.cpp
                 )
 
 target_link_libraries(tests gtest_main)
