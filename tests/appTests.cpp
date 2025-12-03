@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "../src/App.h"
-#include "../src/menus/cliMenu.h"
+#include "../src/InputOutputs/StreamInputOutput.h"
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
 #include "../src/commands/searchCommand.h"
@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-TEST(AppCliRleTests, EndToEndTests) {
+TEST(AppClIRleTests, EndToEndTests) {
     map<string, string> IOMap = {
         {"add testfile1 AAAAAAA", ""},
         {"get testfile1", "AAAAAAA\n"},
@@ -38,7 +38,7 @@ TEST(AppCliRleTests, EndToEndTests) {
         cout.rdbuf(output.rdbuf());
 
         // Run an iteration and check what was printed
-        App app(new CLIMenu(), commands);
+        App app(new StreamInputOutput(), commands);
         app.iteration();
         EXPECT_EQ(output.str(), value);
 
@@ -46,6 +46,15 @@ TEST(AppCliRleTests, EndToEndTests) {
         cin.rdbuf(cinbuf);
         cout.rdbuf(coutbuf);
     }
+}
+
+TEST(ParsingTests, AllTests) {
+    // Test parsing
+    EXPECT_EQ(App::parse_input("get valid_file.txt"), vector<string>({"get", "valid_file.txt"}));
+    EXPECT_EQ(App::parse_input("geta"), vector<string>({"geta", ""}));
+    EXPECT_EQ(App::parse_input("get "), vector<string>({"get", ""}));
+    EXPECT_EQ(App::parse_input("upload file1.txt file2.txt"), vector<string>({"upload", "file1.txt file2.txt"}));
+    EXPECT_EQ(App::parse_input("delete   file3.txt"), vector<string>({"delete", "  file3.txt"}));
 }
 
 // Init and run all tests

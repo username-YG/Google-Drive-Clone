@@ -2,7 +2,7 @@
 #include "commands/addCommand.h"
 #include "commands/getCommand.h"
 #include "commands/searchCommand.h"
-#include "menus/cliMenu.h"
+#include "InputOutputs/StreamInputOutput.h"
 #include "compressions/ICompression.h"
 #include "compressions/RLE.h"
 
@@ -12,13 +12,13 @@
 // Run the app with RLE and CLI and add, get, search commands
 int main(int argc, char **argv) {
     ICompression* comp = new RLE();
-    IMenu *menu = new CLIMenu();
+    StreamInputOutput *cli = new StreamInputOutput();
     map<string, ICommand*> commands = {
         {"add", new addCommand(comp)},
         {"get", new getCommand(comp)},
         {"search", new searchCommand(comp)}
     };
 
-    App app(menu, commands);
+    App app(cli, commands);
     app.run();
 }
