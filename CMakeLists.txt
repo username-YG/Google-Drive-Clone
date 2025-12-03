@@ -22,6 +22,7 @@ add_executable(tests
                 src/InputOutputs/StreamInputOutput.cpp
                 src/InputOutputs/SocketInputOutput.cpp
                 src/App.cpp
+                src/clientHandlers/naiveClientHandler.cpp
                 tests/addCommandTests.cpp
                 tests/getCommandTests.cpp
                 tests/searchCommandTests.cpp
