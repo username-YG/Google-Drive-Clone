@@ -20,6 +20,7 @@ add_executable(tests
                 src/commands/searchCommand.cpp
                 src/compressions/RLE.cpp
                 src/InputOutputs/StreamInputOutput.cpp
+                src/InputOutputs/SocketInputOutput.cpp
                 src/App.cpp
                 tests/addCommandTests.cpp
                 tests/getCommandTests.cpp
