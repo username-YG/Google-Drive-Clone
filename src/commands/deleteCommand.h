@@ -1,4 +1,4 @@
-#ifndef GET_H
+#ifndef DELETE_H
 #define GET_H
 
 #include "ICommand.h"
