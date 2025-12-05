@@ -15,7 +15,8 @@
 void testClientServer(vector<pair<string, string>> IOMap, map<string, ICommand*> commands) {
 
     NaiveClientHandler handler;
-    TCPServer server(commands, &handler);
+    mutex lock;
+    TCPServer server(commands, &handler, lock);
 
     // Use the first port number that works
     int port = MIN_PORT;

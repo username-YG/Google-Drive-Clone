@@ -6,16 +6,21 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <mutex>
+
+using namespace std;
 
 class App {
     private:
         IInputOutput* IO;
         map<string, ICommand*> commands;
+        mutex& lock;
         void iteration();
         static vector<string> parse_input(const string& args);
 
     public:
-        App(IInputOutput* IO, map<string, ICommand*> commands);
+        App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock);
+        ~App();
         void run();
 
         friend class AppClIRleTests_EndToEndTests_Test;

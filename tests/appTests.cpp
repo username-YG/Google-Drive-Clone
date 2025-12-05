@@ -44,7 +44,8 @@ TEST(AppClIRleTests, EndToEndTests) {
 
         // Run an iteration and check what was printed
         StreamInputOutput* streamIO = new StreamInputOutput();
-        App app(streamIO, commands);
+        mutex lock;
+        App app(streamIO, commands, lock);
         app.iteration();
         EXPECT_EQ(output.str(), value);
 
