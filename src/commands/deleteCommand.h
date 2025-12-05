@@ -1,5 +1,5 @@
-#ifndef GET_H
-#define GET_H
+#ifndef DELETE_H
+#define DELETE_H
 
 #include "ICommand.h"
 #include <string>
@@ -15,9 +15,9 @@ class deleteCommand: public ICommand {
 
     private:
         // Validating the filename and checking for its existence
-        void isValidFile(const string& filename) const;
+        void isValidFile(const string& filename, const string& path) const;
         // Deleting the specified file
-        void deleteFile(const string& filename) const;
+        void deleteFile(const string& filename, const string& path) const;
 
     public:
         deleteCommand();
