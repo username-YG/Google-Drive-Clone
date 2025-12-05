@@ -11,20 +11,25 @@
 #include <vector>
 
 TEST(AppClIRleTests, EndToEndTests) {
-    map<string, string> IOMap = {
-        {"add testfile1 AAAAAAA", ""},
-        {"get testfile1", "AAAAAAA\n"},
-        {"get blah", ""},
-        {"add testfile2 44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
-        {"get testfile2", "44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
-        {"search B", "testfile2\n"},
-        {"search C", ""}
+    // The command name is 
+    vector<pair<string, string>> IOMap = {
+        {"POST testfile1 XXXXXXX", ""},
+        {"get testfile1", "XXXXXXX\n"},
+        {"GET blah", ""},
+        {"pOst testfile2 44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
+        {"GeT testfile2", "44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
+        {"search Y", "testfile2\n"},
+        {"SEARCh Z", ""}
     };
 
+    RLE comp;
+    addCommand add(&comp);
+    getCommand get(&comp);
+    searchCommand search(&comp);
     map<string, ICommand*> commands = {
-        {"add", new addCommand(new RLE())},
-        {"get", new getCommand(new RLE())},
-        {"search", new searchCommand(new RLE())}
+        {"POST", &add},
+        {"GET", &get},
+        {"SEARCH", &search},
     };
 
     // Backup cin and cout buffers
@@ -38,7 +43,8 @@ TEST(AppClIRleTests, EndToEndTests) {
         cout.rdbuf(output.rdbuf());
 
         // Run an iteration and check what was printed
-        App app(new StreamInputOutput(), commands);
+        StreamInputOutput* streamIO = new StreamInputOutput();
+        App app(streamIO, commands);
         app.iteration();
         EXPECT_EQ(output.str(), value);
 

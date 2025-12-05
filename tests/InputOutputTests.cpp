@@ -30,7 +30,7 @@ TEST(IOTests, SocketTests) {
     int testSock[2];
 
     int status = socketpair(AF_UNIX, SOCK_STREAM, 0, testSock);
-    if (status < 0) { perror("socketpair"); return; }
+    if (status < 0) { return; }
 
     SocketInputOutput socketIO(testSock[0], testSock[1]);
     for (const auto& text : texts) {
