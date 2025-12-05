@@ -1,0 +1,11 @@
+FROM gcc:latest
+
+COPY src /usr/googledrive/app
+WORKDIR /usr/googledrive/app
+
+RUN mkdir build
+WORKDIR /usr/googledrive/app/build
+
+RUN g++ $(find .. -name "*.cpp" ! -name "server.cpp") -o client
+
+CMD ["./client", "server", "8080"]

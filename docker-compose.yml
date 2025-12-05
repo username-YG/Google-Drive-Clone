@@ -1,23 +1,35 @@
 services:
-  app:
+  server:
     # The path in which files will be saved
     environment:
       - APP_PATH=/mypath
+    build:
+      context: .
+      dockerfile: src/servers/dockerfile
+    volumes:
+      - appfiles:/mypath
+    networks:
+      - app_net
+
+  client:
     # Defines a interactive shell
     stdin_open: true
     tty: true
     build:
-      context: ./src
-      dockerfile: dockerfile
-    volumes:
-      - appfiles:/mypath
+      context: .
+      dockerfile: src/clients/dockerfile
+    networks:
+      - app_net
 
   gtests:
     environment:
       - APP_PATH=/mypath
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: tests/dockerfile
 
 volumes:
   appfiles:
+
+networks:
+  app_net:
