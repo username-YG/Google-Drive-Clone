@@ -50,6 +50,14 @@ vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const
 
             if (entry.is_regular_file()) {
 
+                string filename = entry.path().filename().string();
+
+                // check if the name of the file contains the text
+                if (IsContainsContent(filename, content)) {
+                    // if found, add it to result
+                    results.push_back(filename);
+                    continue; // move to next iteration, no need to check content because the file already added to result
+                }
                 // open the file
                 ifstream file(entry.path());
 
