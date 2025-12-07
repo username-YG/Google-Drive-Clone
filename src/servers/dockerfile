@@ -8,4 +8,4 @@ WORKDIR /usr/googledrive/app/build
 
 RUN g++ $(find .. -name "*.cpp" ! -name "client.cpp") -o server
 
-CMD ["./server", "8080"]
+CMD ./server $APP_PORT
