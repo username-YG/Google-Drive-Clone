@@ -10,6 +10,7 @@
  */
 class IClient {
 public:
+     // @brief Virtual Destructor.
     virtual ~IClient() = default;
 
     /**

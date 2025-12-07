@@ -18,6 +18,7 @@ add_executable(tests
                 ../src/commands/addCommand.cpp
                 ../src/commands/getCommand.cpp
                 ../src/commands/searchCommand.cpp
+                ../src/commands/deleteCommand.cpp
                 ../src/compressions/RLE.cpp
                 ../src/InputOutputs/StreamInputOutput.cpp
                 ../src/InputOutputs/SocketInputOutput.cpp
@@ -28,6 +29,7 @@ add_executable(tests
                 addCommandTests.cpp
                 getCommandTests.cpp
                 searchCommandTests.cpp
+                deleteCommandTests.cpp
                 RLETests.cpp
                 InputOutputTests.cpp
                 appTests.cpp
