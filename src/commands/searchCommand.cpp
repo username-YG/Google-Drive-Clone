@@ -34,7 +34,7 @@ bool searchCommand::IsContainsContent(const string& fileContent, const string& c
 vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const string& content) const {
 
     if (content == "" || root_path.empty()) {
-        throw runtime_error("Content and root path must not be empty.");
+        throw runtime_error("Invalid command: content and root path must not be empty.");
     }
 
     vector<string> results;
@@ -42,7 +42,7 @@ vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const
     try {
         // check the directory exists
         if (!fs::exists(root_path) || !fs::is_directory(root_path)) {
-            throw runtime_error("Path does not exist or is not a directory: " + root_path);
+            throw runtime_error("Logical error: path does not exist or is not a directory: " + root_path);
         }
 
         // recursive iterator to go through all files and directories under root_path

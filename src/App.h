@@ -14,12 +14,19 @@ class App {
     private:
         IInputOutput* IO;
         map<string, ICommand*> commands;
+        string (*outputHandler)(string&, string&, string&);
         mutex& lock;
         void iteration();
         static vector<string> parse_input(const string& args);
 
     public:
-        App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock);
+        App(
+            IInputOutput* IO,
+            map<string, ICommand*> commands,
+            mutex& lock,
+            // By default just return the output as it is
+            string (*outputHandler)(string&, string&, string&) = [](string&, string& output, string&) { return output; }
+        );
         ~App();
         void run();
 
