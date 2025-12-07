@@ -73,18 +73,22 @@ TEST(ClientServerTests, ServerUnitTests) {
 TEST(ClientServerTests, endToEndTests) {
 
     vector<pair<string, string>> IOMap = {
-        {"POST testfile3 AAAAAAA", ""},
-        {"get testfile3", "AAAAAAA\n"},
-        {"POST testfile4 AAAAAAA", ""},
-        {"get testfile4", "AAAAAAA\n"},
-        {"invalid blah blah", ""},
-        {"pOst testfile5 44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
-        {"GeT testfile5", "44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
-        {"search B", "testfile5\n"},
-        {"SEARCh C", ""},
-        {"delete testfile3", ""},
-        {"DELETE testfile4", ""},
-        {"deLETe testfile5", ""}
+        {"POST testfile3 AAAAAAA", "201 Created\n"},
+        {"get testfile3", "200 Ok\n\nAAAAAAA\n"},
+        {"search AAAAAAA", "200 Ok\n\ntestfile3\n"},
+        {"POST testfile4 AAAAAAA", "201 Created\n"},
+        {"get testfile4", "200 Ok\n\nAAAAAAA\n"},
+        {"invalid blah blah", "400 Bad Request\n"},
+        {"post", "400 Bad Request\n"},
+        {"pOst testfile5 44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))", "201 Created\n"},
+        {"GeT testfile5", "200 Ok\n\n44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
+        {"search B", "200 Ok\n\ntestfile5\n"},
+        {"SEARCh C", "200 Ok\n\n"},
+        {"delete testfile3", "204 No Content\n"},
+        {"DELETE testfile4", "204 No Content\n"},
+        {"deLETe testfile5", "204 No Content\n"},
+        {"get testfileerror", "404 Not Found\n"},
+        {"deLETe testfileerror", "404 Not Found\n"}
     };
 
     RLE comp;
