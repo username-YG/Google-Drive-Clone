@@ -53,6 +53,16 @@ TEST(searchFilesFromPath, sanityTests) {
     vector<string> actual3 = search.SearchFilesFromPath(path_c_str, "string1");
     vector<string> expected4 = {"b.txt"};
     vector<string> actual4 = search.SearchFilesFromPath(path_c_str, "string2");
+
+    vector<string> expected5 = {"a.txt", "b.txt", "c.txt"};
+    vector<string> actual5 = search.SearchFilesFromPath(path_c_str, "txt");
+    vector<string> expected6 = {"a.txt", "b.txt", "c.txt"};
+    vector<string> actual6 = search.SearchFilesFromPath(path_c_str, ".t");
+    vector<string> expected7 = {"a.txt"};
+    vector<string> actual7 = search.SearchFilesFromPath(path_c_str, "a");
+    vector<string> expected8 = {"b.txt"};
+    vector<string> actual8 = search.SearchFilesFromPath(path_c_str, "b.txt");
+
     // 1. Sort both vectors alphabetically
     sort(expected1.begin(), expected1.end());
     sort(actual1.begin(), actual1.end());
@@ -63,11 +73,25 @@ TEST(searchFilesFromPath, sanityTests) {
     sort(expected4.begin(), expected4.end());
     sort(actual4.begin(), actual4.end());
 
+    sort(expected5.begin(), expected5.end());
+    sort(actual5.begin(), actual5.end());
+    sort(expected6.begin(), expected6.end());
+    sort(actual6.begin(), actual6.end());
+    sort(expected7.begin(), expected7.end());
+    sort(actual7.begin(), actual7.end());
+    sort(expected8.begin(), expected8.end());
+    sort(actual8.begin(), actual8.end());
+
     // 2. Compare the sorted vectors
     EXPECT_EQ(actual1, expected1);
     EXPECT_EQ(actual2, expected2);
     EXPECT_EQ(actual3, expected3);
     EXPECT_EQ(actual4, expected4);
+
+    EXPECT_EQ(actual5, expected5);
+    EXPECT_EQ(actual6, expected6);
+    EXPECT_EQ(actual7, expected7);
+    EXPECT_EQ(actual8, expected8);
 
     filesystem::remove_all(path_c_str);
 }
