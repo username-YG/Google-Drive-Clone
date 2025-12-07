@@ -4,6 +4,7 @@
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
 #include "../src/commands/searchCommand.h"
+#include "../src/commands/deleteCommand.h"
 #include "../src/compressions/RLE.h"
 
 #include <map>
@@ -16,20 +17,26 @@ TEST(AppClIRleTests, EndToEndTests) {
         {"POST testfile1 XXXXXXX", ""},
         {"get testfile1", "XXXXXXX\n"},
         {"GET blah", ""},
+        {"invalid blah blah", ""},
         {"pOst testfile2 44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
         {"GeT testfile2", "44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
         {"search Y", "testfile2\n"},
-        {"SEARCh Z", ""}
+        {"SEARCh Z", ""},
+        {"delete testfile1", ""},
+        {"DELeTE testfile2", ""}
     };
 
     RLE comp;
     addCommand add(&comp);
     getCommand get(&comp);
     searchCommand search(&comp);
+    deleteCommand deleteC;
+
     map<string, ICommand*> commands = {
         {"POST", &add},
         {"GET", &get},
         {"SEARCH", &search},
+        {"DELETE", &deleteC}
     };
 
     // Backup cin and cout buffers

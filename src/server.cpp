@@ -3,6 +3,7 @@
 #include "commands/addCommand.h"
 #include "commands/getCommand.h"
 #include "commands/searchCommand.h"
+#include "commands/deleteCommand.h"
 #include "clientHandlers/naiveClientHandler.h"
 
 #include <iostream>
@@ -18,12 +19,14 @@ int main(int argc, char *argv[]) {
     addCommand add(&comp);
     getCommand get(&comp);
     searchCommand search(&comp);
+    deleteCommand deleteC;
 
     // Map command name to class
     map<string, ICommand*> commands = {
         {"POST", &add},
         {"GET", &get},
         {"SEARCH", &search},
+        {"DELETE", &deleteC}
     };
 
     // An handler for new users

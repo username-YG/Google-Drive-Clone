@@ -13,14 +13,21 @@ void App::iteration() {
     // Ensure this is a real command
     if (commands.find(command[0]) != commands.end()) {
 
-        // Run command and return output
+        // Lock the execution and execute
+        string output;
+        lock.lock();
         try {
-            lock.lock();
-            string output = commands[command[0]]->execute(command[1]);
-            lock.unlock();
-            try { IO->returnOutput(output); } catch (...) { return; }
-        } catch (...) { return; }
+            output = commands[command[0]]->execute(command[1]);
+        } catch (...) {}
+        lock.unlock();
 
+        // Return output
+        try {
+            IO->returnOutput(output);
+        } catch (...) {}
+
+    } else {
+        IO->returnOutput("");
     }
 
 }

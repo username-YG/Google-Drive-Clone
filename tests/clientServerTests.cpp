@@ -7,6 +7,7 @@
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
 #include "../src/commands/searchCommand.h"
+#include "../src/commands/deleteCommand.h"
 #include "../src/compressions/RLE.h"
 
 #define MIN_PORT 49152
@@ -76,20 +77,26 @@ TEST(ClientServerTests, endToEndTests) {
         {"get testfile3", "AAAAAAA\n"},
         {"POST testfile4 AAAAAAA", ""},
         {"get testfile4", "AAAAAAA\n"},
+        {"invalid blah blah", ""},
         {"pOst testfile5 44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
         {"GeT testfile5", "44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
         {"search B", "testfile5\n"},
-        {"SEARCh C", ""}
+        {"SEARCh C", ""},
+        {"delete testfile3", ""},
+        {"DELETE testfile4", ""},
+        {"deLETe testfile5", ""}
     };
 
     RLE comp;
     addCommand add(&comp);
     getCommand get(&comp);
     searchCommand search(&comp);
+    deleteCommand deleteC;
     map<string, ICommand*> commands = {
         {"POST", &add},
         {"GET", &get},
         {"SEARCH", &search},
+        {"DELETE", &deleteC}
     };
 
     testClientServer(IOMap, commands);

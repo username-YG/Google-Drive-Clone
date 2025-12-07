@@ -63,7 +63,6 @@ vector<string> searchCommand::SearchFilesFromPath(const string& root_path, const
 
                 // if didnt open
                 if (!file.is_open()) {
-                    cerr << "Warning: Could not open file " << entry.path().string() << endl;
                     continue;
                 }
 
