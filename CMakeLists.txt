@@ -30,6 +30,9 @@ add_executable(tests
                 tests/RLETests.cpp
                 tests/InputOutputTests.cpp
                 tests/appTests.cpp
-                )
+        src/clients/IClient.h
+        src/clients/TCPClient.cpp
+        src/clients/TCPClient.h
+)
 
 target_link_libraries(tests gtest_main)
