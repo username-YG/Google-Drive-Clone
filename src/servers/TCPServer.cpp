@@ -29,6 +29,39 @@ void TCPServer::startServer(int port) {
 
 }
 
+// Decides what output to return based on command name, output and exceptions
+// Response code are part of the server logic, not the app or commands
+string outputHanler(string &name, string &output, string &eMsg) {
+
+    if (eMsg == "") {
+
+        // Sucess status
+        if (name == "POST") {
+            return "201 Created\n";
+        } else if (name == "GET" || name == "SEARCH") {
+            return "200 Ok\n\n" + output;
+        } else if (name == "DELETE") {
+            return "204 No Content\n";
+        } else {
+            // Test commands shouldn't have responses
+            return output;
+        }
+
+    } else {
+
+        // Error status
+        if (eMsg.find("Invalid command") != string::npos) {
+            return "400 Bad Request\n";
+        } else if (eMsg.find("Logical error") != string::npos) {
+            return "404 Not Found\n";
+        } else {
+            return "500 Internal Server Error\n";
+        }
+
+    }
+
+}
+
 void TCPServer::serveClient() const {
     struct sockaddr_in clientAddr;
     socklen_t clientAddrLen = sizeof(clientAddr);
@@ -39,7 +72,7 @@ void TCPServer::serveClient() const {
 
     // Creating an instance of App with sockets to set up the communication with the client
     SocketInputOutput* socketIO = new SocketInputOutput(clientSocket, clientSocket);
-    App* app = new App(socketIO, commands, lock);
+    App* app = new App(socketIO, commands, lock, outputHanler);
     handler->createClientHandler(app);
 }
 
