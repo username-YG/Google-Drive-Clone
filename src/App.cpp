@@ -1,34 +1,42 @@
 #include "App.h"
+#include <stdexcept>
 
-App::App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock) : IO(IO), commands(commands), lock(lock) {}
+App::App(
+    IInputOutput* IO,
+    map<string, ICommand*> commands,
+    mutex& lock,
+    string (*outputHandler)(string&, string&, string&)
+    ) : IO(IO), commands(commands), lock(lock), outputHandler(outputHandler) {}
 App::~App() { delete IO; }
 
 void App::iteration() {
 
-    // Get command and convert its name to uppercase
+    // Get command name and args
     string input = IO->getInput();
     vector<string> command = parse_input(input);
-    for (char &c : command[0]) c = toupper(c);
+    string name = command[0];
+    string args = command[1];
 
-    // Ensure this is a real command
-    if (commands.find(command[0]) != commands.end()) {
-
-        // Lock the execution and execute
-        string output;
-        lock.lock();
-        try {
-            output = commands[command[0]]->execute(command[1]);
-        } catch (...) {}
-        lock.unlock();
-
-        // Return output
-        try {
-            IO->returnOutput(output);
-        } catch (...) {}
-
-    } else {
-        IO->returnOutput("");
+    // Convert command name to uppercase
+    for (char &c : name) c = toupper(c);
+    string output;
+    string eMsg;
+    try {
+        // Check if it's a real command
+        if (commands.find(name) != commands.end()) {
+            // Lock the execution and execute
+            unique_lock<mutex> ulock(lock);
+            output = commands[name]->execute(args);
+        } else {
+            throw runtime_error("Invalid command: command doesn't exist");
+        }
+    } catch (const exception& exc) {
+        eMsg = exc.what();
     }
+
+    // Return output
+    output = outputHandler(name, output, eMsg);
+    IO->returnOutput(output);
 
 }
 
