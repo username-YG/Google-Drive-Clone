@@ -9,19 +9,19 @@ void deleteCommand::isValidFile(const string& filename, const string& path) cons
     // Checking if the filename is an empty string
     if (filename.empty()) {
         // Throwing an exception if the filename is empty
-        throw invalid_argument("Filename cannot be empty.");
+        throw invalid_argument("Invalid command: filename cannot be empty.");
     }
 
     // Checking if filename contains a blank space
     if (filename.find(' ') != string::npos) {
         // Throwing an exception if a blank space is found in the filename
-        throw invalid_argument("Filename cannot contain blank spaces.");
+        throw invalid_argument("Invalid command: filename cannot contain blank spaces.");
     }
 
     // Checking if the file exists
     if (!filesystem::exists(path + "/" + filename)) {
         // Throwing an exception if the file does not exist
-        throw runtime_error("File does not exist: " + filename);
+        throw runtime_error("Logical error: file does not exist: " + filename);
     }
 }
 

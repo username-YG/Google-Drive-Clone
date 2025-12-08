@@ -13,13 +13,19 @@ using namespace std;
 class App {
     private:
         IInputOutput* IO;
-        map<string, ICommand*> commands;
+        map<string, pair<ICommand*, string>> commands;
+        map<string, string> errMsg;
         mutex& lock;
         void iteration();
         static vector<string> parse_input(const string& args);
 
     public:
-        App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock);
+        App(
+            IInputOutput* IO,
+            map<string, pair<ICommand*, string>> commands,
+            mutex& lock,
+            map<string, string> errMsg = {{"Default", ""}}
+        );
         ~App();
         void run();
 

@@ -12,15 +12,16 @@
 
 class TCPServer : public IServer {
     public:
-        TCPServer(map<string, ICommand*> commands, IClientHandler* handler, mutex& lock);
+        TCPServer(map<string, pair<ICommand*, string>> commands, IClientHandler* handler, mutex& lock, map<string, string> errMsg);
         void startServer(int port) override; // The port the server listens to
         void serveClient() const override;
         void closeServer() const override;
     private:
         int serverSocket;
-        map<string, ICommand*> commands; // Commands supported by the server
+        map<string, pair<ICommand*, string>> commands; // Commands supported by the server
         IClientHandler* handler; // A function to handle new users
         mutex& lock; // A shared lock across all clients
+        map<string, string> errMsg; // Error messages for exceptions
 };
 
 #endif

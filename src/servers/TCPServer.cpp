@@ -7,7 +7,12 @@
 #include <stdexcept>
 #include <unistd.h>
 
-TCPServer::TCPServer(map<string, ICommand*> commands, IClientHandler* handler, mutex& lock) : commands(commands), handler(handler), lock(lock) {}
+TCPServer::TCPServer(
+    map<string, pair<ICommand*, string>> commands,
+    IClientHandler* handler,
+    mutex& lock,
+    map<string, string> errMsg
+    ) : commands(commands), handler(handler), lock(lock), errMsg(errMsg) {}
 
 void TCPServer::startServer(int port) {
     
@@ -39,7 +44,7 @@ void TCPServer::serveClient() const {
 
     // Creating an instance of App with sockets to set up the communication with the client
     SocketInputOutput* socketIO = new SocketInputOutput(clientSocket, clientSocket);
-    App* app = new App(socketIO, commands, lock);
+    App* app = new App(socketIO, commands, lock, errMsg);
     handler->createClientHandler(app);
 }
 

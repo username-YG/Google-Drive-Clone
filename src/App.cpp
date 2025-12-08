@@ -1,34 +1,43 @@
 #include "App.h"
+#include <stdexcept>
 
-App::App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock) : IO(IO), commands(commands), lock(lock) {}
+App::App(
+    IInputOutput* IO,
+    map<string, pair<ICommand*, string>> commands,
+    mutex& lock,
+    map<string, string> errMsg
+    ) : IO(IO), commands(commands), lock(lock), errMsg(errMsg) {}
 App::~App() { delete IO; }
 
 void App::iteration() {
 
-    // Get command and convert its name to uppercase
+    // Get command name and args
     string input = IO->getInput();
     vector<string> command = parse_input(input);
-    for (char &c : command[0]) c = toupper(c);
+    string name = command[0];
+    string args = command[1];
 
-    // Ensure this is a real command
-    if (commands.find(command[0]) != commands.end()) {
+    // Convert command name to uppercase
+    for (char &c : name) c = toupper(c);
+    string output;
 
-        // Lock the execution and execute
-        string output;
-        lock.lock();
-        try {
-            output = commands[command[0]]->execute(command[1]);
-        } catch (...) {}
-        lock.unlock();
-
-        // Return output
-        try {
-            IO->returnOutput(output);
-        } catch (...) {}
-
-    } else {
-        IO->returnOutput("");
+    try {
+        // Check if it's a real command
+        if (commands.count(name)) {
+            lock_guard<mutex> ulock(lock);
+            output = commands[name].second + commands[name].first->execute(args);
+        } else {
+            throw runtime_error("Invalid command: command doesn't exist");
+        }
+    } catch (const exception& exc) {
+        // Search error title in map
+        string msg = exc.what();
+        string title = msg.substr(0, msg.find(':'));
+        output = errMsg.count(title) ? errMsg[title] : errMsg["Default"];
     }
+
+    // Return output
+    IO->returnOutput(output);
 
 }
 
