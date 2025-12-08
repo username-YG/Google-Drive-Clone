@@ -33,7 +33,7 @@ def receive_full_message(sock: socket.socket) -> str | None:
         if raw_length_with_space is None:
             return None
 
-            # 2. Separate length and content
+        # 2. Separate length and content
         # raw_length_with_space now contains "Length " (e.g., b'15 ')
         raw_length = raw_length_with_space[:-1]  # Remove the trailing space
 
@@ -106,7 +106,7 @@ def run_client(server_ip: str, server_port: int):
             if server_response is None:
                 break
 
-            print(server_response)
+            print(server_response, end="")
 
     except EOFError:
         pass

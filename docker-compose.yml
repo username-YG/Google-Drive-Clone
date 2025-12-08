@@ -1,23 +1,53 @@
+x-env: &shared_env
+    APP_PORT: ${APP_PORT:-8080}
+    APP_PATH: ${APP_PATH:-/app_path}
+
 services:
-  app:
+  server:
     # The path in which files will be saved
     environment:
-      - APP_PATH=/mypath
+      <<: *shared_env
+    build:
+      context: .
+      dockerfile: src/servers/dockerfile
+    volumes:
+      - appfiles:${APP_PATH:-/app_path}
+    networks:
+      - app_net
+
+  cpp-client:
     # Defines a interactive shell
     stdin_open: true
     tty: true
+    environment:
+      <<: *shared_env
     build:
-      context: ./src
-      dockerfile: dockerfile
-    volumes:
-      - appfiles:/mypath
+      context: .
+      dockerfile: src/clients/dockerfile-cpp
+    networks:
+      - app_net
+
+  py-client:
+    # Defines a interactive shell
+    stdin_open: true
+    tty: true
+    environment:
+      <<: *shared_env
+    build:
+      context: .
+      dockerfile: src/clients/dockerfile-py
+    networks:
+      - app_net
 
   gtests:
     environment:
-      - APP_PATH=/mypath
+      <<: *shared_env
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: tests/dockerfile
 
 volumes:
   appfiles:
+
+networks:
+  app_net:

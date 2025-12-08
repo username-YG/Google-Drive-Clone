@@ -1,17 +1,35 @@
 #include "App.h"
 
-App::App(IInputOutput* IO, map<string, ICommand*> commands) : IO(IO), commands(commands) {}
+App::App(IInputOutput* IO, map<string, ICommand*> commands, mutex& lock) : IO(IO), commands(commands), lock(lock) {}
+App::~App() { delete IO; }
 
 void App::iteration() {
+
+    // Get command and convert its name to uppercase
     string input = IO->getInput();
     vector<string> command = parse_input(input);
-    try {
-        // Ensure this is a real command
-        if (commands.find(command[0]) != commands.end()) {
-            string output = commands[command[0]]->execute(command[1]);
+    for (char &c : command[0]) c = toupper(c);
+
+    // Ensure this is a real command
+    if (commands.find(command[0]) != commands.end()) {
+
+        // Lock the execution and execute
+        string output;
+        lock.lock();
+        try {
+            output = commands[command[0]]->execute(command[1]);
+        } catch (...) {}
+        lock.unlock();
+
+        // Return output
+        try {
             IO->returnOutput(output);
-        }
-    } catch (...) {}
+        } catch (...) {}
+
+    } else {
+        IO->returnOutput("");
+    }
+
 }
 
 void App::run() {

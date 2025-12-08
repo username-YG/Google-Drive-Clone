@@ -4,6 +4,7 @@
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
 #include "../src/commands/searchCommand.h"
+#include "../src/commands/deleteCommand.h"
 #include "../src/compressions/RLE.h"
 
 #include <map>
@@ -11,20 +12,31 @@
 #include <vector>
 
 TEST(AppClIRleTests, EndToEndTests) {
-    map<string, string> IOMap = {
-        {"add testfile1 AAAAAAA", ""},
-        {"get testfile1", "AAAAAAA\n"},
-        {"get blah", ""},
-        {"add testfile2 44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
-        {"get testfile2", "44444AABBBBBBBBBB6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
-        {"search B", "testfile2\n"},
-        {"search C", ""}
+    // The command name is 
+    vector<pair<string, string>> IOMap = {
+        {"POST testfile1 XXXXXXX", ""},
+        {"get testfile1", "XXXXXXX\n"},
+        {"GET blah", ""},
+        {"invalid blah blah", ""},
+        {"pOst testfile2 44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))", ""},
+        {"GeT testfile2", "44444XXYYYYYYYYYY6666666666 ,,,,,,, hello %^&*((*&^%$#))\n"},
+        {"search Y", "testfile2\n"},
+        {"SEARCh Z", ""},
+        {"delete testfile1", ""},
+        {"DELeTE testfile2", ""}
     };
 
+    RLE comp;
+    addCommand add(&comp);
+    getCommand get(&comp);
+    searchCommand search(&comp);
+    deleteCommand deleteC;
+
     map<string, ICommand*> commands = {
-        {"add", new addCommand(new RLE())},
-        {"get", new getCommand(new RLE())},
-        {"search", new searchCommand(new RLE())}
+        {"POST", &add},
+        {"GET", &get},
+        {"SEARCH", &search},
+        {"DELETE", &deleteC}
     };
 
     // Backup cin and cout buffers
@@ -38,7 +50,9 @@ TEST(AppClIRleTests, EndToEndTests) {
         cout.rdbuf(output.rdbuf());
 
         // Run an iteration and check what was printed
-        App app(new StreamInputOutput(), commands);
+        StreamInputOutput* streamIO = new StreamInputOutput();
+        mutex lock;
+        App app(streamIO, commands, lock);
         app.iteration();
         EXPECT_EQ(output.str(), value);
 

@@ -11,5 +11,5 @@ string StreamInputOutput::getInput() const {
 
 void StreamInputOutput::returnOutput(const string& output) const {
     // Return the output to the stream
-    out << output;
+    out << output << flush;
 }

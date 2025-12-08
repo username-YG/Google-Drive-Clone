@@ -4,7 +4,7 @@
 #include <cstring>
 #include <netdb.h>
 // Constructor: Initializes members and creates the raw socket file descriptor.
-TCPClient::TCPClient() : socket_fd(-1), is_connected(false), socket_io(-1, -1) {
+TCPClient::TCPClient() : socket_fd(-1), is_connected(false), socket_io(nullptr) {
 
     // Creates a new TCP/IPv4 socket.
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -12,12 +12,6 @@ TCPClient::TCPClient() : socket_fd(-1), is_connected(false), socket_io(-1, -1) {
         // If socket creation fails, socket_fd remains -1. No error output permitted.
         return;
     }
-}
-
-// Destructor: Ensures resources are cleaned up by calling disconnect.
-TCPClient::~TCPClient() {
-    // Calls the disconnect method to close the socket cleanly.
-    TCPClient::disconnect();
 }
 
 // Accessor to get the internal socket file descriptor.
@@ -52,7 +46,7 @@ bool TCPClient::connectToServer(const std::string& ip_address, int port_no) {
     // Connection successful. Initialize the SocketInputOutput object.
     int sharedSock = TCPClient::getSocketDescriptor();
     // For TCP, the input and output descriptors are the same.
-    socket_io = SocketInputOutput(sharedSock, sharedSock);
+    socket_io = new SocketInputOutput(sharedSock, sharedSock);
 
     is_connected = true;
     return true;
@@ -81,9 +75,9 @@ void TCPClient::useServer() {
             }
 
             // Send command to the server (socket stream).
-            socket_io.returnOutput(user_input);
+            socket_io->returnOutput(user_input);
             // Wait for and receive the response (socket stream).
-            server_response = socket_io.getInput();
+            server_response = socket_io->getInput();
             // Display response to the user (console stream).
             stream_io.returnOutput(server_response);
         }
@@ -108,5 +102,6 @@ void TCPClient::disconnect() {
         close(socket_fd);
         socket_fd = -1; // Invalidate the descriptor.
     }
+    delete socket_io;
     is_connected = false;
 }

@@ -1,0 +1,6 @@
+FROM python:3
+
+COPY src/clients /usr/googledrive/app
+WORKDIR /usr/googledrive/app
+
+CMD python -u client.py server $APP_PORT

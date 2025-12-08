@@ -9,7 +9,8 @@
 
 // checks sanity of functionality of IsContain function
 TEST(isContain, sanityTests) {
-    searchCommand search(new RLE());
+    RLE rle;
+    searchCommand search(&rle);
     EXPECT_EQ(search.IsContainsContent("Hello World", "World"), true);
     EXPECT_EQ(search.IsContainsContent("Hello World", "world"), false);
     EXPECT_EQ(search.IsContainsContent("The quick brown fox", "quick"), true);
@@ -44,7 +45,8 @@ TEST(searchFilesFromPath, sanityTests) {
     // checks the environment variable really loaded
     ASSERT_NE(path_c_str, nullptr) << "APP_PATH environment variable is not set in Docker!";
 
-    searchCommand search(new RLE());
+    RLE rle;
+    searchCommand search(&rle);
     vector<string> expected1 = {"a.txt", "b.txt", "c.txt"};
     vector<string> actual1 = search.SearchFilesFromPath(path_c_str, "string");
     vector<string> expected2 = {};
@@ -98,7 +100,8 @@ TEST(searchFilesFromPath, sanityTests) {
 
 // checks edge cases of SearchFilesFromPath function
 TEST(searchFilesFromPath, edgeCaseTests) {
-    searchCommand search(new RLE());
+    RLE rle;
+    searchCommand search(&rle);
     EXPECT_THROW(search.SearchFilesFromPath("testpath", "content"), runtime_error);
     EXPECT_THROW(search.SearchFilesFromPath("", "content"), runtime_error);
     EXPECT_THROW(search.SearchFilesFromPath("testpath", ""), runtime_error);

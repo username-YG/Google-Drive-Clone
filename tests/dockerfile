@@ -8,6 +8,6 @@ WORKDIR /usr/googledrive/tests
 RUN mkdir build
 WORKDIR /usr/googledrive/tests/build
 
-RUN cmake .. && make
+RUN cmake ../tests && make
 
 CMD ["./tests"]
