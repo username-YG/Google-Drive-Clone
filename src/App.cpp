@@ -3,10 +3,10 @@
 
 App::App(
     IInputOutput* IO,
-    map<string, ICommand*> commands,
+    map<string, pair<ICommand*, string>> commands,
     mutex& lock,
-    string (*outputHandler)(string&, string&, string&)
-    ) : IO(IO), commands(commands), lock(lock), outputHandler(outputHandler) {}
+    map<string, string> errMsg
+    ) : IO(IO), commands(commands), lock(lock), errMsg(errMsg) {}
 App::~App() { delete IO; }
 
 void App::iteration() {
@@ -20,22 +20,23 @@ void App::iteration() {
     // Convert command name to uppercase
     for (char &c : name) c = toupper(c);
     string output;
-    string eMsg;
+
     try {
         // Check if it's a real command
-        if (commands.find(name) != commands.end()) {
-            // Lock the execution and execute
-            unique_lock<mutex> ulock(lock);
-            output = commands[name]->execute(args);
+        if (commands.count(name)) {
+            lock_guard<mutex> ulock(lock);
+            output = commands[name].second + commands[name].first->execute(args);
         } else {
             throw runtime_error("Invalid command: command doesn't exist");
         }
     } catch (const exception& exc) {
-        eMsg = exc.what();
+        // Search error title in map
+        string msg = exc.what();
+        string title = msg.substr(0, msg.find(':'));
+        output = errMsg.count(title) ? errMsg[title] : errMsg["Default"];
     }
 
     // Return output
-    output = outputHandler(name, output, eMsg);
     IO->returnOutput(output);
 
 }

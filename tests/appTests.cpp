@@ -32,11 +32,11 @@ TEST(AppClIRleTests, EndToEndTests) {
     searchCommand search(&comp);
     deleteCommand deleteC;
 
-    map<string, ICommand*> commands = {
-        {"POST", &add},
-        {"GET", &get},
-        {"SEARCH", &search},
-        {"DELETE", &deleteC}
+    map<string, pair<ICommand*, string>> commands = {
+        {"POST", {&add, ""}},
+        {"GET", {&get, ""}},
+        {"SEARCH", {&search, ""}},
+        {"DELETE", {&deleteC, ""}}
     };
 
     // Backup cin and cout buffers

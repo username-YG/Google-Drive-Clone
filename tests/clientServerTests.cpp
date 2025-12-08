@@ -13,11 +13,11 @@
 #define MIN_PORT 49152
 #define MAX_PORT 65535
 
-void testClientServer(vector<pair<string, string>> IOMap, map<string, ICommand*> commands) {
+void testClientServer(vector<pair<string, string>> IOMap, map<string, pair<ICommand*, string>> commands, map<string, string> errMsg) {
 
     NaiveClientHandler handler;
     mutex lock;
-    TCPServer server(commands, &handler, lock);
+    TCPServer server(commands, &handler, lock, errMsg);
 
     // Use the first port number that works
     int port = MIN_PORT;
@@ -64,9 +64,10 @@ TEST(ClientServerTests, ServerUnitTests) {
             string execute(const string& args) const override { return args + " " + args; }
     };
     doubleEchoCommand echo;
-    map<string, ICommand*> commands = {{"DECHO", &echo}};
+    map<string, pair<ICommand*, string>> commands = {{"DECHO", {&echo, ""}}};
+    map<string, string> errMsg = {{"Default", ""}};
 
-    testClientServer(IOMap, commands);
+    testClientServer(IOMap, commands, errMsg);
 }
 
 // Test the server and client on the real app
@@ -96,12 +97,18 @@ TEST(ClientServerTests, endToEndTests) {
     getCommand get(&comp);
     searchCommand search(&comp);
     deleteCommand deleteC;
-    map<string, ICommand*> commands = {
-        {"POST", &add},
-        {"GET", &get},
-        {"SEARCH", &search},
-        {"DELETE", &deleteC}
+    map<string, pair<ICommand*, string>> commands = {
+        {"POST", {&add, "201 Created\n"}},
+        {"GET", {&get, "200 Ok\n\n"}},
+        {"SEARCH", {&search, "200 Ok\n\n"}},
+        {"DELETE", {&deleteC, "204 No Content\n"}}
     };
 
-    testClientServer(IOMap, commands);
+    map<string, string> errMsg = {
+        {"Invalid command", "400 Bad Request\n"},
+        {"Logical error", "404 Not Found\n"},
+        {"Default", "500 Internal Server Error\n"}
+    };
+
+    testClientServer(IOMap, commands, errMsg);
 }

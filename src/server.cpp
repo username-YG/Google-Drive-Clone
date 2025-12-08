@@ -22,11 +22,18 @@ int main(int argc, char *argv[]) {
     deleteCommand deleteC;
 
     // Map command name to class
-    map<string, ICommand*> commands = {
-        {"POST", &add},
-        {"GET", &get},
-        {"SEARCH", &search},
-        {"DELETE", &deleteC}
+    map<string, pair<ICommand*, string>> commands = {
+        {"POST", {&add, "201 Created\n"}},
+        {"GET", {&get, "200 Ok\n\n"}},
+        {"SEARCH", {&search, "200 Ok\n\n"}},
+        {"DELETE", {&deleteC, "204 No Content\n"}}
+    };
+
+    // Map error to error message
+    map<string, string> errMsg = {
+        {"Invalid command", "400 Bad Request\n"},
+        {"Logical error", "404 Not Found\n"},
+        {"Default", "500 Internal Server Error\n"}
     };
 
     // An handler for new users
@@ -36,7 +43,7 @@ int main(int argc, char *argv[]) {
     try {
         // Init server
         int port = stoi(argv[1]);
-        TCPServer server(commands, &handler, lock);
+        TCPServer server(commands, &handler, lock, errMsg);
         server.startServer(port);
 
         // Serve clients forever

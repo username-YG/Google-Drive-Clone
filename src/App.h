@@ -13,8 +13,8 @@ using namespace std;
 class App {
     private:
         IInputOutput* IO;
-        map<string, ICommand*> commands;
-        string (*outputHandler)(string&, string&, string&);
+        map<string, pair<ICommand*, string>> commands;
+        map<string, string> errMsg;
         mutex& lock;
         void iteration();
         static vector<string> parse_input(const string& args);
@@ -22,10 +22,9 @@ class App {
     public:
         App(
             IInputOutput* IO,
-            map<string, ICommand*> commands,
+            map<string, pair<ICommand*, string>> commands,
             mutex& lock,
-            // By default just return the output as it is
-            string (*outputHandler)(string&, string&, string&) = [](string&, string& output, string&) { return output; }
+            map<string, string> errMsg = {{"Default", ""}}
         );
         ~App();
         void run();
