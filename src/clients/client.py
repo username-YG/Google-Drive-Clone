@@ -95,9 +95,6 @@ def run_client(server_ip: str, server_port: int):
         while True:
             msg = input()
 
-            if not msg:
-                continue
-
             if not send_full_message(s, msg):
                 continue
 

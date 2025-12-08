@@ -70,10 +70,6 @@ void TCPClient::useServer() {
             // Get command from user (console stream).
             user_input = stream_io.getInput();
 
-            if (user_input.empty()) {
-                continue;
-            }
-
             // Send command to the server (socket stream).
             socket_io->returnOutput(user_input);
             // Wait for and receive the response (socket stream).
