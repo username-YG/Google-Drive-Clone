@@ -38,16 +38,20 @@ Currently, our application supports the following commands:
 
 ## Closed for Modification but Open for Extension
 1. Did the fact that the command names changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
-    Answer: No, in ex1 main function, we created a map with the names "add", "get", and "search", each of them is tied to an ICommand object (a interface we created for all of the commands     that contains the method of "execute"), and gave the map as an argument to the App that runs all of the program. 
-    So now we could just replace those names with the new ones and tie them to the same ICommands as before.
+   
+Answer: No, in ex1 main function, we created a map with the names "add", "get", and "search", each of them is tied to an ICommand object (a interface we created for all of the commands     that contains the method of "execute"), and gave the map as an argument to the App that runs all of the program. 
+So now we could just replace those names with the new ones and tie them to the same ICommands as before.
 
 2. Did the fact that new commands were added require you to touch code that is supposed to be "closed for modification, but open for extension"?
-   Answer: No, As explained in the previous question, we just added a new element to the map tied to a new object of ICommand.
+   
+Answer: No, As explained in the previous question, we just added a new element to the map tied to a new object of ICommand.
 
 3. Did the fact that the command output changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
+   
 Answer: No, because we still needed to return the previous output as before and just add to it a proper message, so we just wrapped it inside a wrapper that checks the output and prints the correct message according to the output result. We did needed to change the messages that were thrown from several errors but it's only a minimal textual changes.
 
 4. Did the fact that the input/output comes from sockets instead of the console require you to touch code that is supposed to be "closed for modification, but open for extension"?
+   
 Answer: No, we just generalized an interface from ex1 that controlled the input and output from the CLI menu to control general input and output, and added a class of that interface that use the send and receive functions of Socket and used them to send output or receive input.
 
 ## Running Instructions
