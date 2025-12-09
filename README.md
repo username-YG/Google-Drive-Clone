@@ -19,7 +19,8 @@ Currently, our application supports the following commands:
        The command prints the message "200 Ok" if legal and then the file's text to the screen.
        
 - **SEARCH**: This command receives 1 string argument - 'file content'.
-          It finds all the files from the root directory that contain the text given by the argument (file content).
+          It finds all the files from the root directory that either contain the text given by the argument or
+          whose names contain (or are) the text given by the argument (file content).
           The command returns a list of all these files' names and prints the message "200 Ok" if legal, and then the list to the screen.
   
 - **DELETE**: This command receives 1 string argument - 'filename'.
@@ -46,13 +47,13 @@ So now we could just replace those names with the new ones and tie them to the s
    
 Answer: No, As explained in the previous question, we just added a new element to the map tied to a new object of ICommand.
 
-3. Did the fact that the command output changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
+3. Did the fact that the commands output changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
    
-Answer: No, because we still needed to return the previous output as before and just add to it a proper message, so we just wrapped it inside a wrapper that checks the output and prints the correct message according to the output result. We did needed to change the messages that were thrown from several errors but it's only a minimal textual changes.
+Answer: No, because we still needed to return the previous output as before and therefore just added to it a proper message (status code), so we just wrapped it inside a wrapper that checks the output and prints the correct message accordingly. We did need to change the messages that were thrown from several errors/exceptions but it's only minimal textual changes.
 
 4. Did the fact that the input/output comes from sockets instead of the console require you to touch code that is supposed to be "closed for modification, but open for extension"?
    
-Answer: No, we just generalized an interface from ex1 that controlled the input and output from the CLI menu to control general input and output, and added a class of that interface that use the send and receive functions of Socket and used them to send output or receive input.
+Answer: No, we just generalized an interface from ex1 that controlled the input and output from the CLI menu to control general input and output, and added a class implementing that interface and which uses the send and receive methods of Socket to send output or receive input.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex2-main:
