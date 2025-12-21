@@ -6,9 +6,9 @@ const usersRoutes = require('./routes/users')
 const tokensRoutes = require('./routes/tokens')
 
 app.use(express.json())
-app.use('http://foo.com/api/files', fileAndDirRoutes)
-app.use('http://foo.com/api/search', searchRoutes)
-app.use('http://foo.com/api/users', usersRoutes)
-app.use('http://foo.com/api/tokens', tokensRoutes)
+app.use('/api/files', fileAndDirRoutes)
+app.use('/api/search', searchRoutes)
+app.use('/api/users', usersRoutes)
+app.use('/api/tokens', tokensRoutes)
 
 app.listen(3000)

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../controllers/articles')
+const controller = require('../controllers/fileAndDir')
 
 router.route('/')
         .get(controller.getAllFilesAndDirs)
