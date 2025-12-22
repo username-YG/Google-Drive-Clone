@@ -4,21 +4,21 @@
 const users = [];
 
 class User {
-    constructor(username, password, displayName, profilePic) {
-        this.username = username; // this is the unique ID
+    constructor(ID, password, displayName, profilePic) {
+        this.ID = ID; // this is the unique ID
         this.password = password;
         this.displayName = displayName;
         this.profilePic = profilePic;
     }
 
-    static create(username, password, displayName, profilePic) {
-        const newUser = new User(username, password, displayName, profilePic);
+    static create(ID, password, displayName, profilePic) {
+        const newUser = new User(ID, password, displayName, profilePic);
         users.push(newUser);
         return newUser;
     }
 
-    static findByUsername(username) {
-        return users.find(u => u.username === username);
+    static findByUsername(ID) {
+        return users.find(u => u.ID === ID);
     }
 }
 

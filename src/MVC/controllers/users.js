@@ -2,32 +2,32 @@ const User = require('../models/users')
 
 // POST /api/users
 exports.createUser = (req, res) => {
-    const { username, password, displayName, profilePic } = req.body;
+    const { ID : ID, password, displayName, profilePic } = req.body;
 
     // check if all fields exist
-    if (!username || !password || !displayName || !profilePic) {
-        return res.status(400).json({ error: "All fields are required" });
+    if (!ID || !password || !displayName || !profilePic) {
+        return res.status(400).json({ error: "Bad Request" });
     }
 
     // check if the user already exists
-    if (User.findByUsername(username)) {
-        return res.status(404).json({ error: "User already exists" });
+    if (User.findByUsername(ID)) {
+        return res.status(404).json({ error: "Not Found" });
     }
 
-    const newUser = User.create(username, password, displayName, profilePic);
+    const newUser = User.create(ID, password, displayName, profilePic);
 
     // return user without the password
     const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json(userWithoutPassword);
 };
 
-// GET /api/users/:id (כאשר :id הוא ה-username)
+// GET /api/users/:id
 exports.getUserById = (req, res) => {
-    const username = req.params.id;
-    const user = User.findByUsername(username);
+    const ID = req.params.id;
+    const user = User.findByUsername(ID);
 
     if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({ error: "Not Found" });
     }
 
     const { password: _, ...userWithoutPassword } = user;
