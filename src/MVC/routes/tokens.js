@@ -4,3 +4,5 @@ const controller = require('../controllers/tokens')
 
 router.route('/')
         .post(controller.checkUserSignedIn)
+
+module.exports = router
