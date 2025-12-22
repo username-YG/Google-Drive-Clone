@@ -4,7 +4,7 @@
 #include "commands/getCommand.h"
 #include "commands/searchCommand.h"
 #include "commands/deleteCommand.h"
-#include "clientHandlers/naiveClientHandler.h"
+#include "clientHandlers/threadPoolClientHandler.h"
 
 #include <iostream>
 #include <map>
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     };
 
     // An handler for new users
-    NaiveClientHandler handler;
+    ThreadPoolClientHandler& handler = ThreadPoolClientHandler::instance();
     mutex lock;
 
     try {
