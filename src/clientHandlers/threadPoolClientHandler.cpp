@@ -43,12 +43,7 @@ void* ThreadPoolClientHandler::handleClient(void* arg) {
 ThreadPoolClientHandler::ThreadPoolClientHandler(size_t numThreads) : stop(false) {
     for (size_t i = 0; i < numThreads; ++i) {
         // Specifying that each thread will execute the clientHandler function
-        pthread_create(&threads.emplace_back(), NULL, 
-            [](void* arg) -> void* {
-                ThreadPoolClientHandler* handler = static_cast<ThreadPoolClientHandler*>(arg);
-                handler->ThreadPoolClientHandler::clientHandler();
-                return NULL;
-            }, this);
+        threads.emplace_back([this]() { ThreadPoolClientHandler::clientHandler(); });
     }
 }
 
@@ -63,8 +58,10 @@ ThreadPoolClientHandler::~ThreadPoolClientHandler() {
 
     // Notifying all threads to wake up and finish
     condition.notify_all();
-    for (pthread_t &thread : threads) {
-        pthread_join(thread, NULL);
+    for (thread &thread : threads) {
+        if (thread.joinable()) {
+            thread.join();
+        }
     }
 }
 

@@ -4,7 +4,7 @@
 #include <vector>
 #include <queue>
 #include <condition_variable>
-#include <pthread.h>
+#include <thread>
 #include <queue>
 
 using namespace std;
@@ -19,7 +19,7 @@ struct ArgsPtr {
 class ThreadPoolClientHandler : public IClientHandler {
     private:
         // Private fields for thread pool management
-        vector<pthread_t> threads;
+        vector<thread> threads;
         queue<ArgsPtr*> clients;
         mutex queueMutex;
         condition_variable condition;
