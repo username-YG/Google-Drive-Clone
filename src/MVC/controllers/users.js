@@ -10,7 +10,7 @@ exports.createUser = (req, res) => {
     }
 
     // check if the user already exists
-    if (User.findByUsername(ID)) {
+    if (User.findByID(ID)) {
         return res.status(404).json({ error: "Not Found" });
     }
 
@@ -24,7 +24,7 @@ exports.createUser = (req, res) => {
 // GET /api/users/:id
 exports.getUserById = (req, res) => {
     const ID = req.params.id;
-    const user = User.findByUsername(ID);
+    const user = User.findByID(ID);
 
     if (!user) {
         return res.status(404).json({ error: "Not Found" });

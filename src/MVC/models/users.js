@@ -17,7 +17,7 @@ class User {
         return newUser;
     }
 
-    static findByUsername(ID) {
+    static findByID(ID) {
         return users.find(u => u.ID === ID);
     }
 }
