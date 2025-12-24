@@ -1,10 +1,9 @@
 x-env: &shared_env
-    APP_PORT: ${APP_PORT:-8080}
-    APP_PATH: ${APP_PATH:-/app_path}
+    APP_PORT: ${APP_PORT:-8080} # The port the cpp server listens on
+    APP_PATH: ${APP_PATH:-/app_path} # The path in which files will be saved
 
 services:
   server:
-    # The path in which files will be saved
     environment:
       <<: *shared_env
     build:
@@ -36,6 +35,17 @@ services:
     build:
       context: .
       dockerfile: src/clients/dockerfile-py
+    networks:
+      - app_net
+
+  web-server:
+    environment:
+      <<: *shared_env
+    build:
+      context: .
+      dockerfile: src/MVC/dockerfile
+    ports:
+      - "3000:3000"
     networks:
       - app_net
 

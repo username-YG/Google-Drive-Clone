@@ -1,37 +1,35 @@
 import net from "net";
 
-const rootId = createRoot();
-const filesystsem = [];
+const rootId = crypto.randomUUID();
+const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [] } ];
 
-async function createRoot() {
-    const id = crypto.randomUUID();
-    const rootFolder = { id, name: "/", isFolder: true, parentId: null };
-    filesystsem.push(rootFolder);
-    await sendToServer(`POST ${id} []`);
-    return id;
-}
-
-const getMetadata = (id) => filesystsem.find(a => a.id === id);
-
+let sock = null;
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
 
         // Send message to server
-        const sock = net.connect(1234, "localhost", () => s.write(`${msg.length} ${msg}`));
+        const ip = process.argv[2];
+        const port = +process.argv[3];
+        sock = net.connect(port, ip, () => sock.write(`${msg.length} ${msg}`));
 
         // Get response from server
         let res = '', len = null;
         sock.on("data", chunk => {
+            res += chunk;
 
             // Parsing length
-            res += chunk;
             if (len === null && res.includes(" ")) [len, res] = [parseInt(res), res.slice(res.indexOf(" ") + 1)];
 
             // When finished reading all
-            if (len && len <= res.length) {
+            if (len !== null && len <= res.length) {
                 sock.end();
+                sock = null;
                 res = res.slice(0, len);
-                res.startsWith("500") ? reject(new Error(res)) : resolve(res);
+                if (res.startsWith("500")) reject(new Error(res));
+                // Remove the status msg and the last '\n'
+                const index = res.indexOf("\n\n");
+                res = (index === -1) ? "" : res.slice(index + 2).slice(0, -1);
+                resolve(res);
             }
             
         });
@@ -40,45 +38,36 @@ const sendToServer = (msg) => {
     });
 }
 
-async function updateParent(itemId, parentId, add) {
-    if (!parentId) return;
-    const content = getFile(parentId).content;
-    if (add) {
-        content.push(itemId)
-    } else {
-        content.splice(parent.indexOf(itemId), 1);
-    }
-    await updateFile(parentId, {content});
-}
+const getMetadata = (id) => filesystem.find(a => a.id === id);
 
 async function createFile(name, content, isFolder, parentId) {
-    
+
     // Generate a unique ID
     let id;
     while (getMetadata(id = crypto.randomUUID()));
 
-    // Add new item to array and update parent
-    const newItem = { id, name, isFolder, parentId };
-    filesystsem.push(newItem);
-    await updateParent(id, parentId, true);
+    // Add new item to array
+    if (parentId === null) parentId = rootId;
+    const newItem = { id, name, isFolder, parentId, content: [] };
+    filesystem.push(newItem);
 
-    // Create the file on the server
-    await sendToServer(`POST ${id} ${content}`);
+    // Update parent folder
+    getMetadata(parentId).content.push(id);
+    
+    // If it is a file, save the content on the server
+    if (isFolder === false) await sendToServer(`POST ${id} ${content}`);
     return newItem;
 }
 
+function getAllFiles() {
+    return getMetadata(rootId).content;
+}
+
 async function getFile(id) {
-
-    // Get the content from the server
-    const item = getMetadata(id);
-    const content = await sendToServer(`GET ${id}`);
-    if (item.isFolder) content = JSON.parse(content);
-
-    // We use a copy because we don't want to save the content here
-    const copy = JSON.parse(JSON.stringify(item));
-    copy.content = content;
+    // We use a copy so we don't store the content on the server
+    const copy = JSON.parse(JSON.stringify(getMetadata(id)));
+    if (copy.isFolder === false) copy.content = await sendToServer(`GET ${id}`);
     return copy;
-
 }
 
 async function updateFile(id, name, content, parentId) {
@@ -98,24 +87,46 @@ async function updateFile(id, name, content, parentId) {
     }
 
     // Update parent if asked to
+    if (parentId === null) parentId = rootId;
     if (parentId) {
-        const oldParentId = item.parent;
-        item.parent = parentId;
-        await updateParent(id, oldParentId, false);
+        const oldParent = getMetadata(item.parentId);
+        oldParent.content.splice(oldParent.content.indexOf(id), 1);
+        item.parentId = parentId;
     }
 
 }
 
 async function deleteFile(id) {
-    filesystsem.splice(filesystsem.findIndex(a => a.id === id), 1);
+    
+    // Remove item's metdata and content
+    const item = getMetadata(id);
+    filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
     await sendToServer(`DELETE ${id}`);
+
+    // Update parent
+    if (item.parentId) {
+        const parent = getMetadata(item.parentId);
+        parent.content.splice(parent.content.indexOf(id), 1);
+    }
+
+    // Recursively delete subdir
+    if (item.isFolder) {
+        for (child in item.content) {
+            await deleteFile(child);
+        }
+    }
 }
 
+process.on('SIGINT', () => {
+    if (sock) sock.end();
+    process.exit();
+})
+
 export {
-    rootId,
-    createRoot,
     getMetadata,
+    getAllFiles,
     getFile,
     createFile,
+    updateFile,
     deleteFile
 }
