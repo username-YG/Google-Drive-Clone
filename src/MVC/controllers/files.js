@@ -23,49 +23,39 @@ exports.getAllFiles = (req, res) => {
 }
 
 exports.getFile = (req, res) => {
-    if (!Files.getMetadata(req.params.id)) {
-        res.status(404).json({ error: 'Not found' });
-    }
-    res.json(Files.getFile(req.params.id));
+    if (!Files.getMetadata(req.params.id)) res.status(404).json({ error: 'Not found' });
+    const file = Files.getFile(req.params.id);
+    if (Files.err) return res.status(500).json({ error: '500 Internal server error' });
+    res.json(file);
 }
 
 exports.updateFile = (req, res) => {
 
-    // Other fields can't change and will be ignored
+    // Ensure there are fields to update
     const { name, content, parentId } = req.body
-
     if (name === undefined && content === undefined && parentId === undefined) {
         return res.status(400).send("Bad Request");
     }
 
-    if (!Files.getMetadata(req.params.id)) {
-        return res.status(404).json({ error: 'Not found' });
-    }
+    // Ensure the file exists
+    if (!Files.getMetadata(req.params.id)) return res.status(404).json({ error: 'Not found' });
 
-    if (parentId !== undefined && !Files.getMetadata(parentId)) {
-        return res.status(404).json({ error: 'Not found' });
+    // Ensure the parent exists and is a folder
+    if (parentId) {
+        const parent = Files.getMetadata(parentId);
+        if (!parent || !parent.isFolder) {
+            return res.status(404).json({ error: 'Not found' });
+        }
     }
 
     const updatedFile = Files.updateFile(req.params.id, name, content, parentId);
+    if (Files.err) return res.status(500).json({ error: '500 Internal server error' });
     res.json(updatedFile);
 }
 
 exports.deleteFile = (req, res) => {
-    if (!Files.getMetadata(req.params.id)) {
-        res.status(404).json({ error: 'Not found' });
-    }
+    if (!Files.getMetadata(req.params.id)) res.status(404).json({ error: 'Not found' });
     Files.deleteFile(req.params.id)
+    if (Files.err) return res.status(500).json({ error: '500 Internal server error' });
     res.status(204).end()
-}
-
-exports.getPermissions = (req, res) => {
-}
-
-exports.setPermissions = (req, res) => {
-}
-
-exports.updatePermission = (req, res) => {
-}
-
-exports.deletePermission = (req, res) => {
 }
