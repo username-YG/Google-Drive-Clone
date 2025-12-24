@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../controllers/fileAndDir')
-const permController = require('../controllers/permissions')
 
 router.route('/')
         .get(controller.getAllFilesAndDirs)
@@ -13,11 +12,12 @@ router.route('/:id')
         .delete(controller.deleteFileOrDir)
 
 router.route('/:id/permissions')
-        .get(permController.getPermissions)
-        .post(permController.createPermission)
+        .get(controller.getPermissions)
+        .post(controller.setPermissions)
 
 router.route('/:id/permissions/:pId')
-        .patch(permController.updatePermission)
-        .delete(permController.deletePermission)
+        .patch(controller.updatePermission)
+        .delete(controller.deletePermission)
+
 
 module.exports = router
