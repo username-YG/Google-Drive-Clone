@@ -3,14 +3,13 @@ import net from "net";
 const rootId = crypto.randomUUID();
 const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [] } ];
 
-let sock = null;
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
 
         // Send message to server
         const ip = process.argv[2];
         const port = +process.argv[3];
-        sock = net.connect(port, ip, () => sock.write(`${msg.length} ${msg}`));
+        const sock = net.connect(port, ip, () => sock.write(`${msg.length} ${msg}`));
 
         // Get response from server
         let res = '', len = null;
@@ -23,7 +22,6 @@ const sendToServer = (msg) => {
             // When finished reading all
             if (len !== null && len <= res.length) {
                 sock.end();
-                sock = null;
                 res = res.slice(0, len);
                 if (res.startsWith("500")) reject(new Error(res));
                 // Remove the status msg and the last '\n'
@@ -51,8 +49,9 @@ async function createFile(name, content, isFolder, parentId) {
     const newItem = { id, name, isFolder, parentId, content: [] };
     filesystem.push(newItem);
 
-    // Update parent folder
-    getMetadata(parentId).content.push(id);
+    // If it is a folder, update parent
+    const parent = getMetadata(parentId);
+    if (parent.isFolder) parent.content.push(id);
     
     // If it is a file, save the content on the server
     if (isFolder === false) await sendToServer(`POST ${id} ${content}`);
@@ -98,29 +97,25 @@ async function updateFile(id, name, content, parentId) {
 
 async function deleteFile(id) {
     
-    // Remove item's metdata and content
     const item = getMetadata(id);
-    filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
-    await sendToServer(`DELETE ${id}`);
-
+    
     // Update parent
     if (item.parentId) {
         const parent = getMetadata(item.parentId);
-        parent.content.splice(parent.content.indexOf(id), 1);
+        if (parent) parent.content.splice(parent.content.indexOf(id), 1);
     }
 
     // Recursively delete subdir
     if (item.isFolder) {
-        for (child in item.content) {
+        for (const child of item.content) {
             await deleteFile(child);
         }
     }
-}
 
-process.on('SIGINT', () => {
-    if (sock) sock.end();
-    process.exit();
-})
+    // Remove item's metdata and content
+    filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
+    await sendToServer(`DELETE ${id}`);
+}
 
 export {
     getMetadata,

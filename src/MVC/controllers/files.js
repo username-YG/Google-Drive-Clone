@@ -4,7 +4,7 @@ exports.createFile = async (req, res) => {
 
     // Return 400 when no body is sent
     if (!req.body) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).json({ error: "Bad Request" })
     }
 
     const { name, content, isFolder, parentId } = req.body;
@@ -15,7 +15,7 @@ exports.createFile = async (req, res) => {
     if ((name === undefined || isFolder === undefined || parentId === undefined)
         || (name === "" || name === null)
         ||  (isFolder === false && content === undefined)) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).json({ error: "Bad Request" })
     }
 
     // Return 404 is the parent doesn't exist or isn't a folder
@@ -46,7 +46,7 @@ exports.updateFile = async (req, res) => {
 
     // Return 400 when no body is sent
     if (!req.body) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).json({ error: "Bad Request" })
     }
 
     /*
@@ -70,7 +70,7 @@ exports.updateFile = async (req, res) => {
     // Return 400 when new name is empty
     if ((name === undefined && content === undefined && parentId === undefined)
         || (name === "" || name === null)) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).json({ error: "Bad Request" })
     }
 
     // Ensure the parent exists and is a folder
