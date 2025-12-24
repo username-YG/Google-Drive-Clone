@@ -1,7 +1,8 @@
 import net from "net";
+import {getPermissions} from './permissions.js'
 
 const rootId = crypto.randomUUID();
-const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [] } ];
+const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {} } ];
 
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
@@ -46,7 +47,7 @@ async function createFile(name, content, isFolder, parentId) {
 
     // Add new item to array
     if (parentId === null) parentId = rootId;
-    const newItem = { id, name, isFolder, parentId, content: [] };
+    const newItem = { id, name, isFolder, parentId, content: [], permissions: {} };
     filesystem.push(newItem);
 
     // If it is a folder, update parent
@@ -63,8 +64,9 @@ function getAllFiles() {
 }
 
 async function getFile(id) {
-    // We use a copy so we don't store the content on the server
+    // We use a copy so we don't store the content or permissions on the server
     const copy = JSON.parse(JSON.stringify(getMetadata(id)));
+    copy.permissions = getPermissions(id);
     if (copy.isFolder === false) copy.content = await sendToServer(`GET ${id}`);
     return copy;
 }

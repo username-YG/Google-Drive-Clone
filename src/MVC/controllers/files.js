@@ -1,9 +1,10 @@
 const Files = require('../models/files')
+const Perm = require('../models/permissions')
 
 exports.createFile = async (req, res) => {
 
-    // Return 400 when no body is sent
-    if (!req.body) {
+    // Return 400 when no body or header of userid is sent
+    if (!req.body || !req.headers || !req.headers.userid) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -26,26 +27,54 @@ exports.createFile = async (req, res) => {
         }
     }
 
-    const newFile = await Files.createFile(name, content, isFolder, parentId);
-    res.status(201).location(`/api/files/${newFile.id}`).end()
+    try {
+        const newFile = await Files.createFile(name, content, isFolder, parentId);
+        Perm.addPermission(newFile.id, req.headers.userid, "owner"); // Add owner permissions
+        res.status(201).location(`/api/files/${newFile.id}`).end()
+    } catch(err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
 }
 
 exports.getAllFiles = (req, res) => {
-    res.json(Files.getAllFiles());
+
+    // Return 400 when no header of userid is sent
+    if (!req.headers || !req.headers.userid) {
+        return res.status(400).json({ error: "Bad Request" })
+    }
+
+    try {
+        res.json(Files.getAllFiles());
+    } catch(err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
 
 exports.getFile = async (req, res) => {
+
+    // Return 400 when no header of userid is sent
+    if (!req.headers || !req.headers.userid) {
+        return res.status(400).json({ error: "Bad Request" })
+    }
+
+    // Return 404 if the file doesn't exist
     if (!Files.getMetadata(req.params.id)) {
         return res.status(404).json({ error: 'Not found' });
     }
-    const file = await Files.getFile(req.params.id);
-    res.json(file);
+
+    try {
+        const file = await Files.getFile(req.params.id);
+        res.json(file);
+    } catch(err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
 
 exports.updateFile = async (req, res) => {
 
-    // Return 400 when no body is sent
-    if (!req.body) {
+    // Return 400 when no body or header of userid is sent
+    if (!req.body || !req.headers || !req.headers.userid) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -81,14 +110,31 @@ exports.updateFile = async (req, res) => {
         }
     }
 
-    const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
-    res.json(updatedFile);
+    try {
+        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
+        res.json(updatedFile);
+    } catch(err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
 }
 
 exports.deleteFile = async (req, res) => {
+
+    // Return 400 when no header of userid is sent
+    if (!req.headers || !req.headers.userid) {
+        return res.status(400).json({ error: "Bad Request" })
+    }
+
+    // Return 404 if the file doesn't exist
     if (!Files.getMetadata(req.params.id)) {
         return res.status(404).json({ error: 'Not found' });
     }
-    await Files.deleteFile(req.params.id)
-    res.status(204).end()
+
+    try {
+        await Files.deleteFile(req.params.id);
+        res.status(204).end()
+    } catch(err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
