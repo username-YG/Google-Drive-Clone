@@ -1,4 +1,6 @@
 const Permission = require('../models/permissions')
+const User = require('../models/users');
+
 // valid roles that can be assigned to users
 const roles = ["owner", "writer", "commenter", "reader"]
 
@@ -19,6 +21,11 @@ exports.getPermissions = (req, res) => {
         // checking if file or directory exists
         if (!filePermissions) {
             return res.status(404).json({ error: "Not Found" })
+        }
+
+        // Return 404 if the user doesn't exist
+        if (!User.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Not found' });
         }
 
         // checking if the requester's role is at least a reader
@@ -49,6 +56,11 @@ exports.createPermission = (req, res) => {
         // checking validity of the arguments
         if (!requesterID || !userID || !role || !roles.includes(role)) {
             return res.status(400).json({ error: "Bad Request" })
+        }
+
+        // Return 404 if one of the users doesn't exist
+        if (!User.findByID(requesterID) || !User.findByID(userID)) {
+            return res.status(404).json({ error: 'Not found' });
         }
 
         const filePermissions = Permission.getPermissions(fileOrDirId)
@@ -90,6 +102,11 @@ exports.updatePermission = (req, res) => {
             return res.status(400).json({ error: "Bad Request" })
         }
 
+        // Return 404 if one of the users doesn't exist
+        if (!User.findByID(requesterID) || !User.findByID(permissionId)) {
+            return res.status(404).json({ error: 'Not found' });
+        }
+
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists and the permission exists
@@ -122,6 +139,11 @@ exports.deletePermission = (req, res) => {
         }
 
         const requesterID = req.headers['x-user-id']
+
+        // Return 404 if one of the users doesn't exist
+        if (!User.findByID(requesterID) || !User.findByID(permissionId)) {
+            return res.status(404).json({ error: 'Not found' });
+        }
 
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
