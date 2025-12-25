@@ -15,7 +15,7 @@ const sendToServer = (msg) => {
         // Get response from server
         let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes
         sock.on("data", chunk => {
-            res += chunk;
+            res = Buffer.concat([res, chunk]);
 
             // Parsing length
             if (len === null && res.toString().includes(" ")) {
