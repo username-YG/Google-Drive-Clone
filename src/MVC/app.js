@@ -11,4 +11,5 @@ app.use('/api/search', searchRoutes)
 app.use('/api/users', usersRoutes)
 app.use('/api/tokens', tokensRoutes)
 
-app.listen(3000)
+const webPort = +process.argv[4];
+app.listen(webPort);

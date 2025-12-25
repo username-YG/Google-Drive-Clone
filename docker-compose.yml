@@ -1,8 +1,9 @@
 x-env: &shared_env
-    APP_PORT: ${APP_PORT:-8080}
-    APP_PATH: ${APP_PATH:-/app_path}
+    APP_PORT: ${APP_PORT:-8080} # The port the cpp server listens on
+    APP_PATH: ${APP_PATH:-/app_path} # The path in which files will be saved
     MAX_CLIENTS: ${MAX_CLIENTS:-2}
     MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
+    WEB_PORT: ${WEB_PORT:-3000} # The port the web server listens on
 
 services:
   server:
@@ -49,7 +50,7 @@ services:
       context: .
       dockerfile: src/MVC/dockerfile
     ports:
-      - "3000:3000"
+      - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     networks:
       - app_net
 

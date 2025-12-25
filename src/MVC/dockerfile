@@ -3,4 +3,4 @@ FROM node:latest
 COPY src/MVC /usr/googledrive/app
 WORKDIR /usr/googledrive/app
 
-CMD node app.js server $APP_PORT
+CMD node app.js server $APP_PORT $WEB_PORT
