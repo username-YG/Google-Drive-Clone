@@ -110,7 +110,8 @@ async function updateFile(id, name, content, parentId) {
         item.parentId = parentId;
     }
 
-    return item;
+    // We also want to return content and permissions
+    return getFile(id);
 }
 
 async function deleteFile(id) {

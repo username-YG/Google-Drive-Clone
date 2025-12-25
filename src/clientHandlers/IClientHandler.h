@@ -19,7 +19,9 @@ inline void* handleClient(void* arg) {
     // Casting the argument back to ArgsPtr
     ArgsPtr* argsPtr = (ArgsPtr*)arg;
     // Running the app to start and handle the communication
-    argsPtr->app->run();
+    try {
+        argsPtr->app->run();
+    } catch (...) {}
 
     // Cleaning up allocated memory
     delete argsPtr->app;
