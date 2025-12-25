@@ -1,4 +1,4 @@
-# Google Drive System
+<img width="787" height="451" alt="image" src="https://github.com/user-attachments/assets/63dae989-2bca-404d-a28f-af039e0436c6" /># Google Drive System
 # Advanced System Programming - Exercise 3
 
 ## Project Overview
@@ -129,7 +129,7 @@ Request Body:
 }
 
 Possible status codes:
-- 200 OK: file or directory updated.
+- 204 No Content: file or directory updated successfully.
 - 400 Bad Request: missing header/body or invalid fields.
 - 404 Not Found: file or directory with the specified id does not exist or parent either does not exist or not a directory.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
@@ -189,7 +189,7 @@ Request Body:
 }
 
 Possible status codes:
-- 204 No Content: permission updated.
+- 204 No Content: permission updated successfully.
 - 400 Bad Request: missing or incomplete header or body or invalid role (permission).
 - 403 Forbidden: insufficient permissions of the requester's (from the header) role.
 - 404 Not Found: file or directory with the specified id or permission (role) with the specified pId does not exist.
