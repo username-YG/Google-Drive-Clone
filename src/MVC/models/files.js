@@ -11,6 +11,7 @@ const sendToServer = (msg) => {
         const ip = process.argv[2];
         const port = +process.argv[3];
         const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
+        sock.setTimeout(2000); // 2 sec before we give up
 
         // Get response from server
         let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes
@@ -18,15 +19,20 @@ const sendToServer = (msg) => {
             res = Buffer.concat([res, chunk]);
 
             // Parsing length
-            if (len === null && res.toString().includes(" ")) {
-                len = parseInt(res.toString());
+            const pos = res.indexOf(' ');
+            if (len === null && pos !== -1) {
+                len = parseInt(res.subarray(0, pos).toString());
                 // Extract substring after space
-                res = res.subarray(Buffer.byteLength(res.toString().slice(0, res.toString().indexOf(" ") + 1)));
+                res = res.subarray(pos + 1);
             }
 
             // When finished reading all
             if (len !== null && len <= res.length) {
+
+                // Close socket and other events
                 sock.end();
+                sock.removeAllListeners();
+
                 let result = res.subarray(0, len).toString();
                 if (result.startsWith("500")) return reject(new Error(result));
                 // Remove the status msg and the last '\n'
@@ -38,6 +44,9 @@ const sendToServer = (msg) => {
         });
 
         sock.on("error", reject);
+        sock.on("close", reject);
+        sock.on("end", reject);
+        sock.on('timeout', () => { resolve(res.toString()); });
     });
 }
 
@@ -91,14 +100,17 @@ async function updateFile(id, name, content, parentId) {
         await sendToServer(`POST ${id} ${content}`);
     }
 
-    // Update parent if asked to
+    // Update parents if asked to
     if (parentId === null) parentId = rootId;
     if (parentId) {
         const oldParent = getMetadata(item.parentId);
         oldParent.content.splice(oldParent.content.indexOf(id), 1);
+        const newParent = getMetadata(parentId);
+        newParent.content.push(id);
         item.parentId = parentId;
     }
 
+    return item;
 }
 
 async function deleteFile(id) {
@@ -116,6 +128,7 @@ async function deleteFile(id) {
         for (const child of item.content) {
             await deleteFile(child);
         }
+        return;
     }
 
     // Remove item's metdata and content

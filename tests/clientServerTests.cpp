@@ -3,6 +3,7 @@
 
 #include "../src/servers/TCPServer.h"
 #include "../src/clientHandlers/naiveClientHandler.h"
+#include "../src/clientHandlers/threadPoolClientHandler.h"
 #include "../src/clients/TCPClient.h"
 #include "../src/commands/addCommand.h"
 #include "../src/commands/getCommand.h"
@@ -17,7 +18,7 @@ void testClientServer(vector<pair<string, string>> IOMap, map<string, pair<IComm
 
     NaiveClientHandler handler;
     mutex lock;
-    TCPServer server(commands, &handler, lock, errMsg);
+    TCPServer server(commands, &handler, lock, errMsg, 3);
 
     // Use the first port number that works
     int port = MIN_PORT;

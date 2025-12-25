@@ -19,7 +19,6 @@ services:
 
   cpp-client:
     # Defines a interactive shell
-    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -32,7 +31,6 @@ services:
 
   py-client:
     # Defines a interactive shell
-    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -55,7 +53,6 @@ services:
       - app_net
 
   gtests:
-    platform: linux/amd64
     environment:
       <<: *shared_env
     build:
