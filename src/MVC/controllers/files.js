@@ -4,7 +4,7 @@ const Perm = require('../models/permissions')
 exports.createFile = async (req, res) => {
 
     // Return 400 when no body or header of userid is sent
-    if (!req.body || !req.headers || !req.headers.userid) {
+    if (!req.body || !req.headers || !req.headers['x-user-id']) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -29,7 +29,7 @@ exports.createFile = async (req, res) => {
 
     try {
         const newFile = await Files.createFile(name, content, isFolder, parentId);
-        Perm.addPermission(newFile.id, req.headers.userid, "owner"); // Add owner permissions
+        Perm.addPermission(newFile.id, req.headers['x-user-id'], "owner"); // Add owner permissions
         res.status(201).location(`/api/files/${newFile.id}`).end()
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -40,7 +40,7 @@ exports.createFile = async (req, res) => {
 exports.getAllFiles = (req, res) => {
 
     // Return 400 when no header of userid is sent
-    if (!req.headers || !req.headers.userid) {
+    if (!req.headers || !req.headers['x-user-id']) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -54,7 +54,7 @@ exports.getAllFiles = (req, res) => {
 exports.getFile = async (req, res) => {
 
     // Return 400 when no header of userid is sent
-    if (!req.headers || !req.headers.userid) {
+    if (!req.headers || !req.headers['x-user-id']) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -74,7 +74,7 @@ exports.getFile = async (req, res) => {
 exports.updateFile = async (req, res) => {
 
     // Return 400 when no body or header of userid is sent
-    if (!req.body || !req.headers || !req.headers.userid) {
+    if (!req.body || !req.headers || !req.headers['x-user-id']) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
@@ -122,7 +122,7 @@ exports.updateFile = async (req, res) => {
 exports.deleteFile = async (req, res) => {
 
     // Return 400 when no header of userid is sent
-    if (!req.headers || !req.headers.userid) {
+    if (!req.headers || !req.headers['x-user-id']) {
         return res.status(400).json({ error: "Bad Request" })
     }
 
