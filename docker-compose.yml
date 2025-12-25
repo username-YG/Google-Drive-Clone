@@ -1,10 +1,11 @@
 x-env: &shared_env
     APP_PORT: ${APP_PORT:-8080}
     APP_PATH: ${APP_PATH:-/app_path}
+    MAX_CLIENTS: ${MAX_CLIENTS:-2}
+    MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
 
 services:
   server:
-    # The path in which files will be saved
     environment:
       <<: *shared_env
     build:
@@ -17,6 +18,7 @@ services:
 
   cpp-client:
     # Defines a interactive shell
+    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -29,6 +31,7 @@ services:
 
   py-client:
     # Defines a interactive shell
+    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -39,7 +42,19 @@ services:
     networks:
       - app_net
 
+  web-server:
+    environment:
+      <<: *shared_env
+    build:
+      context: .
+      dockerfile: src/MVC/dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app_net
+
   gtests:
+    platform: linux/amd64
     environment:
       <<: *shared_env
     build:

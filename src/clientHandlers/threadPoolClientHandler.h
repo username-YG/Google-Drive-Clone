@@ -8,12 +8,7 @@
 #include <queue>
 
 using namespace std;
-#define MAX_CLIENTS_AT_ONCE 10
-
-// Creating this "temporary" struct to pass the argument to the thread function safely
-struct ArgsPtr {
-    App* app;
-};
+// #define MAX_CLIENTS_AT_ONCE 10
 
 // Thread pool client handler class definition
 class ThreadPoolClientHandler : public IClientHandler {
@@ -27,7 +22,6 @@ class ThreadPoolClientHandler : public IClientHandler {
 
         // Private methods for thread handling
         void clientHandler();
-        void* handleClient(void* arg);
 
         // Private constructor and destructor for singleton pattern
         ThreadPoolClientHandler(size_t numThreads);
@@ -35,7 +29,7 @@ class ThreadPoolClientHandler : public IClientHandler {
 
     public:
         // Singleton instance accessor: creating the thread pool vector only once
-        static ThreadPoolClientHandler& instance();
+        static ThreadPoolClientHandler& instance(int numThreads);
         // Creating a new client handler for a new client
         void createClientHandler(App* app) override;
 
