@@ -242,10 +242,8 @@ docker compose up --build server
 ```
 docker compose up --build web-server
 ```
-5. In another terminal, run the various HTTP requests:
-```
+5. In the cmd, run the various HTTP requests listed above.
 
-```
 Note for the checker: you can run the tests using the command "docker-compose run --rm gtests"
 You can modify the port the server listens to or the path the files are saved to by writing PORT=[new_port] or APP_PATH=[new_path] before the command, for example: 
 PORT=8080 APP_PATH=/mypath docker compose up server
