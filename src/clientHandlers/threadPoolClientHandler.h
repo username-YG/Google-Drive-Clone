@@ -8,7 +8,7 @@
 #include <queue>
 
 using namespace std;
-#define MAX_CLIENTS_AT_ONCE 10
+// #define MAX_CLIENTS_AT_ONCE 10
 
 // Creating this "temporary" struct to pass the argument to the thread function safely
 struct ArgsPtr {
@@ -35,7 +35,7 @@ class ThreadPoolClientHandler : public IClientHandler {
 
     public:
         // Singleton instance accessor: creating the thread pool vector only once
-        static ThreadPoolClientHandler& instance();
+        static ThreadPoolClientHandler& instance(int numThreads);
         // Creating a new client handler for a new client
         void createClientHandler(App* app) override;
 

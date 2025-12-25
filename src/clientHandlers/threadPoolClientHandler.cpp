@@ -66,23 +66,23 @@ ThreadPoolClientHandler::~ThreadPoolClientHandler() {
 }
 
 // Singleton instance accessor: creating the thread pool vector only once
-ThreadPoolClientHandler& ThreadPoolClientHandler::instance() {
+ThreadPoolClientHandler& ThreadPoolClientHandler::instance(int numThreads) {
     // Static instance of the ThreadPoolClientHandler
-    static ThreadPoolClientHandler instance(MAX_CLIENTS_AT_ONCE);
+    static ThreadPoolClientHandler instance(numThreads);
     return instance;
 }
 
 // Creating a new client handler for a new client
 void ThreadPoolClientHandler::createClientHandler(App* app) {
     // Getting the singleton instance of the ThreadPoolClientHandler
-    ThreadPoolClientHandler& instance = ThreadPoolClientHandler::instance();
+    // ThreadPoolClientHandler& instance = ThreadPoolClientHandler::instance(int numThreads);
     {
         // Locking the queue and adding a new client
-        unique_lock<mutex> lock(instance.queueMutex);
+        unique_lock<mutex> lock(this->queueMutex);
         ArgsPtr* argsPtr = new ArgsPtr();
         argsPtr->app = app;
-        instance.clients.push(argsPtr);
+        this->clients.push(argsPtr);
     }
     // Notifying one thread that a new client is available
-    instance.condition.notify_one();
+    this->condition.notify_one();
 }
