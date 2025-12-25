@@ -1,4 +1,4 @@
-<img width="787" height="451" alt="image" src="https://github.com/user-attachments/assets/63dae989-2bca-404d-a28f-af039e0436c6" /># Google Drive System
+# Google Drive System
 # Advanced System Programming - Exercise 3
 
 ## Project Overview
