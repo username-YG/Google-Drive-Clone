@@ -25,7 +25,7 @@ HTTP requests that require authentication expect the following HTTP header to be
 x-user-id: <authenticated user id>
 
 If the header is missing, the server responds with **400 Bad Request**.
-If the specified user doesn't exist, the server responds with **404 Not found**.
+If the specified user in the header doesn't exist, the server responds with **404 Not found**.
 
 ### Users
 
@@ -160,7 +160,7 @@ Possible status codes:
 - 200 OK: permissions returned.
 - 400 Bad Request: missing authentication header.
 - 403 Forbidden: insufficient permissions of the requester's (from the header) role.
-- 404 Not Found: file or directory with the specified id does not exist.
+- 404 Not Found: file or directory with the specified id does not exist or the user in the header does not exist.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### POST /api/files/:id/permissions
@@ -177,7 +177,7 @@ Possible status codes:
 - 201 Created: permission created. Returns the location header: /api/files/{id}/permissions/{userID}
 - 400 Bad Request: missing header or missing or incomplete body or invalid role (permission)
 - 403 Forbidden: insufficient permissions of the requester's (from the header) role.
-- 404 Not Found: file or directory with the specified id does not exist.
+- 404 Not Found: file or directory with the specified id does not exist or the user in the header does not exist.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### PATCH /api/files/:id/permissions/:pId
@@ -193,7 +193,7 @@ Possible status codes:
 - 204 No Content: permission updated successfully.
 - 400 Bad Request: missing or incomplete header or body or invalid role (permission).
 - 403 Forbidden: insufficient permissions of the requester's (from the header) role.
-- 404 Not Found: file or directory with the specified id or permission (role) with the specified pId does not exist.
+- 404 Not Found: file or directory with the specified id or permission (role) with the specified pId does not exist or the user in the header or the user with the specified pId does not exist.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### DELETE /api/files/:id/permissions/:pId
@@ -204,7 +204,7 @@ Possible status codes:
 - 204 No Content: permission deleted successfully.
 - 400 Bad Request: missing authentication header.
 - 403 Forbidden: insufficient permissions of the requester's (from the header) role.
-- 404 Not Found: file or directory with the specified id or permission (role) with the specified pId does not exist.
+- 404 Not Found: file or directory with the specified id or permission (role) with the specified pId does not exist or the user in the header or the user with the specified pId does not exist.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 ### Search
@@ -216,14 +216,16 @@ Returns all files and directories whose name or content contains the query strin
 Possible status codes:
 - 200 OK: all files and directories matching returned.
 - 400 Bad Request: missing authentication header.
+- 404 Not Found: the user in the header does not exist.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 
 ## Notes
- - All error responses are returned as:
-   {
-     "error": "Error description"
-   }
+- We decided to implement our code such that the pId is actually the userID, exactly like in Google Drive.
+- All error responses are returned as:
+  {
+    "error": "Error description"
+  }
 - All requests and responses use JSON format.
 - Authentication is simplified (and mostly unchecked) for this exercise but will be extended in future steps of the project.
 
