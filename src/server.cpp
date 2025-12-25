@@ -8,11 +8,21 @@
 
 #include <iostream>
 #include <map>
+#include <cstdlib> // Required for getenv
+#include <string>  // Required for stoi
 
 int main(int argc, char *argv[]) {
 
     // Ensure enough args
     if (argc < 2) return 0;
+
+    // Read environment variables set in docker-compose.yml
+    const char* envMaxClients = std::getenv("MAX_CLIENTS");
+    const char* envMaxThreads = std::getenv("MAX_CLIENTS_AT_ONCE");
+
+    // Convert to integers with fallback defaults (3 and 10)
+    int maxClients = envMaxClients ? std::stoi(envMaxClients) : 3;
+    int maxThreads = envMaxThreads ? std::stoi(envMaxThreads) : 10;
 
     // Commands the server supports
     RLE comp;
@@ -36,14 +46,14 @@ int main(int argc, char *argv[]) {
         {"Default", "500 Internal Server Error\n"}
     };
 
-    // An handler for new users
-    ThreadPoolClientHandler& handler = ThreadPoolClientHandler::instance();
+    // A handler for new users
+    ThreadPoolClientHandler& handler = ThreadPoolClientHandler::instance(maxThreads);
     mutex lock;
 
     try {
         // Init server
         int port = stoi(argv[1]);
-        TCPServer server(commands, &handler, lock, errMsg);
+        TCPServer server(commands, &handler, lock, errMsg, maxClients);
         server.startServer(port);
 
         // Serve clients forever

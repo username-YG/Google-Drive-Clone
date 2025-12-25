@@ -1,6 +1,8 @@
 x-env: &shared_env
     APP_PORT: ${APP_PORT:-8080} # The port the cpp server listens on
     APP_PATH: ${APP_PATH:-/app_path} # The path in which files will be saved
+    MAX_CLIENTS: ${MAX_CLIENTS:-2}
+    MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
     WEB_PORT: ${WEB_PORT:-3000} # The port the web server listens on
 
 services:
@@ -17,6 +19,7 @@ services:
 
   cpp-client:
     # Defines a interactive shell
+    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -29,6 +32,7 @@ services:
 
   py-client:
     # Defines a interactive shell
+    platform: linux/amd64
     stdin_open: true
     tty: true
     environment:
@@ -51,6 +55,7 @@ services:
       - app_net
 
   gtests:
+    platform: linux/amd64
     environment:
       <<: *shared_env
     build:
