@@ -10,27 +10,31 @@ const sendToServer = (msg) => {
         // Send message to server
         const ip = process.argv[2];
         const port = +process.argv[3];
-        const sock = net.connect(port, ip, () => sock.write(`${msg.length} ${msg}`));
+        const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
 
         // Get response from server
-        let res = '', len = null;
+        let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes
         sock.on("data", chunk => {
             res += chunk;
 
             // Parsing length
-            if (len === null && res.includes(" ")) [len, res] = [parseInt(res), res.slice(res.indexOf(" ") + 1)];
+            if (len === null && res.toString().includes(" ")) {
+                len = parseInt(res.toString());
+                // Extract substring after space
+                res = res.subarray(Buffer.byteLength(res.toString().slice(0, res.toString().indexOf(" ") + 1)));
+            }
 
             // When finished reading all
             if (len !== null && len <= res.length) {
                 sock.end();
-                res = res.slice(0, len);
-                if (res.startsWith("500")) reject(new Error(res));
+                let result = res.subarray(0, len).toString();
+                if (result.startsWith("500")) return reject(new Error(result));
                 // Remove the status msg and the last '\n'
-                const index = res.indexOf("\n\n");
-                res = (index === -1) ? "" : res.slice(index + 2).slice(0, -1);
-                resolve(res);
+                const index = result.indexOf("\n\n");
+                result = (index === -1) ? "" : result.slice(index + 2).slice(0, -1);
+                resolve(result);
             }
-            
+
         });
 
         sock.on("error", reject);
@@ -125,5 +129,6 @@ export {
     getFile,
     createFile,
     updateFile,
-    deleteFile
+    deleteFile,
+    sendToServer
 }
