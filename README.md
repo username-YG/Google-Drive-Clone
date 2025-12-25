@@ -257,10 +257,34 @@ You can modify some of the variables in each run, those that are defined as envi
 
 For example: 
 PORT=8080 APP_PATH=/mypath docker compose up server
+
+Note for the checker #2: In order to use "curl" commands in our server's REST API using CMD, you must follow a specific syntax to handle JSON data and headers correctly:
+1. Command Flags:
+- -i (Include): Displays the HTTP response headers (e.g., Status Code, Content-Type, Location).
+- -X (Request Method): Specifies the HTTP method to use (GET, POST, PATCH, DELETE).
+- -H (Header): Sets required headers like Content-Type or the mandatory x-user-id.
+- -d (Data): Sends the data in the HTTP POST or PATCH request body.
+
+2. Core Syntax Requirements
+- The Stop-Parsing Symbol (--%): Must be placed immediately after the curl.exe command. This prevents PowerShell from misinterpreting special characters like backslashes and quotes.
+- Escaped Quotes (\"): Inside the JSON body (-d), every key and string value must be escaped using a backslash to be processed correctly by the server.
+- Authentication: Requests that require a logged-in user (like creating or searching files) must include the x-user-id header.
+  
+For example:
+To create a new user using POST, run:
+```
+curl.exe -i -X POST http://localhost:3000/api/users --% -H "Content-Type: application/json" -d "{\"username\":\"[YOUR_USER_USERNAME]\", \"password\":\"[YOUR_USER_PASSWORD]\", \"displayName\":\"[YOUR_USER_DISPLAY_NAME]\", \"profilePic\":\"[YOUR_USER_PROFILE_PIC]\"}"
+```
+To create a File/Folder using POST, run (after isFolder write false to create a file or true to create a folder):
+```
+curl.exe -i -X POST http://localhost:3000/api/files --% -H "Content-Type: application/json" -H "x-user-id: [YOUR_USER_ID]" -d "{\"name\":\"[YOUR_FILE_NAME\",\"content\":\"[YOUR_FILE_CONTENT]\",\"isFolder\":false,\"parentId\":null}"
+```
+
 Now you are able to use the program as much as you'd like!
 
 ## Running Examples:
-
+<img width="1781" height="252" alt="image" src="https://github.com/user-attachments/assets/2751b32f-6612-4823-ae5b-146b8dc8af3d" />
+<img width="1796" height="283" alt="image" src="https://github.com/user-attachments/assets/53626b8d-0165-4637-8f61-330ede6b2703" />
 
 Enjoy!
 
