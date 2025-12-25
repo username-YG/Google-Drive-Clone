@@ -6,7 +6,6 @@ x-env: &shared_env
 
 services:
   server:
-    # The path in which files will be saved
     environment:
       <<: *shared_env
     build:
@@ -40,6 +39,17 @@ services:
     build:
       context: .
       dockerfile: src/clients/dockerfile-py
+    networks:
+      - app_net
+
+  web-server:
+    environment:
+      <<: *shared_env
+    build:
+      context: .
+      dockerfile: src/MVC/dockerfile
+    ports:
+      - "3000:3000"
     networks:
       - app_net
 

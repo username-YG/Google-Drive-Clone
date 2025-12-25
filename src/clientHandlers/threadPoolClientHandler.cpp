@@ -26,19 +26,6 @@ void ThreadPoolClientHandler::clientHandler() {
     }
 }
 
-// The function the thread executes to handle the communication with the client
-void* ThreadPoolClientHandler::handleClient(void* arg) {
-    // Casting the argument back to ArgsPtr
-    ArgsPtr* argsPtr = (ArgsPtr*)arg;
-    // Running the app to start and handle the communication
-    argsPtr->app->run();
-
-    // Cleaning up allocated memory
-    delete argsPtr->app;
-    delete argsPtr;
-    return NULL;
-}
-    
 // Initialize the thread pool with a specific number of worker threads
 ThreadPoolClientHandler::ThreadPoolClientHandler(size_t numThreads) : stop(false) {
     for (size_t i = 0; i < numThreads; ++i) {

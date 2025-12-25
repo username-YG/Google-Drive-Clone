@@ -5,7 +5,7 @@ const roles = ["owner", "writer", "commenter", "reader"]
 // controller method to get permissions for a file or directory
 exports.getPermissions = (req, res) => {
     const fileOrDirId = req.params.id
-    const requesterID = req.headers.userid
+    const requesterID = req.headers['x-user-id']
 
     // checking validity of the arguments
     if (!requesterID) {
@@ -31,7 +31,7 @@ exports.getPermissions = (req, res) => {
 // controller method to create a permission for a file or directory
 exports.createPermission = (req, res) => {
     const fileOrDirId = req.params.id
-    const requesterID = req.headers.userid
+    const requesterID = req.headers['x-user-id']
     const { userID, role } = req.body
 
     // checking validity of the arguments
@@ -60,7 +60,7 @@ exports.createPermission = (req, res) => {
 exports.updatePermission = (req, res) => {
     const fileOrDirId = req.params.id
     const permissionId = req.params.pId
-    const requesterID = req.headers.userid
+    const requesterID = req.headers['x-user-id']
     const { role } = req.body
 
      // checking validity of the arguments
@@ -89,7 +89,7 @@ exports.updatePermission = (req, res) => {
 exports.deletePermission = (req, res) => {
     const fileOrDirId = req.params.id
     const permissionId = req.params.pId
-    const requesterID = req.headers.userid
+    const requesterID = req.headers['x-user-id']
 
     // checking validity of the arguments
     if (!requesterID) {
