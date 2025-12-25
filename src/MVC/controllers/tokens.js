@@ -14,7 +14,7 @@ exports.checkUserSignedIn = (req, res) => {
     // Verify if the user exists and the password matches
     if (user && user.password === password) {
         // Return the user ID as a token in the JSON response
-        res.status(201).json({ token: user.ID });
+        res.status(200).json({ token: user.ID });
     } else {
         // Return 404 if authentication fails
         res.status(404).json({ error: "Not Found" });

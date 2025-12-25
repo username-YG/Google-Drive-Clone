@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../controllers/fileAndDir')
+const controller = require('../controllers/files')
 const permController = require('../controllers/permissions')
 
 router.route('/')
-        .get(controller.getAllFilesAndDirs)
-        .post(controller.createFileOrDir)
+        .get(controller.getAllFiles)
+        .post(controller.createFile)
 
 router.route('/:id')
-        .get(controller.getFileOrDirById)
-        .patch(controller.updateFileOrDir)
-        .delete(controller.deleteFileOrDir)
+        .get(controller.getFile)
+        .patch(controller.updateFile)
+        .delete(controller.deleteFile)
 
 router.route('/:id/permissions')
         .get(permController.getPermissions)

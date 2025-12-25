@@ -10,11 +10,6 @@
 using namespace std;
 #define MAX_CLIENTS_AT_ONCE 10
 
-// Creating this "temporary" struct to pass the argument to the thread function safely
-struct ArgsPtr {
-    App* app;
-};
-
 // Thread pool client handler class definition
 class ThreadPoolClientHandler : public IClientHandler {
     private:
@@ -27,7 +22,6 @@ class ThreadPoolClientHandler : public IClientHandler {
 
         // Private methods for thread handling
         void clientHandler();
-        void* handleClient(void* arg);
 
         // Private constructor and destructor for singleton pattern
         ThreadPoolClientHandler(size_t numThreads);
