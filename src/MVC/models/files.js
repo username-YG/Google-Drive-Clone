@@ -1,5 +1,5 @@
 import net from "net";
-import {getPermissions} from './permissions.js'
+import { getPermissions, deleteAllPermissions } from './permissions.js'
 
 const rootId = crypto.randomUUID();
 const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {} } ];
@@ -10,30 +10,43 @@ const sendToServer = (msg) => {
         // Send message to server
         const ip = process.argv[2];
         const port = +process.argv[3];
-        const sock = net.connect(port, ip, () => sock.write(`${msg.length} ${msg}`));
+        const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
+        sock.setTimeout(2000); // 2 sec before we give up
 
         // Get response from server
-        let res = '', len = null;
+        let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes
         sock.on("data", chunk => {
-            res += chunk;
+            res = Buffer.concat([res, chunk]);
 
             // Parsing length
-            if (len === null && res.includes(" ")) [len, res] = [parseInt(res), res.slice(res.indexOf(" ") + 1)];
+            const pos = res.indexOf(' ');
+            if (len === null && pos !== -1) {
+                len = parseInt(res.subarray(0, pos).toString());
+                // Extract substring after space
+                res = res.subarray(pos + 1);
+            }
 
             // When finished reading all
             if (len !== null && len <= res.length) {
+
+                // Close socket and other events
                 sock.end();
-                res = res.slice(0, len);
-                if (res.startsWith("500")) reject(new Error(res));
+                sock.removeAllListeners();
+
+                let result = res.subarray(0, len).toString();
+                if (result.startsWith("500")) return reject(new Error(result));
                 // Remove the status msg and the last '\n'
-                const index = res.indexOf("\n\n");
-                res = (index === -1) ? "" : res.slice(index + 2).slice(0, -1);
-                resolve(res);
+                const index = result.indexOf("\n\n");
+                result = (index === -1) ? "" : result.slice(index + 2).slice(0, -1);
+                resolve(result);
             }
-            
+
         });
 
         sock.on("error", reject);
+        sock.on("close", reject);
+        sock.on("end", reject);
+        sock.on('timeout', () => { resolve(res.toString()); });
     });
 }
 
@@ -87,14 +100,18 @@ async function updateFile(id, name, content, parentId) {
         await sendToServer(`POST ${id} ${content}`);
     }
 
-    // Update parent if asked to
+    // Update parents if asked to
     if (parentId === null) parentId = rootId;
     if (parentId) {
         const oldParent = getMetadata(item.parentId);
         oldParent.content.splice(oldParent.content.indexOf(id), 1);
+        const newParent = getMetadata(parentId);
+        newParent.content.push(id);
         item.parentId = parentId;
     }
 
+    // We also want to return content and permissions
+    return getFile(id);
 }
 
 async function deleteFile(id) {
@@ -114,9 +131,10 @@ async function deleteFile(id) {
         }
     }
 
-    // Remove item's metdata and content
+    // Remove item's metdata, permissions and content
     filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
-    await sendToServer(`DELETE ${id}`);
+    deleteAllPermissions(id);
+    if (item.isFolder === false) await sendToServer(`DELETE ${id}`);
 }
 
 export {
@@ -125,5 +143,6 @@ export {
     getFile,
     createFile,
     updateFile,
-    deleteFile
+    deleteFile,
+    sendToServer
 }

@@ -15,7 +15,7 @@ string SocketInputOutput::getInput() const {
     // Get message
     char buffer[BUF_SIZE];
     int read_bytes = recv(sockIn, buffer, BUF_SIZE, 0);
-    if (read_bytes <= 0) return "error";
+    if (read_bytes <= 0) throw runtime_error("Socket error");;
     string input = string(buffer, read_bytes);
 
     // Separate length and content
@@ -26,7 +26,7 @@ string SocketInputOutput::getInput() const {
     // Keep reading all bytes
     while (input.length() < length) {
         read_bytes = recv(sockIn, buffer, BUF_SIZE, 0);
-        if (read_bytes <= 0) return "error";
+        if (read_bytes <= 0) throw runtime_error("Socket error");;
         input += string(buffer, read_bytes);
     }
 

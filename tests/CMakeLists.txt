@@ -24,6 +24,7 @@ add_executable(tests
                 ../src/InputOutputs/SocketInputOutput.cpp
                 ../src/App.cpp
                 ../src/clientHandlers/naiveClientHandler.cpp
+                ../src/clientHandlers/threadPoolClientHandler.cpp
                 ../src/servers/TCPServer.cpp
                 ../src/clients/TCPClient.cpp
                 addCommandTests.cpp

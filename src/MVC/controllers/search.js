@@ -11,7 +11,7 @@ exports.searchFilesAndDirs = async (req, res) => {
 
         const requesterID = req.headers['x-user-id']
 
-        const files = await Search.getFiles(query)
+        const files = await Search.getFiles(query, requesterID)
         // retrieving and returning the files and directories
         res.status(200).json(files)
     } catch(err) {

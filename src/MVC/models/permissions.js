@@ -26,9 +26,15 @@ const deletePermission = (fileOrDirId, userID) => {
     delete permissions[fileOrDirId][userID]
 }
 
+// deleting all the permissions of a certain file or directory
+const deleteAllPermissions = (fileOrDirId) => {
+    delete permissions[fileOrDirId]
+}
+
 module.exports = { 
     addPermission, 
     getPermissions, 
     updatePermission,
-    deletePermission 
+    deletePermission,
+    deleteAllPermissions
 };

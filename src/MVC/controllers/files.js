@@ -1,5 +1,6 @@
 const Files = require('../models/files')
-const Perm = require('../models/permissions')
+const Perms = require('../models/permissions')
+const Users = require('../models/users')
 
 exports.createFile = async (req, res) => {
     try {
@@ -8,6 +9,7 @@ exports.createFile = async (req, res) => {
         if (!req.body || !req.headers || !req.headers['x-user-id']) {
             return res.status(400).json({ error: "Bad Request" })
         }
+        const usrId = req.headers['x-user-id'];
 
         const { name, content, isFolder, parentId } = req.body;
 
@@ -28,8 +30,22 @@ exports.createFile = async (req, res) => {
             }
         }
 
+        // Return 404 if the user doesn't exist
+        if (!Users.findByID(usrId)) {
+            return res.status(404).json({ error: 'Not found' });
+        }
+
+        // Return 403 if the user doesn't have permissions to write to the parent folder
+        // Everyone is allowed to write to the root so we don't check that
+        if (parentId) {
+            const perm = Perms.getPermissions(parentId);
+            if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
+                return res.status(403).json({ error: "Forbidden" })
+            }
+        }
+
         const newFile = await Files.createFile(name, content, isFolder, parentId);
-        Perm.addPermission(newFile.id, req.headers['x-user-id'], "owner"); // Add owner permissions
+        Perms.addPermission(newFile.id, usrId, "owner"); // Add owner permissions
         res.status(201).location(`/api/files/${newFile.id}`).end()
 
     } catch(err) {
@@ -37,14 +53,30 @@ exports.createFile = async (req, res) => {
     }
 }
 
-exports.getAllFiles = (req, res) => {
+exports.getAllFiles = async (req, res) => {
     try {
 
         // Return 400 when no header of userid is sent
         if (!req.headers || !req.headers['x-user-id']) {
             return res.status(400).json({ error: "Bad Request" })
         }
-        res.json(Files.getAllFiles());
+        const usrId = req.headers['x-user-id'];
+
+        // Return 404 if the user doesn't exist
+        if (!Users.findByID(usrId)) {
+            return res.status(404).json({ error: 'Not found' });
+        }
+
+        // Filter only items the user is allowed to read
+        const permittedFiles = [];
+        for (const fileId of Files.getAllFiles()) {
+            const perm = Perms.getPermissions(fileId);
+            if (perm && perm[usrId]) {
+                const fileObj = await Files.getFile(fileId);
+                permittedFiles.push(fileObj);
+            }
+        }
+        res.json(permittedFiles);
 
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -59,10 +91,18 @@ exports.getFile = async (req, res) => {
         if (!req.headers || !req.headers['x-user-id']) {
             return res.status(400).json({ error: "Bad Request" })
         }
+        const usrId = req.headers['x-user-id'];
 
         // Return 404 if the file doesn't exist
-        if (!Files.getMetadata(req.params.id)) {
+        // Return 404 if the user doesn't exist
+        if (!Files.getMetadata(req.params.id) || !Users.findByID(usrId)) {
             return res.status(404).json({ error: 'Not found' });
+        }
+
+        // Return 403 if the user doesn't have permissions to read the item
+        const perm = Perms.getPermissions(req.params.id);
+        if (!perm || !perm[usrId]) {
+            return res.status(403).json({ error: "Forbidden" })
         }
 
         const file = await Files.getFile(req.params.id);
@@ -76,10 +116,12 @@ exports.getFile = async (req, res) => {
 exports.updateFile = async (req, res) => {
 
     try {
+
         // Return 400 when no body or header of userid is sent
         if (!req.body || !req.headers || !req.headers['x-user-id']) {
             return res.status(400).json({ error: "Bad Request" })
         }
+        const usrId = req.headers['x-user-id'];
 
         /*
         The fields that can be changed using patch are only:
@@ -89,9 +131,9 @@ exports.updateFile = async (req, res) => {
         */
         let { name, content, parentId } = req.body
 
-        // Ensure the file exists
+        // Ensure the file and user exists
         const item = Files.getMetadata(req.params.id);
-        if (!item) {
+        if (!item || !Users.findByID(usrId)) {
             return res.status(404).json({ error: 'Not found' });
         }
 
@@ -113,8 +155,15 @@ exports.updateFile = async (req, res) => {
             }
         }
 
+        // Return 403 if the user doesn't have permissions to write to the file
+        // Everyone is allowed to write to the root so we don't check that
+        const perm = Perms.getPermissions(req.params.id);
+        if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
+            return res.status(403).json({ error: "Forbidden" })
+        }
+
         const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
-        res.json(updatedFile);
+        res.status(204).end()
 
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -130,10 +179,18 @@ exports.deleteFile = async (req, res) => {
         if (!req.headers || !req.headers['x-user-id']) {
             return res.status(400).json({ error: "Bad Request" })
         }
+        const usrId = req.headers['x-user-id'];
 
         // Return 404 if the file doesn't exist
-        if (!Files.getMetadata(req.params.id)) {
+        // Return 404 if the user doesn't exist
+        if (!Files.getMetadata(req.params.id) || !Users.findByID(usrId)) {
             return res.status(404).json({ error: 'Not found' });
+        }
+
+        // Return 403 if the user doesn't have owner permissions
+        const perm = Perms.getPermissions(req.params.id);
+        if (!perm || !perm[usrId] || perm[usrId] != "owner") {
+            return res.status(403).json({ error: "Forbidden" })
         }
 
         await Files.deleteFile(req.params.id);
