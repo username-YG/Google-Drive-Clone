@@ -292,9 +292,6 @@ Now you are able to use the program as much as you'd like!
 
 ## Easy to use HTTP Requests
 ### API Curl Examples
-
-Replace `localhost:3000` with your actual server address and port.
-
 ---
 
 ### Users
