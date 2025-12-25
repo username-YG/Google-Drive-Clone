@@ -163,7 +163,7 @@ exports.updateFile = async (req, res) => {
         }
 
         const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
-        res.json(updatedFile);
+        res.status(204).end()
 
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
