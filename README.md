@@ -245,7 +245,14 @@ docker compose up --build web-server
 5. In the cmd, run the various HTTP requests listed above.
 
 Note for the checker: you can run the tests using the command "docker-compose run --rm gtests"
-You can modify the port the server listens to or the path the files are saved to by writing PORT=[new_port] or APP_PATH=[new_path] before the command, for example: 
+You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
+- APP_PORT=[new_port] - The port the CPP server listens to 
+- APP_PATH=[new_path] - The path the files are saved to
+- WEB_PORT=[new_port] - The port the Web server listens to
+- MAX_CLIENTS=[new_max] - The maximal number of clients that can wait in the queue to the server concurrently
+- MAX_CLIENTS_AT_ONCE=[new_max] - The maximal number of clients the server can deal with concurrently
+
+For example: 
 PORT=8080 APP_PATH=/mypath docker compose up server
 Now you are able to use the program as much as you'd like!
 
