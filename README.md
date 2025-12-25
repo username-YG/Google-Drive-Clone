@@ -25,6 +25,7 @@ HTTP requests that require authentication expect the following HTTP header to be
 x-user-id: <authenticated user id>
 
 If the header is missing, the server responds with **400 Bad Request**.
+If the specified user doesn't exist, the server responds with **404 Not found**.
 
 ### Users
 
