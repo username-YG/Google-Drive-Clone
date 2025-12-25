@@ -220,12 +220,12 @@ Possible status codes:
 
 
 ## Notes
-All error responses are returned as:
-{
-  "error": "Error description"
-}
-All requests and responses use JSON format.
-Authentication is simplified (and mostly unchecked) for this exercise but will be extended in future steps of the project.
+ - All error responses are returned as:
+   {
+     "error": "Error description"
+   }
+- All requests and responses use JSON format.
+- Authentication is simplified (and mostly unchecked) for this exercise but will be extended in future steps of the project.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex3-main:
