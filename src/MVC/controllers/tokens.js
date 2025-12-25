@@ -1,6 +1,10 @@
 const User = require('../models/users')
 
 exports.checkUserSignedIn = (req, res) => {
+    if (!req.body){
+        return res.status(400).json({ error: "Bad Request"})
+    }
+
     try {    // Depart ID and password from the request body
         const { username, password } = req.body;
 

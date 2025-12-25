@@ -4,6 +4,10 @@ const User = require('../models/users');
 // POST /api/users
 exports.createUser = (req, res) => {
     try {
+        if (!req.body){
+            return res.status(400).json({ error: "Bad Request"})
+        }
+
         const { username, password, displayName, profilePic } = req.body;
 
         // Check if all required fields are present
