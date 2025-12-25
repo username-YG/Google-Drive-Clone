@@ -11,8 +11,9 @@ TCPServer::TCPServer(
     map<string, pair<ICommand*, string>> commands,
     IClientHandler* handler,
     mutex& lock,
-    map<string, string> errMsg
-    ) : commands(commands), handler(handler), lock(lock), errMsg(errMsg) {}
+    map<string, string> errMsg,
+    int maxClients
+    ) : commands(commands), handler(handler), lock(lock), errMsg(errMsg), maxClients(maxClients) {}
 
 void TCPServer::startServer(int port) {
     
@@ -30,7 +31,7 @@ void TCPServer::startServer(int port) {
     if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0) throw runtime_error("Bind failed.");
 
     // Listen for incoming connections
-    if (listen(serverSocket, MAX_CLIENTS) < 0) throw runtime_error("Listen failed.");
+    if (listen(serverSocket, maxClients) < 0) throw runtime_error("Listen failed.");
 
 }
 
