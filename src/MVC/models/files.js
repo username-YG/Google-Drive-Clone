@@ -129,13 +129,12 @@ async function deleteFile(id) {
         for (const child of item.content) {
             await deleteFile(child);
         }
-        return;
     }
 
     // Remove item's metdata, permissions and content
     filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
     deleteAllPermissions(id);
-    await sendToServer(`DELETE ${id}`);
+    if (item.isFolder === false) await sendToServer(`DELETE ${id}`);
 }
 
 export {

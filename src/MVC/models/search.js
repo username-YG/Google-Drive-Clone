@@ -2,41 +2,30 @@ const FILES = require("./files")
 const PERMS = require("./permissions")
 
 exports.getFiles = async (query, usrId) => {
+    const filteredFilesID = new Set(); // Set so we don't duplicate
+
     // getting files or dirs which contian query in their contnet in the cpp "library"
-    let msg = `search ${query}`
-    const files = await FILES.sendToServer(msg)
-    const fileArray = files.trim() ? files.trim().split(/\s+/) : [];
-    const filteredFilesID = []
+    const res = await FILES.sendToServer(`search ${query}`);
+    const serverFileIDs = res.trim() ? res.trim().split(/\s+/) : [];
 
     // making sure the files or dirs contain the query in their content and not just in their ID
-    for (const element of fileArray) {
-        msg = `get ${element}`
-        const content = await FILES.sendToServer(msg)
-
+    for (const fileId of serverFileIDs) {
+        const content = await FILES.sendToServer(`get ${fileId}`);
         if (content.includes(query)) {
-            filteredFilesID.push(element)
+            filteredFilesID.add(fileId);
         }
     }
 
-    const filesIDs = FILES.getAllFiles()
     // getting files or dirs which contian query in their names in the web "library"
-    for (const fileID of filesIDs) {
-        const info = FILES.getMetadata(fileID)
-
-        if (info.name.includes(query)) {
-            filteredFilesID.push(info.name)
+    const allFileIDs = FILES.getAllFiles();
+    for (const fileId of allFileIDs) {
+        const metadata = FILES.getMetadata(fileId);
+        if (metadata && metadata.name.includes(query)) {
+            filteredFilesID.add(fileId);
         }
     }
 
-    // Remove duplicates
-    const uniqueNames = [];
-    for (const name of filteredFilesID) {
-        if (!uniqueNames.includes(name)) {
-            uniqueNames.push(name);
-        }
-    }
-
-    // Remove no permission to read
+    // Remove files with no permission to read
     const permittedFiles = [];
     for (const fileId of filteredFilesID) {
         const perm = PERMS.getPermissions(fileId);
@@ -46,5 +35,5 @@ exports.getFiles = async (query, usrId) => {
         }
     }
 
-    return permittedFiles
+    return permittedFiles;
 }
