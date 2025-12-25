@@ -279,12 +279,23 @@ To create a File/Folder using POST, run (after isFolder write false to create a 
 ```
 curl.exe -i -X POST http://localhost:3000/api/files --% -H "Content-Type: application/json" -H "x-user-id: [YOUR_USER_ID]" -d "{\"name\":\"[YOUR_FILE_NAME\",\"content\":\"[YOUR_FILE_CONTENT]\",\"isFolder\":false,\"parentId\":null}"
 ```
+To get the details of a user using GET, run:
+```
+curl.exe -i -X GET http://localhost:3000/api/users/[YOUR_ID]
+```
+To log in and get the ID of a user using GET, run:
+```
+curl.exe -i -X POST http://localhost:3000/api/tokens --% -H "Content-Type: application/json" -d "{\"username\":\"[YOUR_USERNAME]\", \"password\":\"[YOUR_PASSWORD]\"}"
+```
 
 Now you are able to use the program as much as you'd like!
 
 ## Running Examples:
 <img width="1781" height="252" alt="image" src="https://github.com/user-attachments/assets/2751b32f-6612-4823-ae5b-146b8dc8af3d" />
 <img width="1796" height="283" alt="image" src="https://github.com/user-attachments/assets/53626b8d-0165-4637-8f61-330ede6b2703" />
+<img width="1798" height="323" alt="image" src="https://github.com/user-attachments/assets/3f397721-9b5c-41d9-ae4e-95612ef7a071" />
+<img width="1789" height="320" alt="image" src="https://github.com/user-attachments/assets/b6b97293-a0ed-4e27-b14a-edbf91f41869" />
+
 
 Enjoy!
 
