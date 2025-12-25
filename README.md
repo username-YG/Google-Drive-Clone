@@ -1,59 +1,27 @@
 # Google Drive System
-# Advanced System Programming - Exercise 2
+# Advanced System Programming - Exercise 3
 
 ## Project Overview
-This project represents the evolution of our original RLE file compression and decompression application from a CLI model to a distributed multi-threaded TCP *Client-Server* architecture. The system is essentially divided: the Server, implemented in C++, hosts all application intelligence and business logic, managing RLE operations and data processing. The Server's ability to handle multiple users simultaneously is achieved by dedicating a separate thread for each connected client, ensuring high concurrency while requiring careful implementation of thread synchronisation mechanism to manage shared resources safely. The listening port for the Server is specified as a command-line argument upon startup.
+This part of the project focuses on building a web server using the MVC (Model-View-Controller) architecture, designed to serve as the core of our Google Drive application. 
+The system manages users, files, directories, permissions and searches through a RESTful API.
+Important Note: all the previous functionalities of the project (the Google Drive engine and the Client-Server communication), in particular the previous CPP server implementation,  are explained and implemented in the branches of the previous exercises, named:
+- ex1-main
+- ex2-main
+The implementation of the code for our current part of the project is located under the branch 'ex3-main'.
+In this way, we've "locked" the code of ex2's server and prevented any overrides by our new code for this part.
 
-The Client, developed in both C++ and Python 3, functions as a console interface. It receives the Server's IP address and port as arguments and immediately establishes a single, persistent TCP connection for its entire runtime. The Client operates synchronously: it reads one command from the user, transports it across the persistent connection to the Server by a socket, and then blocks, waiting to receive and display the Server's response before accepting the next command, like the following animation:
-<img width="2440" height="988" alt="image" src="https://github.com/user-attachments/assets/d73b539c-7587-431f-a071-32c5ac1ab419" />
+The Web Server is separated into 4 parts: models, routes, controllers and the main app (later on will also include views for the visual screens) as in the MVC structure we saw in class.
+The Web Server contacts the CPP-Server, i.e., opens a socket to it and communicates with the server as a client.
+More specifically, some of the models' files communicate with the CPP-Server, which functions as the "back-end" files and directories storage, to handle several HTTP requests.
+The rest of the HTTP requests that don't require access to the back-end files and directories storage are handled directly through the models of the web server.
+The CPP-Server contains a Thread Pool, that is a fixed amount of threads that are allocated once, and whenever a new client arrives, the server attaches an available thread to handle the client and their requests.
+The size of the Thread Pool, which actually represents the number of clients the server can take care of concurrently, is given to the server as an environment variable (as well as the number of clients that can wait in the queue for the server at a time), and can be defined in the Docker-Compose file, to prevent the code from being hard-coded.
 
-Currently, our application supports the following commands:
+Currently, our application supports the following HTTP requests:
 
-- **POST**: This command receives 2 string arguments - 'filename' and 'text'.
-       It creates a new file named by filename, containing the RLE-compressed version of the given text.
-       The file is saved in the directory specified by an environment variable; we call it the root directory.
-       The command prints the message "201 created" if legal.
-  
-- **GET**: This command receives 1 string argument - 'filename'.
-       It returns the RLE-decompressed text from the file named by filename from the root directory (see above).
-       The command prints the message "200 Ok" if legal and then the file's text to the screen.
-       
-- **SEARCH**: This command receives 1 string argument - 'file content'.
-          It finds all the files from the root directory that either contain the text given by the argument or
-          whose names contain (or are) the text given by the argument (file content).
-          The command returns a list of all these files' names and prints the message "200 Ok" if legal, and then the list to the screen.
-  
-- **DELETE**: This command receives 1 string argument - 'filename'.
-          It finds the file from the root directory that is named by filename and deletes it from the directory.
-          The command prints the message "204 No Content" if legal.
 
 ## Notes
-- Each command will be written in one line and finished with an enter.
-- Each command can be executed unlimitedly and in any sequence desired by the user.
-- File names cannot contain spaces and cannot be an empty string.
-- Any other or non-standard command (e.g., a non-existent command or an incomplete command) must be ignored.
-- The program must print nothing else (no instructions, no errors, etc.). The output must strictly match the required format.
-- The program runs endlessly (there is no defined 'quit' sign to stop running).
-- In cases where the command structure is legal but not correct logically, it prints the message "404 Not Found".
-- In any other case or when the command is not structurely legal, it prints the message "400 Bad Request".
 
-## Closed for Modification but Open for Extension
-1. Did the fact that the command names changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
-   
-Answer: No, in ex1 main function, we created a map with the names "add", "get", and "search", each of them is tied to an ICommand object (a interface we created for all of the commands     that contains the method of "execute"), and gave the map as an argument to the App that runs all of the program. 
-So now we could just replace those names with the new ones and tie them to the same ICommands as before.
-
-2. Did the fact that new commands were added require you to touch code that is supposed to be "closed for modification, but open for extension"?
-   
-Answer: No, As explained in the previous question, we just added a new element to the map tied to a new object of ICommand.
-
-3. Did the fact that the commands output changed require you to touch code that is supposed to be "closed for modification, but open for extension"?
-   
-Answer: No, because we still needed to return the previous output as before and therefore just added to it a proper message (status code), so we just wrapped it inside a wrapper that checks the output and prints the correct message accordingly. We did need to change the messages that were thrown from several errors/exceptions but it's only minimal textual changes.
-
-4. Did the fact that the input/output comes from sockets instead of the console require you to touch code that is supposed to be "closed for modification, but open for extension"?
-   
-Answer: No, we just generalized an interface from ex1 that controlled the input and output from the CLI menu to control general input and output, and added a class implementing that interface and which uses the send and receive methods of Socket to send output or receive input.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex2-main:
