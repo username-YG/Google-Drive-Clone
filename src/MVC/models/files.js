@@ -1,5 +1,5 @@
 import net from "net";
-import {getPermissions} from './permissions.js'
+import { getPermissions, deleteAllPermissions } from './permissions.js'
 
 const rootId = crypto.randomUUID();
 const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {} } ];
@@ -132,8 +132,9 @@ async function deleteFile(id) {
         return;
     }
 
-    // Remove item's metdata and content
+    // Remove item's metdata, permissions and content
     filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
+    deleteAllPermissions(id);
     await sendToServer(`DELETE ${id}`);
 }
 
