@@ -18,7 +18,7 @@ exports.getFiles = async (query, usrId) => {
     }
 
     // getting files or dirs which contian query in their names in the web "library"
-    const allFileIDs = FILES.getAllFiles();
+    const allFileIDs = FILES.getAllIDs();
     for (const fileId of allFileIDs) {
         const metadata = FILES.getMetadata(fileId);
         if (metadata && metadata.name.includes(query)) {
