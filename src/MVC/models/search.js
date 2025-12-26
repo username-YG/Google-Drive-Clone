@@ -1,13 +1,7 @@
 const FILES = require("./files")
 const PERMS = require("./permissions")
-const USERS = require("./users")
 
 exports.getFiles = async (query, usrId) => {
-
-    // Return 404 if one of the users doesn't exist
-    if (!USERS.findByID(usrId)) {
-        return res.status(404).json({ error: 'Not found' });
-    }
 
     const filteredFilesID = new Set(); // Set so we don't duplicate
 

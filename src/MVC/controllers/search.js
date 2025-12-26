@@ -1,4 +1,5 @@
 const Search = require('../models/search')
+const Users = require("../models/users")
 
 exports.searchFilesAndDirs = async (req, res) => {
     try {
@@ -10,6 +11,11 @@ exports.searchFilesAndDirs = async (req, res) => {
         }
 
         const requesterID = req.headers['x-user-id']
+
+        // Return 404 if one of the users doesn't exist
+        if (!Users.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Not found' });
+        }
 
         const files = await Search.getFiles(query, requesterID)
         // retrieving and returning the files and directories
