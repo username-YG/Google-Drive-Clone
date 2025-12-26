@@ -126,7 +126,9 @@ async function deleteFile(id) {
 
     // Recursively delete subdir
     if (item.isFolder) {
-        for (const child of item.content) {
+        // We copy because deleteFile changes item.content
+        const children = item.content.slice();
+        for (const child of children) {
             await deleteFile(child);
         }
     }
