@@ -2,11 +2,12 @@
 # Advanced System Programming - Exercise 3
 
 ## Project Overview
-This part of the project focuses on building a web server using the MVC (Model-View-Controller) architecture, designed to serve as the core of our Google Drive application. 
+This part of the project focuses on building a web server using the MVC (Model-View-Controller) architecture, designed to serve as the core of our Google Drive application.
 The system manages users, files, directories, permissions and searches through a RESTful API.
 Important Note: all the previous functionalities of the project (the Google Drive engine and the Client-Server communication), in particular the previous CPP server implementation,  are explained and implemented in the branches of the previous exercises, named:
 - ex1-main
 - ex2-main
+
 The implementation of the code for our current part of the project is located under the branch 'ex3-main'.
 In this way, we've "locked" the code of ex2's server and prevented any overrides by our new code for this part.
 
@@ -22,10 +23,10 @@ Currently, our application supports the following:
 ### Authentication Header
 HTTP requests that require authentication expect the following HTTP header to be present:
 
-x-user-id: <authenticated user id>
+x-user-id: \<authenticated user id\>
 
-If the header is missing, the server responds with **400 Bad Request**.
-If the specified user in the header doesn't exist, the server responds with **404 Not found**.
+If the header is missing, the server responds with **400 Bad Request**.  
+If the specified user in the header doesn't exist, the server responds with **404 Not found**.  
 
 ### Users
 
@@ -106,6 +107,7 @@ Possible status codes:
 - 201 Created: file or directory created. Returns the location header: /api/files/{id}
 - 400 Bad Request: missing header, body, or missing body fields.
 - 404 Not Found: parent either does not exist or is not a directory.
+- 403 Forbidden: the user isn't authorized to create in this folder.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### GET /api/files/:id
@@ -116,6 +118,7 @@ Possible status codes:
 - 200 OK: metadata and content returned.
 - 400 Bad Request: missing authentication header.
 - 404 Not Found: file or directory with the specified id does not exist.
+- 403 Forbidden: the user isn't authorized to view this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### PATCH /api/files/:id
@@ -133,6 +136,7 @@ Possible status codes:
 - 204 No Content: file or directory updated successfully.
 - 400 Bad Request: missing header/body or invalid fields.
 - 404 Not Found: file or directory with the specified id does not exist or parent either does not exist or not a directory.
+- 403 Forbidden: the user isn't authorized to update this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### DELETE /api/files/:id
@@ -143,6 +147,7 @@ Possible status codes:
 - 204 No Content: file or directory deleted successfully.
 - 400 Bad Request: missing authentication header.
 - 404 Not Found: file or directory with the specified id does not exist.
+- 403 Forbidden: the user isn't authorized to delete this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 ### Permissions
@@ -221,13 +226,13 @@ Possible status codes:
 
 
 ## Notes
-- We decided to implement our code such that the pId is actually the userID, exactly like in Google Drive.
+- The pId is the same as the userID, exactly like in Google Drive.
 - All error responses are returned as:
   {
     "error": "Error description"
   }
 - All requests and responses use JSON format.
-- Authentication is simplified (and mostly unchecked) for this exercise but will be extended in future steps of the project.
+- Authentication is simplified for this exercise but will be extended in future steps of the project.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex3-main:
@@ -247,7 +252,7 @@ docker compose up --build web-server
 ```
 5. In the cmd, run the various HTTP requests listed above.
 
-Note for the checker: you can run the tests using the command "docker-compose run --rm gtests"
+Note for the checker: you can run the tests using the command "docker-compose run --rm gtests".  
 You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
 - APP_PORT=[new_port] - The port the CPP server listens to 
 - APP_PATH=[new_path] - The path the files are saved to
