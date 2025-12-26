@@ -2,11 +2,12 @@
 # Advanced System Programming - Exercise 3
 
 ## Project Overview
-This part of the project focuses on building a web server using the MVC (Model-View-Controller) architecture, designed to serve as the core of our Google Drive application. 
+This part of the project focuses on building a web server using the MVC (Model-View-Controller) architecture, designed to serve as the core of our Google Drive application.
 The system manages users, files, directories, permissions and searches through a RESTful API.
 Important Note: all the previous functionalities of the project (the Google Drive engine and the Client-Server communication), in particular the previous CPP server implementation,  are explained and implemented in the branches of the previous exercises, named:
 - ex1-main
 - ex2-main
+
 The implementation of the code for our current part of the project is located under the branch 'ex3-main'.
 In this way, we've "locked" the code of ex2's server and prevented any overrides by our new code for this part.
 
@@ -22,10 +23,10 @@ Currently, our application supports the following:
 ### Authentication Header
 HTTP requests that require authentication expect the following HTTP header to be present:
 
-x-user-id: <authenticated user id>
+x-user-id: \<authenticated user id\>
 
-If the header is missing, the server responds with **400 Bad Request**.
-If the specified user in the header doesn't exist, the server responds with **404 Not found**.
+If the header is missing, the server responds with **400 Bad Request**.  
+If the specified user in the header doesn't exist, the server responds with **404 Not found**.  
 
 ### Users
 
@@ -106,6 +107,7 @@ Possible status codes:
 - 201 Created: file or directory created. Returns the location header: /api/files/{id}
 - 400 Bad Request: missing header, body, or missing body fields.
 - 404 Not Found: parent either does not exist or is not a directory.
+- 403 Forbidden: the user isn't authorized to create in this folder.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### GET /api/files/:id
@@ -116,6 +118,7 @@ Possible status codes:
 - 200 OK: metadata and content returned.
 - 400 Bad Request: missing authentication header.
 - 404 Not Found: file or directory with the specified id does not exist.
+- 403 Forbidden: the user isn't authorized to view this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### PATCH /api/files/:id
@@ -133,6 +136,7 @@ Possible status codes:
 - 204 No Content: file or directory updated successfully.
 - 400 Bad Request: missing header/body or invalid fields.
 - 404 Not Found: file or directory with the specified id does not exist or parent either does not exist or not a directory.
+- 403 Forbidden: the user isn't authorized to update this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### DELETE /api/files/:id
@@ -143,6 +147,7 @@ Possible status codes:
 - 204 No Content: file or directory deleted successfully.
 - 400 Bad Request: missing authentication header.
 - 404 Not Found: file or directory with the specified id does not exist.
+- 403 Forbidden: the user isn't authorized to delete this item.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 ### Permissions
@@ -221,13 +226,13 @@ Possible status codes:
 
 
 ## Notes
-- We decided to implement our code such that the pId is actually the userID, exactly like in Google Drive.
+- The pId is the same as the userID, exactly like in Google Drive.
 - All error responses are returned as:
   {
     "error": "Error description"
   }
 - All requests and responses use JSON format.
-- Authentication is simplified (and mostly unchecked) for this exercise but will be extended in future steps of the project.
+- Authentication is simplified for this exercise but will be extended in future steps of the project.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex3-main:
@@ -247,7 +252,7 @@ docker compose up --build web-server
 ```
 5. In the cmd, run the various HTTP requests listed above.
 
-Note for the checker: you can run the tests using the command "docker-compose run --rm gtests"
+Note for the checker #1: you can run the tests using the command "docker-compose run --rm gtests".  
 You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
 - APP_PORT=[new_port] - The port the CPP server listens to 
 - APP_PATH=[new_path] - The path the files are saved to
@@ -258,7 +263,8 @@ You can modify some of the variables in each run, those that are defined as envi
 For example: 
 PORT=8080 APP_PATH=/mypath docker compose up server
 
-Note for the checker #2: In order to use "curl" commands in our server's REST API using CMD, you must follow a specific syntax to handle JSON data and headers correctly:
+Note for the checker #2: In order to use "curl" commands in our server's REST API using BASH, you must follow a specific syntax to handle JSON data and headers correctly:
+
 1. Command Flags:
 - -i (Include): Displays the HTTP response headers (e.g., Status Code, Content-Type, Location).
 - -X (Request Method): Specifies the HTTP method to use (GET, POST, PATCH, DELETE).
@@ -266,25 +272,89 @@ Note for the checker #2: In order to use "curl" commands in our server's REST AP
 - -d (Data): Sends the data in the HTTP POST or PATCH request body.
 
 2. Core Syntax Requirements
-- The Stop-Parsing Symbol (--%): Must be placed immediately after the curl.exe command. This prevents PowerShell from misinterpreting special characters like backslashes and quotes.
-- Escaped Quotes (\"): Inside the JSON body (-d), every key and string value must be escaped using a backslash to be processed correctly by the server.
-- Authentication: Requests that require a logged-in user (like creating or searching files) must include the x-user-id header.
+- Single Quotes for Data ('...'): Use single quotes to wrap the entire JSON body in the -d flag. This tells Bash to treat the content as a literal string, so you don't need to escape the double quotes inside.
+- Standard Double Quotes: Inside the JSON, simply use standard double quotes " for keys and values (e.g., "name":"aaa").
+- Authentication: Requests that require a logged-in user must include the x-user-id header.
   
-For example:
-To create a new user using POST, run:
+## For Example - Easy To Use HTTP Requests with Running Examples:
+
+### Users
+#### Create a new user
+```bash
+curl -i -X POST http://localhost:3000/api/users -H "Content-Type: application/json" -d '{"username": "tom@gmail.com", "password": "mypassword123", "displayName": "Tom Smith", "profilePic": "https://example.com/pic.jpg"}'
 ```
-curl.exe -i -X POST http://localhost:3000/api/users --% -H "Content-Type: application/json" -d "{\"username\":\"[YOUR_USER_USERNAME]\", \"password\":\"[YOUR_USER_PASSWORD]\", \"displayName\":\"[YOUR_USER_DISPLAY_NAME]\", \"profilePic\":\"[YOUR_USER_PROFILE_PIC]\"}"
+
+#### Get user by ID
+```bash
+curl -i -X GET http://localhost:3000/api/users/USER_ID_HERE
 ```
-To create a File/Folder using POST, run (after isFolder write false to create a file or true to create a folder):
+<img width="1796" height="547" alt="image" src="https://github.com/user-attachments/assets/0d0ff620-65a4-4d36-a207-13ef9094fda4" />
+
+### Tokens (Authentication)
+
+#### Sign in / Get token
+```bash
+curl -i -X POST http://localhost:3000/api/tokens -H "Content-Type: application/json" -d '{"username": "tom@gmail.com", "password": "mypassword123"}'
 ```
-curl.exe -i -X POST http://localhost:3000/api/files --% -H "Content-Type: application/json" -H "x-user-id: [YOUR_USER_ID]" -d "{\"name\":\"[YOUR_FILE_NAME\",\"content\":\"[YOUR_FILE_CONTENT]\",\"isFolder\":false,\"parentId\":null}"
+<img width="1798" height="310" alt="image" src="https://github.com/user-attachments/assets/c0656772-12fa-4477-be2d-a6e98d0226ad" />
+
+### Files
+
+#### Get all files
+```bash
+curl -i -X GET http://localhost:3000/api/files -H "x-user-id: USER_ID_HERE"
+```
+
+#### Create a new file
+```bash
+curl -i -X POST http://localhost:3000/api/files -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "my-document.txt", "content": "Hello, this is the file content!", "isFolder": false, "parentId": null}'
+```
+<img width="1796" height="591" alt="image" src="https://github.com/user-attachments/assets/613727dc-8710-41d8-a634-8e8efa80a519" />
+
+#### Create a new folder
+```bash
+curl -i -X POST http://localhost:3000/api/files -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "my-folder", "isFolder": true, "parentId": null}'
+```
+<img width="1792" height="615" alt="image" src="https://github.com/user-attachments/assets/71cc0d15-e537-4d40-b8bb-6d87a9dd80d3" />
+
+#### Get a specific file
+```bash
+curl -i -X GET http://localhost:3000/api/files/FILE_ID_HERE -H "x-user-id: USER_ID_HERE"
+```
+<img width="1803" height="338" alt="image" src="https://github.com/user-attachments/assets/44acbcbe-1520-4fba-9239-33a1024ad9ee" />
+
+#### Update a file (rename)
+```bash
+curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "new-filename.txt"}'
+```
+<img width="1799" height="342" alt="image" src="https://github.com/user-attachments/assets/8da17a07-45be-4ae1-8492-8545535e18cc" />
+
+#### Update a file (change content)
+```bash
+curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"content": "Updated file content goes here"}'
+```
+
+#### Update a file (move to different folder)
+```bash
+curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"parentId": "NEW_PARENT_FOLDER_ID"}'
+```
+
+#### Delete a file
+```bash
+curl -i -X DELETE http://localhost:3000/api/files/FILE_ID_HERE -H "x-user-id: USER_ID_HERE"
 ```
 
 Now you are able to use the program as much as you'd like!
 
+## Easy to use HTTP Requests
+
+
 ## Running Examples:
 <img width="1781" height="252" alt="image" src="https://github.com/user-attachments/assets/2751b32f-6612-4823-ae5b-146b8dc8af3d" />
 <img width="1796" height="283" alt="image" src="https://github.com/user-attachments/assets/53626b8d-0165-4637-8f61-330ede6b2703" />
+<img width="1798" height="323" alt="image" src="https://github.com/user-attachments/assets/3f397721-9b5c-41d9-ae4e-95612ef7a071" />
+<img width="1789" height="320" alt="image" src="https://github.com/user-attachments/assets/b6b97293-a0ed-4e27-b14a-edbf91f41869" />
+
 
 Enjoy!
 
