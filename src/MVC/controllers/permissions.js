@@ -78,6 +78,11 @@ exports.createPermission = (req, res) => {
             return res.status(403).json({ error: "Forbidden" })
         }
 
+        // checking if the permission already exists
+        if (filePermissions[userID]) {
+            return res.status(404).json({ error: "Permission already exists" })
+        }
+
         // creating the permission for the user and returning the location header
         const permission = Permission.addPermission(fileOrDirId, userID, role)
         res.status(201).location(`/api/files/${fileOrDirId}/permissions/${permission.userID}`).end()
