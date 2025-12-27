@@ -11,7 +11,7 @@ exports.getPermissions = (req, res) => {
 
         // checking validity of the arguments
         if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing header or authentication user id" })
         }
 
         const requesterID = req.headers['x-user-id']
@@ -20,12 +20,12 @@ exports.getPermissions = (req, res) => {
 
         // checking if file or directory exists
         if (!filePermissions) {
-            return res.status(404).json({ error: "Not Found" })
+            return res.status(404).json({ error: "Permission not Found" })
         }
 
         // Return 404 if the user doesn't exist
         if (!User.findByID(requesterID)) {
-            return res.status(404).json({ error: 'Not found' });
+            return res.status(404).json({ error: 'Authentication user not found' });
         }
 
         // checking if the requester's role is at least a reader
@@ -47,7 +47,7 @@ exports.createPermission = (req, res) => {
 
         // checking the header and body of the request exist
         if (!req.headers || !req.body) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing header or authentication user id" })
         }
 
         const requesterID = req.headers['x-user-id']
@@ -55,19 +55,22 @@ exports.createPermission = (req, res) => {
 
         // checking validity of the arguments
         if (!requesterID || !userID || !role || !roles.includes(role)) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing args" })
         }
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID) || !User.findByID(userID)) {
-            return res.status(404).json({ error: 'Not found' });
+        if (!User.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Authentication user not found' });
+        }
+        if (!User.findByID(userID)) {
+            return res.status(404).json({ error: 'User in body not found' });
         }
 
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists
         if (!filePermissions) {
-            return res.status(404).json({ error: "Not Found" })
+            return res.status(404).json({ error: "Permission not found" })
         }
 
         // checking if the requester's role is owner
@@ -91,7 +94,7 @@ exports.updatePermission = (req, res) => {
 
         // checking the header and body of the request exist
         if (!req.headers || !req.body) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing header or authentication user id" })
         }
 
         const requesterID = req.headers['x-user-id']
@@ -99,19 +102,22 @@ exports.updatePermission = (req, res) => {
 
         // checking validity of the arguments
         if (!requesterID || !role || !roles.includes(role)) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing args" })
         }
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID) || !User.findByID(permissionId)) {
-            return res.status(404).json({ error: 'Not found' });
+        if (!User.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Authentication user not found' });
+        }
+        if (!User.findByID(permissionId)) {
+            return res.status(404).json({ error: 'User in body not found' });
         }
 
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists and the permission exists
         if (!filePermissions || !filePermissions[permissionId]) {
-            return res.status(404).json({ error: "Not Found" })
+            return res.status(404).json({ error: "Permission not found" })
         }
 
         // checking if the requester's role is owner
@@ -135,21 +141,24 @@ exports.deletePermission = (req, res) => {
 
         // checking validity of the arguments
         if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing header or authentication user id" })
         }
 
         const requesterID = req.headers['x-user-id']
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID) || !User.findByID(permissionId)) {
-            return res.status(404).json({ error: 'Not found' });
+        if (!User.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Authentication user not found' });
+        }
+        if (!User.findByID(permissionId)) {
+            return res.status(404).json({ error: 'User in body not found' });
         }
 
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists and the permission exists
         if (!filePermissions || !filePermissions[permissionId]) {
-            return res.status(404).json({ error: "Not Found" })
+            return res.status(404).json({ error: "Permission not found" })
         }
 
         // checking if the requester's role is owner
