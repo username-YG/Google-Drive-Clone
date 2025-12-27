@@ -16,7 +16,7 @@ exports.createFile = async (req, res) => {
         // Return 400 when a field is missing
         // Return 400 when the content field is missing for a file
         // Return 400 when the name is empty
-        if ((!name || name === "" || isFolder === undefined || parentId === undefined)
+        if ((!name || isFolder === undefined || parentId === undefined)
             ||  (isFolder === false && content === undefined)) {
             return res.status(400).json({ error: "Missing args" })
         }
@@ -147,7 +147,7 @@ exports.updateFile = async (req, res) => {
 
         // Return 400 when all fields are missing
         // Return 400 when new name is empty
-        if ((!name || name === "") && content === undefined && parentId === undefined) {
+        if (!name && content === undefined && parentId === undefined) {
             return res.status(400).json({ error: "Missing args" })
         }
 
