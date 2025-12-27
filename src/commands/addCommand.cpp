@@ -8,6 +8,7 @@
 addCommand::addCommand(ICompression* comp) : comp(comp) {}
 
 string addCommand::execute(const string& args) const {
+
     // Get filename and content from args and path from environment variable
     vector<string> parsed = parseArgs(args);
     string filename = parsed[0];
@@ -21,7 +22,7 @@ string addCommand::execute(const string& args) const {
 void addCommand::saveToFile(const string& pathStr, const string& content) const {
     // Throw error if the file exists
     if (ifstream(pathStr).is_open()) {
-        throw invalid_argument("Invalid command arguments: file already exists.");
+        throw invalid_argument("Logical error: file already exists.");
     }
     // Create the parent directory and write to file
     filesystem::path path = pathStr;
@@ -33,9 +34,9 @@ vector<string> addCommand::parseArgs(const string& args) const {
     size_t pos = args.find(' ');
     // No space and nothing before space is invalid
     if (pos == string::npos || pos == 0) {
-        throw invalid_argument("Invalid command arguments: not enough arguments.");
+        throw invalid_argument("Invalid command: not enough arguments.");
     }
-    // The structure is "add [file name] [text]"
+    // The structure is "POST [file name] [text]"
     string filename = args.substr(0, pos);
     string content = args.substr(pos + 1);
     return vector<string>({filename, content});

@@ -9,7 +9,8 @@
 
 // Test the splitArgs function
 TEST(FilenameValiditySanityTest, FilenameValidityCheck) {
-    getCommand cmd(new RLE());
+    RLE rle;
+    getCommand cmd(&rle);
 
     // Valid filenames - no exceptions should be thrown
     EXPECT_NO_THROW(cmd.isValidFilename("valid_filename.txt"));
@@ -18,7 +19,8 @@ TEST(FilenameValiditySanityTest, FilenameValidityCheck) {
 }
 
 TEST(FilenameValidityNegativeTest, FilenameValidityCheck) {
-    getCommand cmd(new RLE());
+    RLE rle;
+    getCommand cmd(&rle);
 
     // Invalid filenames - exceptions should be thrown
     EXPECT_THROW(cmd.isValidFilename("invalid filename.txt"), invalid_argument);
@@ -28,7 +30,8 @@ TEST(FilenameValidityNegativeTest, FilenameValidityCheck) {
 }
 
 TEST(GettingFileContentSanityTest, GettingFileContent) {
-    getCommand cmd(new RLE());
+    RLE rle;
+    getCommand cmd(&rle);
 
     // Creating and openning temporary file1 for the getFileContent method testing
     string filename1 = "testfile1.txt";
@@ -84,7 +87,8 @@ TEST(GettingFileContentSanityTest, GettingFileContent) {
 }
 
 TEST(GettingFileContentNegativeTest, GettingFileContent) {
-    getCommand cmd(new RLE());
+    RLE rle;
+    getCommand cmd(&rle);
 
     // Testing getFileContent method with non-existing files
     EXPECT_THROW(cmd.getFileContent("non_existing_file.txt", "."), runtime_error);
@@ -92,7 +96,8 @@ TEST(GettingFileContentNegativeTest, GettingFileContent) {
 }
 
 TEST(GetCommandIntegrationTest, ExecuteMethod) {
-    getCommand cmd(new RLE());
+    RLE rle;
+    getCommand cmd(&rle);
 
     // Getting the path from the environment variable
     string path = getenv("APP_PATH") ? getenv("APP_PATH") : "";

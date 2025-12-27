@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 getCommand::getCommand(ICompression* comp) : comp(comp) {}
 
@@ -12,13 +13,13 @@ void getCommand::isValidFilename(const string& filename) const {
     // Checking if the filename is an empty string
     if (filename.empty()) {
         // Throwing an exception if the filename is empty
-        throw invalid_argument("Filename cannot be empty.");
+        throw invalid_argument("Invalid command: filename cannot be empty.");
     }
 
     // Checking if filename contains blank spaces
     if (filename.find(' ') != string::npos) {
         // Throwing an exception if blank spaces are found in the filename
-        throw invalid_argument("Filename cannot contain blank spaces.");
+        throw invalid_argument("Invalid command: filename cannot contain blank spaces.");
     }
 }
 
@@ -27,6 +28,11 @@ string getCommand::getFileContent(const string& filename, const string& path) co
     string fullPath = path + "/" + filename;
     // Opening the file to extract its content
     ifstream file(fullPath);
+
+    // Checking if the file exists, if not - throwing an exception
+    if (!filesystem::exists(fullPath)) {
+        throw runtime_error("Logical error: file does not exist: " + filename);
+    }
 
     // Checking if the file was opened successfully, if not - throwing an exception
     if (!file) {

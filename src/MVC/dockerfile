@@ -1,0 +1,8 @@
+FROM node:latest
+
+COPY src/MVC /usr/googledrive/app
+WORKDIR /usr/googledrive/app
+
+RUN npm install express
+
+CMD node app.js server $APP_PORT $WEB_PORT
