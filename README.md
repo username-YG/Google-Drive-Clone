@@ -227,6 +227,7 @@ Possible status codes:
 
 ## Notes
 - The pId is the same as the userID, exactly like in Google Drive.
+- If you want to create a new file under the root directory, insert "null" in the field asking for the parentID.
 - All error responses are returned as:
   {
     "error": "Error description"
@@ -288,7 +289,7 @@ curl -i -X POST http://localhost:3000/api/users -H "Content-Type: application/js
 ```bash
 curl -i -X GET http://localhost:3000/api/users/USER_ID_HERE
 ```
-<img width="1796" height="547" alt="image" src="https://github.com/user-attachments/assets/0d0ff620-65a4-4d36-a207-13ef9094fda4" />
+<img width="1798" height="592" alt="image" src="https://github.com/user-attachments/assets/f198fab8-910a-4375-8c95-3c5c9388e3cf" />
 
 ### Tokens (Authentication)
 
@@ -296,7 +297,7 @@ curl -i -X GET http://localhost:3000/api/users/USER_ID_HERE
 ```bash
 curl -i -X POST http://localhost:3000/api/tokens -H "Content-Type: application/json" -d '{"username": "tom@gmail.com", "password": "mypassword123"}'
 ```
-<img width="1798" height="310" alt="image" src="https://github.com/user-attachments/assets/c0656772-12fa-4477-be2d-a6e98d0226ad" />
+<img width="1801" height="304" alt="image" src="https://github.com/user-attachments/assets/ab4cc954-8026-428b-9afa-4927bb496a2b" />
 
 ### Files
 
@@ -309,53 +310,79 @@ curl -i -X GET http://localhost:3000/api/files -H "x-user-id: USER_ID_HERE"
 ```bash
 curl -i -X POST http://localhost:3000/api/files -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "my-document.txt", "content": "Hello, this is the file content!", "isFolder": false, "parentId": null}'
 ```
-<img width="1796" height="591" alt="image" src="https://github.com/user-attachments/assets/613727dc-8710-41d8-a634-8e8efa80a519" />
 
 #### Create a new folder
 ```bash
 curl -i -X POST http://localhost:3000/api/files -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "my-folder", "isFolder": true, "parentId": null}'
 ```
-<img width="1792" height="615" alt="image" src="https://github.com/user-attachments/assets/71cc0d15-e537-4d40-b8bb-6d87a9dd80d3" />
+<img width="1804" height="519" alt="image" src="https://github.com/user-attachments/assets/74b6cd79-305f-458b-81f3-3ccb51b04457" />
 
 #### Get a specific file
 ```bash
 curl -i -X GET http://localhost:3000/api/files/FILE_ID_HERE -H "x-user-id: USER_ID_HERE"
 ```
-<img width="1803" height="338" alt="image" src="https://github.com/user-attachments/assets/44acbcbe-1520-4fba-9239-33a1024ad9ee" />
+<img width="1793" height="311" alt="image" src="https://github.com/user-attachments/assets/717e0466-7cda-4d74-8af2-260927c400a4" />
 
 #### Update a file (rename)
 ```bash
 curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"name": "new-filename.txt"}'
 ```
-<img width="1799" height="342" alt="image" src="https://github.com/user-attachments/assets/8da17a07-45be-4ae1-8492-8545535e18cc" />
-
 #### Update a file (change content)
 ```bash
 curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"content": "Updated file content goes here"}'
 ```
+<img width="1798" height="447" alt="image" src="https://github.com/user-attachments/assets/c1a8aff6-9c11-4b9e-a39e-85bbd7764278" />
+<img width="1794" height="315" alt="image" src="https://github.com/user-attachments/assets/4f184b8e-9d63-4373-848b-95e8d40846d3" />
 
 #### Update a file (move to different folder)
 ```bash
 curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE -H "Content-Type: application/json" -H "x-user-id: USER_ID_HERE" -d '{"parentId": "NEW_PARENT_FOLDER_ID"}'
 ```
+<img width="1801" height="538" alt="image" src="https://github.com/user-attachments/assets/0279b793-bf40-4051-a65d-a2237eb31e22" />
 
 #### Delete a file
 ```bash
 curl -i -X DELETE http://localhost:3000/api/files/FILE_ID_HERE -H "x-user-id: USER_ID_HERE"
 ```
+<img width="1797" height="536" alt="image" src="https://github.com/user-attachments/assets/40b74b7d-5864-4db3-af0c-9401ecdfd2f5" />
 
-Now you are able to use the program as much as you'd like!
+### Permissions
 
-## Easy to use HTTP Requests
+#### Get permissions for a file/folder
+```bash
+curl -i -X GET http://localhost:3000/api/files/FILE_ID_HERE/permissions -H "x-user-id: USER_ID_HERE"
+```
+<img width="1802" height="782" alt="image" src="https://github.com/user-attachments/assets/330b7c4c-5751-47cd-8442-22b702b22d77" />
+
+#### Create a permission (share with another user)
+```bash
+curl -i -X POST http://localhost:3000/api/files/FILE_ID_HERE/permissions -H "Content-Type: application/json" -H "x-user-id: OWNER_USER_ID" -d '{"userID": "TARGET_USER_ID", "role": "reader"}'
+```
+<img width="1798" height="567" alt="image" src="https://github.com/user-attachments/assets/b54350b3-0627-4069-a266-b4ca85bf349e" />
+
+#### Update a permission
+```bash
+curl -i -X PATCH http://localhost:3000/api/files/FILE_ID_HERE/permissions/TARGET_USER_ID -H "Content-Type: application/json" -H "x-user-id: OWNER_USER_ID" -d '{"role": "writer"}'
+```
+<img width="1801" height="517" alt="image" src="https://github.com/user-attachments/assets/ee408ab8-6124-4acd-90a3-4360b39d0877" />
 
 
-## Running Examples:
-<img width="1781" height="252" alt="image" src="https://github.com/user-attachments/assets/2751b32f-6612-4823-ae5b-146b8dc8af3d" />
-<img width="1796" height="283" alt="image" src="https://github.com/user-attachments/assets/53626b8d-0165-4637-8f61-330ede6b2703" />
-<img width="1798" height="323" alt="image" src="https://github.com/user-attachments/assets/3f397721-9b5c-41d9-ae4e-95612ef7a071" />
-<img width="1789" height="320" alt="image" src="https://github.com/user-attachments/assets/b6b97293-a0ed-4e27-b14a-edbf91f41869" />
+#### Delete a permission (revoke access)
+```bash
+curl -i -X DELETE http://localhost:3000/api/files/FILE_ID_HERE/permissions/TARGET_USER_ID -H "x-user-id: OWNER_USER_ID"
+```
+<img width="1805" height="483" alt="image" src="https://github.com/user-attachments/assets/0956fd8a-f9b4-41ef-875f-d3b57ceb6507" />
+
+### Search
+
+#### Search files and folders
+```bash
+curl -i -X GET "http://localhost:3000/api/search/SEARCH_QUERY_HERE" -H "x-user-id: USER_ID_HERE"
+```
+<img width="1906" height="264" alt="image" src="https://github.com/user-attachments/assets/d68b2006-cca3-424f-b1a9-e7c34d2d4a7d" />
 
 
+You can now use the program as much as you'd like!
 Enjoy!
 
 
