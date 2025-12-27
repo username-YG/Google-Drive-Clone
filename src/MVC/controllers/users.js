@@ -5,20 +5,20 @@ const User = require('../models/users');
 exports.createUser = (req, res) => {
     try {
         if (!req.body){
-            return res.status(400).json({ error: "Bad Request"})
+            return res.status(400).json({ error: "Missing body" });
         }
 
         const { username, password, displayName, profilePic } = req.body;
 
         // Check if all required fields are present
         if (!username || !password || !displayName || !profilePic) {
-            return res.status(400).json({ error: "Bad Request" });
+            return res.status(400).json({ error: "Missing args" });
         }
 
         // Check if the username (email) already exists
         if (User.findByUsername(username)) {
             // Return 404 for existing user as per your requirements
-            return res.status(404).json({ error: "Not Found" });
+            return res.status(404).json({ error: "Username already exists" });
         }
 
         // Create the user and generate the unique UUID inside the model
@@ -39,7 +39,7 @@ exports.getUserById = (req, res) => {
         const user = User.findByID(ID); // finds the user with the given ID
 
         if (!user) { // check if exists
-            return res.status(404).json({ error: "Not Found" });
+            return res.status(404).json({ error: "User not found" });
         }
 
         // For GET, we still return the user details (without the password)

@@ -1,4 +1,5 @@
 const Search = require('../models/search')
+const Users = require("../models/users")
 
 exports.searchFilesAndDirs = async (req, res) => {
     try {
@@ -6,10 +7,15 @@ exports.searchFilesAndDirs = async (req, res) => {
 
         // checking validity of the arguments
         if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Bad Request" })
+            return res.status(400).json({ error: "Missing header or authentication user id" })
         }
 
         const requesterID = req.headers['x-user-id']
+
+        // Return 404 if one of the users doesn't exist
+        if (!Users.findByID(requesterID)) {
+            return res.status(404).json({ error: 'Authentication user not found' });
+        }
 
         const files = await Search.getFiles(query, requesterID)
         // retrieving and returning the files and directories

@@ -76,6 +76,14 @@ function getAllFiles() {
     return getMetadata(rootId).content;
 }
 
+function getAllIDs() {
+    const allIds = [];
+    for (const file of filesystem) {
+        allIds.push(file.id);
+    }
+    return allIds;
+}
+
 async function getFile(id) {
     // We use a copy so we don't store the content or permissions on the server
     const copy = JSON.parse(JSON.stringify(getMetadata(id)));
@@ -126,7 +134,9 @@ async function deleteFile(id) {
 
     // Recursively delete subdir
     if (item.isFolder) {
-        for (const child of item.content) {
+        // We copy because deleteFile changes item.content
+        const children = item.content.slice();
+        for (const child of children) {
             await deleteFile(child);
         }
     }
@@ -144,5 +154,6 @@ export {
     createFile,
     updateFile,
     deleteFile,
-    sendToServer
+    sendToServer,
+    getAllIDs
 }
