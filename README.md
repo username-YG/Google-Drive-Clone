@@ -10,6 +10,7 @@ Important Note: all the previous functionalities of the project (the Google Driv
 
 The implementation of the code for our current part of the project is located under the branch 'ex3-main'.
 In this way, we've "locked" the code of ex2's server and prevented any overrides by our new code for this part.
+Note that the main branch contains the current most updated version of our app (that is, for now, the version of this step - step 3).
 
 The Web Server is separated into 4 parts: models, routes, controllers and the main app (later on will also include views for the visual screens) as in the MVC structure we saw in class.
 The Web Server contacts the CPP-Server, i.e., opens a socket to it and communicates with the server as a client.
@@ -251,7 +252,7 @@ docker compose up --build server
 ```
 docker compose up --build web-server
 ```
-5. In the cmd, run the various HTTP requests listed above.
+5. In the wsl, run the various HTTP requests listed above.
 
 Note for the checker #1: you can run the tests using the command "docker-compose run --rm gtests".  
 You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
@@ -276,6 +277,8 @@ Note for the checker #2: In order to use "curl" commands in our server's REST AP
 - Single Quotes for Data ('...'): Use single quotes to wrap the entire JSON body in the -d flag. This tells Bash to treat the content as a literal string, so you don't need to escape the double quotes inside.
 - Standard Double Quotes: Inside the JSON, simply use standard double quotes " for keys and values (e.g., "name":"aaa").
 - Authentication: Requests that require a logged-in user must include the x-user-id header.
+
+Note for the checker #3: We decided to use the syntax of the HTTP requests (using curl) for wsl since it is easier to use and more compact. However, there is an equivalent syntax for the cmd where there are additional slashes needed for the parameters in the headers and body request. Moreoever, it is worth mentioning that in the wsl the printing/display format is to print the output without going one line before reprinting the shell's line for input. In cmd there is an enter. That is a matter of the shell in use and not related to our app. 
   
 ## For Example - Easy To Use HTTP Requests with Running Examples:
 
