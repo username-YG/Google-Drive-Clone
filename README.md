@@ -135,8 +135,8 @@ Request Body:
 Possible status codes:
 - 204 No Content: file or directory updated successfully.
 - 400 Bad Request: missing header/body or invalid fields.
-- 404 Not Found: file or directory with the specified id does not exist or parent either does not exist or not a directory.
-- 403 Forbidden: the user isn't authorized to update this item.
+- 404 Not Found: file or directory with the specified id does not exist or parent either does not exist or not a directory. Moving a folder into itself also causes this error.
+- 403 Forbidden: the user isn't authorized to update this item or the new parent.
 - 500 Internal Server Error: should there be any malfunctioning in the servers' end.
 
 #### DELETE /api/files/:id
