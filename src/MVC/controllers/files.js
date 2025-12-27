@@ -157,6 +157,9 @@ exports.updateFile = async (req, res) => {
             if (!parent || !parent.isFolder) {
                 return res.status(404).json({ error: 'Parent not found' });
             }
+            if (parentId === req.params.id) {
+                return res.status(400).json({ error: "Can't move folder into itself" })
+            }
         }
 
         // Return 403 if the user doesn't have permissions to write to the file
@@ -164,6 +167,15 @@ exports.updateFile = async (req, res) => {
         const perm = Perms.getPermissions(req.params.id);
         if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
             return res.status(403).json({ error: "Forbidden" })
+        }
+
+        // Return 403 if the user doesn't have permissions to write to the folder
+        // Everyone is allowed to write to the root so we don't check that
+        if (parentId) {
+            const parentPerm = Perms.getPermissions(parentId);
+            if (!parentPerm || !parentPerm[usrId] || (parentPerm[usrId] != "owner" && parentPerm[usrId] != "writer")) {
+                return res.status(403).json({ error: "Forbidden" })
+            }
         }
 
         const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
