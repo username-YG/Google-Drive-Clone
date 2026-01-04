@@ -1,4 +1,4 @@
-function Registration() {
+function SharedWithMe() {
   return (
     <div>
       <h1>Sign up page</h1>
@@ -6,4 +6,4 @@ function Registration() {
   )
 }
 
-export default Registration
+export default SharedWithMe

@@ -1,7 +1,9 @@
+import FileDisplayer from "./FileDisplayer/FileDisplayer.jsx"
+
 function Home() {
   return (
     <div>
-      <h1>Home page</h1>
+      <FileDisplayer />
     </div>
   )
 }
