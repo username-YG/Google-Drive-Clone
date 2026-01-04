@@ -7,14 +7,9 @@ const roles = ["owner", "writer", "commenter", "reader"]
 // controller method to get permissions for a file or directory
 exports.getPermissions = (req, res) => {
     try {
-        const fileOrDirId = req.params.id
+        const fileOrDirId = req.params.id;
 
-        // checking validity of the arguments
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-
-        const requesterID = req.headers['x-user-id']
+        const requesterID = req.user.ID;
         
         const filePermissions = Permission.getPermissions(fileOrDirId)
 
@@ -43,14 +38,14 @@ exports.getPermissions = (req, res) => {
 // controller method to create a permission for a file or directory
 exports.createPermission = (req, res) => {
     try {
-        const fileOrDirId = req.params.id
+        const fileOrDirId = req.params.id;
 
         // checking the header and body of the request exist
-        if (!req.headers || !req.body) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing body" })
         }
 
-        const requesterID = req.headers['x-user-id']
+        const requesterID = req.user.ID;
         const { userID, role } = req.body
 
         // checking validity of the arguments
@@ -98,11 +93,11 @@ exports.updatePermission = (req, res) => {
         const permissionId = req.params.pId
 
         // checking the header and body of the request exist
-        if (!req.headers || !req.body) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing body" })
         }
 
-        const requesterID = req.headers['x-user-id']
+        const requesterID = req.user.ID;
         const { role } = req.body
 
         // checking validity of the arguments
@@ -144,12 +139,7 @@ exports.deletePermission = (req, res) => {
         const fileOrDirId = req.params.id
         const permissionId = req.params.pId
 
-        // checking validity of the arguments
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-
-        const requesterID = req.headers['x-user-id']
+        const requesterID = req.user.ID;
 
         // Return 404 if one of the users doesn't exist
         if (!User.findByID(requesterID)) {

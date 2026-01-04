@@ -4,6 +4,7 @@ x-env: &shared_env
     MAX_CLIENTS: ${MAX_CLIENTS:-2}
     MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
     WEB_PORT: ${WEB_PORT:-3000} # The port the web server listens on
+    JWT_SECRET: ${JWT_SECRET:-0c65905c90fc5bf2fa1bcef939b851c7} # Secret key for JWT authentication
 
 services:
   server:
