@@ -75,7 +75,6 @@ body {
 
 .panel-list a.active-link {
   background-color: #c2e7ff;
-  font-weight: bold;
   color: #001d35;
 }
 
