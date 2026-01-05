@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
+import "./App.css"
+
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Registration from "./pages/Registration/Registration.jsx";
@@ -8,13 +10,14 @@ import Recent from "./pages/Recent/Recent.jsx";
 import SharedWithMe from "./pages/SharedWithMe/SharedWithMe.jsx";
 import Starred from "./pages/Starred/Starred.jsx";
 import Trash from "./pages/Trash/Trash.jsx";
+import Settings from "./pages/Settings/Settings.jsx";
 
 import SidePanel from "./SidePanel/SidePanel.jsx"
 import TopBar from "./TopBar/TopBar.jsx"
 
 function MainScreen() {
   return (
-    <div>
+    <div class="main-screen">
       <SidePanel />
       <TopBar />
       <Outlet />
@@ -30,7 +33,8 @@ function App() {
 
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Registration />} />
-          
+          <Route path="settings" element={<Settings />} />
+
           <Route element={<MainScreen/>}>
             <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="home" element={<Home />} />
