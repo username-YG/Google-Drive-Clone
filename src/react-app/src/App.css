@@ -1,0 +1,12 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+.main-screen {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  height: 100vh;
+  overflow: hidden;
+}

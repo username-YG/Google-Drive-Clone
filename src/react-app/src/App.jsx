@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
+import "./App.css"
+
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Registration from "./pages/Registration/Registration.jsx";
@@ -14,7 +16,7 @@ import TopBar from "./TopBar/TopBar.jsx"
 
 function MainScreen() {
   return (
-    <div>
+    <div class="main-screen">
       <SidePanel />
       <TopBar />
       <Outlet />

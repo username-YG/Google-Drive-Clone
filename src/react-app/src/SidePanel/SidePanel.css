@@ -1,14 +1,9 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-}
-
 .side-panel {
   background-color: #f8fafd;
   padding: 16px;
   padding-left: 10px;
   height: 100vh;
-  width: 220px;
+  width: 230px;
 }
 
 .logo {
@@ -19,6 +14,7 @@ body {
   font-size: 21px;
   color: #444746;
   width: 36px;
+  cursor: pointer;
 }
 
 .new-item-button {
@@ -27,9 +23,9 @@ body {
   gap: 13px;
   background: white;
   border: none;
-  padding-top:9px;
-  padding-bottom:9px;
-  padding-left: 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 15px;
   padding-right: 20px;
   border-radius: 16px;
   margin-top: 24px;
@@ -46,12 +42,13 @@ body {
   background-color: #edf1fa;
 }
 
-#plus-icon {
-  font-size: 32px;
+.new-item-button img {
+  width: 24px;
 }
 
 .panel-list ul {
   padding: 0;
+  list-style-type: none;
 }
 
 .panel-list a {
@@ -59,26 +56,67 @@ body {
   align-items: center;
   color: #1f1f1f;
   text-decoration: none;
-  font-size: 13px;
-  gap: 13px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  font-size: 14px;
+  gap: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-left: 24px;
-  padding-right: 24px;
+  padding-right: 25px;
   border-radius: 25px;
   transition: 0.1s;
 }
 
 .panel-list img {
-  width: 20px
+  width: 19px
 }
 
 .panel-list a.active-link {
   background-color: #c2e7ff;
-  font-weight: bold;
+  margin-left: 5px;
+  padding-left: 19px;
   color: #001d35;
 }
 
 .panel-list a:hover:not(.active-link) {
   background-color: #e7e8eb;
+}
+
+.new-item-div {
+  position: relative;
+}
+
+
+
+
+
+.drive-menu {
+  position: absolute;
+  top: 100%; /* Places it directly below the button */
+  left: 0;
+  margin-top: 8px;
+  background: white;
+  min-width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  list-style: none;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.menu-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.menu-item:hover {
+  background-color: #f1f3f4;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #e8eaed;
+  margin: 4px 0;
 }

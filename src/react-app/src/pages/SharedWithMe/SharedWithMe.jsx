@@ -1,7 +1,7 @@
 function SharedWithMe() {
   return (
     <div>
-      <h1>Shared with me page</h1>
+      <h1>Shared page</h1>
     </div>
   )
 }
