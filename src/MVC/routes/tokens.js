@@ -3,6 +3,6 @@ const router = express.Router()
 const controller = require('../controllers/tokens')
 
 router.route('/')
-        .post(controller.checkUserSignedIn)
+        .post(controller.processLogin)
 
 module.exports = router

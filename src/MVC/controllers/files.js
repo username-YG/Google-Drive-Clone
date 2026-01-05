@@ -6,11 +6,10 @@ exports.createFile = async (req, res) => {
     try {
 
         // Return 400 when no body or header of userid is sent
-        if (!req.body || !req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing body or header or authentication user id" })
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing body" })
         }
-        const usrId = req.headers['x-user-id'];
-
+        const usrId = req.user.ID
         const { name, content, isFolder, parentId } = req.body;
 
         // Return 400 when a field is missing
@@ -54,12 +53,7 @@ exports.createFile = async (req, res) => {
 
 exports.getAllFiles = async (req, res) => {
     try {
-
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         // Return 404 if the user doesn't exist
         if (!Users.findByID(usrId)) {
@@ -83,14 +77,8 @@ exports.getAllFiles = async (req, res) => {
 }
 
 exports.getFile = async (req, res) => {
-
     try {
-
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         // Return 404 if the file doesn't exist
         if (!Files.getMetadata(req.params.id)) {
@@ -116,14 +104,8 @@ exports.getFile = async (req, res) => {
 }
 
 exports.updateFile = async (req, res) => {
-
     try {
-
-        // Return 400 when no body or header of userid is sent
-        if (!req.body || !req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing body or header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         /*
         The fields that can be changed using patch are only:
@@ -188,14 +170,8 @@ exports.updateFile = async (req, res) => {
 }
 
 exports.deleteFile = async (req, res) => {
-
     try {
-        
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         // Return 404 if the user doesn't exist
         if (!Users.findByID(usrId)) {
