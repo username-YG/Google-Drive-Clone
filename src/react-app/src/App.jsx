@@ -10,6 +10,7 @@ import Recent from "./pages/Recent/Recent.jsx";
 import SharedWithMe from "./pages/SharedWithMe/SharedWithMe.jsx";
 import Starred from "./pages/Starred/Starred.jsx";
 import Trash from "./pages/Trash/Trash.jsx";
+import Settings from "./pages/Settings/Settings.jsx";
 
 import SidePanel from "./SidePanel/SidePanel.jsx"
 import TopBar from "./TopBar/TopBar.jsx"
@@ -32,7 +33,8 @@ function App() {
 
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Registration />} />
-          
+          <Route path="settings" element={<Settings />} />
+
           <Route element={<MainScreen/>}>
             <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="home" element={<Home />} />

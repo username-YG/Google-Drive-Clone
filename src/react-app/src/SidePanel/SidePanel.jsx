@@ -85,9 +85,9 @@ function NewItemButton() {
 
   useEffect(() => {
     const closePopup = (event) => { if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false) }
-    document.addEventListener("mousedown", closePopup);
+    if (isOpen) document.addEventListener("mousedown", closePopup);
     return () => document.removeEventListener("mousedown", closePopup);
-  }, []);
+  }, [isOpen]);
 
   return (
     <div className="new-item-div" ref={popupRef}>
