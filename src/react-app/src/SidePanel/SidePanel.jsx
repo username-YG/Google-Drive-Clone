@@ -11,6 +11,9 @@ import people from "../../assets/people.png"
 import clock from "../../assets/clock.png"
 import star from "../../assets/star.png"
 import trash from "../../assets/trash.png"
+import folderplus from "../../assets/folderplus.png"
+import fileup from "../../assets/fileup.png"
+import folderup from "../../assets/folderup.png"
 
 const listButtons = [
   {
@@ -57,15 +60,20 @@ function Logo() {
 
 function NewItemPopup() {
   return (
-    <ul className="drive-menu">
-      <li className="menu-item"><i className="icon-folder" /> New folder</li>
+    <ul className="new-item-menu">
+      <li className="new-item-menu-item">
+        <img src={folderplus} />
+        New folder
+      </li>
       <hr />
-      <li className="menu-item"><i className="icon-upload" /> File upload</li>
-      <li className="menu-item"><i className="icon-folder-upload" /> Folder upload</li>
-      <hr />
-      <li className="menu-item"><i className="icon-docs" /> Google Docs</li>
-      <li className="menu-item"><i className="icon-sheets" /> Google Sheets</li>
-      <li className="menu-item">More</li>
+      <li className="new-item-menu-item">
+        <img src={fileup} />
+        File upload
+      </li>
+      <li className="new-item-menu-item">
+        <img src={folderup} />
+        Folder upload
+      </li>
     </ul>
   )
 }

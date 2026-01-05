@@ -85,38 +85,35 @@
   position: relative;
 }
 
-
-
-
-
-.drive-menu {
+.new-item-menu {
   position: absolute;
-  top: 100%; /* Places it directly below the button */
-  left: 0;
-  margin-top: 8px;
-  background: white;
-  min-width: 250px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
   list-style: none;
+  top: -15px;
+  width: 250px;
   padding: 8px 0;
-  z-index: 1000;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
 }
 
-.menu-item {
-  padding: 10px 16px;
+.new-item-menu-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
+  color: #484848;
 }
 
-.menu-item:hover {
-  background-color: #f1f3f4;
+.new-item-menu-item img {
+  width: 20px;
+  padding-right: 10px;
+  opacity: 0.7;
 }
 
-hr {
-  border: 0;
-  border-top: 1px solid #e8eaed;
-  margin: 4px 0;
+.new-item-menu-item:hover {
+  background-color: #e4e4e4;
 }
