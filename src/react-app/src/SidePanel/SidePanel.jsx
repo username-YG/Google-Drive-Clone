@@ -58,22 +58,72 @@ function Logo() {
   )
 }
 
-function NewItemPopup() {
+const NewFolderPopup = ({ toggle, createFolder }) => {
+  const [name, setName] = useState("Untitled folder");
+  const inputRef = useRef(null);
+
+  const onCreateFolder = () => {
+    createFolder(name);
+    toggle();
+  };
+
   return (
-    <ul className="new-item-menu">
-      <li className="new-item-menu-item">
-        <img src={folderplus} />
+    <div className="new-folder-screen">
+      <div className="new-folder-popup" onClick={(e) => e.stopPropagation()}>
+
+        <h2 className="new-folder-title">New folder</h2>
+        
+        <input ref={inputRef} type="text" className="new-folder-input" value={name}
+          onChange={(e) => setName(e.target.value)}/>
+        
+        <div className="new-folder-buttons">
+          <button onClick={toggle}>Cancel</button>
+          <button onClick={onCreateFolder}>Create</button>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+function createFolder(name) {
+  //
+}
+
+function NewItemPopup() {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const popupRef = useRef(null);
+
+  const closePopup = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
+  }
+
+  useEffect(() => {
+    if (isOpen) document.addEventListener("mousedown", closePopup);
+    return () => document.removeEventListener("mousedown", closePopup);
+  }, [isOpen]);
+  
+  return (
+    <ul className="new-item-menu" ref={popupRef}>
+
+      <li className="new-item-menu-item" onClick={() => setIsOpen(!isOpen)}>
+        <img src={folderplus}/>
         New folder
+        {isOpen && <NewFolderPopup toggle={() => setIsOpen(!isOpen)} createFolder={createFolder}/>}
       </li>
       <hr />
+
       <li className="new-item-menu-item">
         <img src={fileup} />
         File upload
       </li>
+
       <li className="new-item-menu-item">
         <img src={folderup} />
         Folder upload
       </li>
+
     </ul>
   )
 }
@@ -83,22 +133,20 @@ function NewItemButton() {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
+  const closePopup = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
+  }
+
   useEffect(() => {
-    const closePopup = (event) => { if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false) }
     if (isOpen) document.addEventListener("mousedown", closePopup);
     return () => document.removeEventListener("mousedown", closePopup);
   }, [isOpen]);
 
   return (
     <div className="new-item-div" ref={popupRef}>
-
       <button className="new-item-button" onClick={() => setIsOpen(!isOpen)}>
-        <img id="plus" src={plus} />
-        New
-      </button>
-
+        <img id="plus" src={plus}/>New</button>
       {isOpen && <NewItemPopup/>}
-
     </div>
   );
 }
