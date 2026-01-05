@@ -58,7 +58,7 @@ function Logo() {
   )
 }
 
-const NewFolderPopup = ({ toggle, createFolder }) => {
+const InputNewFolderPopup = ({ toggle, createFolder }) => {
   const [name, setName] = useState("Untitled folder");
   const inputRef = useRef(null);
 
@@ -110,7 +110,7 @@ function NewItemPopup() {
       <li className="new-item-menu-item" onClick={() => setIsOpen(!isOpen)}>
         <img src={folderplus}/>
         New folder
-        {isOpen && <NewFolderPopup toggle={() => setIsOpen(!isOpen)} createFolder={createFolder}/>}
+        {isOpen && <InputNewFolderPopup toggle={() => setIsOpen(!isOpen)} createFolder={createFolder}/>}
       </li>
       <hr />
 

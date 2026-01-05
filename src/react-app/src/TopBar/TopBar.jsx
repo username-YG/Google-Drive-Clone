@@ -7,20 +7,44 @@ import question from "../../assets/question.png"
 import search from "../../assets/search.png"
 import lines from "../../assets/lines.png"
 
+const navigate = useNavigate();
+
+const supportMenuItems = [
+  {
+    text: "Project readme",
+    onClick: () => openLink(githubLink)
+  },
+  {
+    text: "Google drive help",
+    onClick: () => openLink(googleHelpLink)
+  }
+]
+
+const settingsMenuItems = [
+  {
+    text: "Display settings",
+    onClick: () => navigate("/settings#Display")
+  },
+  {
+    text: "User settings",
+    onClick: () => navigate("/settings#User")
+  }
+]
+
 const barButtons = [
   {
     title: "Support",
-    popUp: <SupportPopup/>,
+    menuItems: <SimplePopup supportMenuItems/>,
     img: question,
   },
   {
     title: "Settings",
-    popUp: <SettingPopup/>,
+    menuItems: <SimplePopup settingsMenuItems/>,
     img: settings,
   },
   {
     title: "Account",
-    popUp: <ProfilePopup/>,
+    menuItems: <ProfilePopup/>,
     img: "",
   }
 ]
@@ -32,18 +56,8 @@ function openLink(url) {
   window.open(url);
 }
 
-function SupportPopup() {
-  return (
-    <ul className="item-menu">
-      <li className="item-menu-item" onClick={() => openLink(githubLink)}>Project readme</li>
-      <li className="item-menu-item" onClick={() => openLink(googleHelpLink)}>Google drive help</li>
-    </ul>
-  )
-}
-
 function ProfilePopup() {
 
-  const navigate = useNavigate();
   const username = "username@gmail.com";
   const displayName = "displayName";
 
@@ -57,23 +71,25 @@ function ProfilePopup() {
   )
 }
 
-function SettingPopup() {
-  const navigate = useNavigate();
+function SimplePopup(items) {
   return (
     <ul className="item-menu">
-      <li className="item-menu-item" onClick={() => {navigate("/settings#Display")}}>Display settings</li>
-      <li className="item-menu-item" onClick={() => {navigate("/settings#User")}}>User settings</li>
+      {items.map((item) => (
+        <li className="item-menu-item" onClick={item.onClick}>{item.text}</li>
+      ))}
     </ul>
   )
 }
 
-function BarListItem({ title, popUp, img }) {
-
+function BarListItem({ title, menuItems, img }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
 
+  const closePopup = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
+  }
+
   useEffect(() => {
-    const closePopup = (event) => { if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false) }
     if (isOpen) document.addEventListener("mousedown", closePopup);
     return () => document.removeEventListener("mousedown", closePopup);
   }, [isOpen]);
@@ -81,9 +97,12 @@ function BarListItem({ title, popUp, img }) {
   return (
     <li ref={popupRef}>
       <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
-        {img ? <img src={img}/> : <div className="no-profile-pic">{title[0]}</div>}
+        {img ?
+          <img src={img}/> :
+          <div className="no-profile-pic">{title[0]}</div>
+        }
       </a>
-      {isOpen && popUp}
+      {isOpen && menuItems}
     </li>
   )
 }
@@ -93,7 +112,7 @@ function TopBarList() {
     <nav class="bar-list">
       <ul>
         {barButtons.map((item) => (
-            <BarListItem title={item.title} popUp={item.popUp} img={item.img}/>
+            <BarListItem title={item.title} menuItems={item.menuItems} img={item.img}/>
         ))}
       </ul>
     </nav>
