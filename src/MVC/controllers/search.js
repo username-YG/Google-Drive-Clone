@@ -5,12 +5,7 @@ exports.searchFilesAndDirs = async (req, res) => {
     try {
         const query = req.params.query
 
-        // checking validity of the arguments
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-
-        const requesterID = req.headers['x-user-id']
+        const requesterID = req.user.ID;
 
         // Return 404 if one of the users doesn't exist
         if (!Users.findByID(requesterID)) {
