@@ -1,0 +1,86 @@
+.registration-page {
+    background-color: #f0f2f5;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.google-rectangular-card {
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 24px;
+    width: 840px;
+    min-height: 300px;
+    display: flex;
+    padding: 40px;
+}
+
+.card-branding {
+    flex: 1;
+    padding-right: 40px;
+    border-right: 1px solid #f1f1f1;
+    text-align: left;
+}
+
+.google-asset-logo {
+    height: 32px;
+    width: auto;
+    margin-bottom: 24px;
+}
+
+.display-title {
+    font-size: 32px;
+    font-weight: 400;
+    color: #1f1f1f;
+    margin: 0 0 12px 0;
+}
+
+.display-subtitle {
+    font-size: 16px;
+    color: #444746;
+}
+
+.card-inputs {
+    flex: 1;
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-container { flex-grow: 1; }
+
+.google-input-field {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border: 1px solid #747775;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.card-navigation {
+    display: flex;
+    margin-top: 24px;
+}
+
+.primary-action {
+    background-color: #0b57d0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 24px;
+    cursor: pointer;
+}
+
+.secondary-action {
+    background: none;
+    border: none;
+    color: #0b57d0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.flex-grow { flex: 1; }
