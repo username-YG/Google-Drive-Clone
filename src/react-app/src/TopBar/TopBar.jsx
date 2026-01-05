@@ -7,48 +7,6 @@ import question from "../../assets/question.png"
 import search from "../../assets/search.png"
 import lines from "../../assets/lines.png"
 
-const navigate = useNavigate();
-
-const supportMenuItems = [
-  {
-    text: "Project readme",
-    onClick: () => openLink(githubLink)
-  },
-  {
-    text: "Google drive help",
-    onClick: () => openLink(googleHelpLink)
-  }
-]
-
-const settingsMenuItems = [
-  {
-    text: "Display settings",
-    onClick: () => navigate("/settings#Display")
-  },
-  {
-    text: "User settings",
-    onClick: () => navigate("/settings#User")
-  }
-]
-
-const barButtons = [
-  {
-    title: "Support",
-    menuItems: <SimplePopup supportMenuItems/>,
-    img: question,
-  },
-  {
-    title: "Settings",
-    menuItems: <SimplePopup settingsMenuItems/>,
-    img: settings,
-  },
-  {
-    title: "Account",
-    menuItems: <ProfilePopup/>,
-    img: "",
-  }
-]
-
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
 const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
 
@@ -58,6 +16,7 @@ function openLink(url) {
 
 function ProfilePopup() {
 
+  const navigate = useNavigate();
   const username = "username@gmail.com";
   const displayName = "displayName";
 
@@ -71,7 +30,7 @@ function ProfilePopup() {
   )
 }
 
-function SimplePopup(items) {
+function SimplePopup({items}) {
   return (
     <ul className="item-menu">
       {items.map((item) => (
@@ -108,6 +67,49 @@ function BarListItem({ title, menuItems, img }) {
 }
 
 function TopBarList() {
+
+  const navigate = useNavigate();
+
+  const supportMenuItems = [
+    {
+      text: "Project readme",
+      onClick: () => openLink(githubLink)
+    },
+    {
+      text: "Google drive help",
+      onClick: () => openLink(googleHelpLink)
+    }
+  ]
+
+  const settingsMenuItems = [
+    {
+      text: "Display settings",
+      onClick: () => navigate("/settings#Display")
+    },
+    {
+      text: "User settings",
+      onClick: () => navigate("/settings#User")
+    }
+  ]
+
+  const barButtons = [
+    {
+      title: "Support",
+      menuItems: <SimplePopup items={supportMenuItems}/>,
+      img: question,
+    },
+    {
+      title: "Settings",
+      menuItems: <SimplePopup items={settingsMenuItems}/>,
+      img: settings,
+    },
+    {
+      title: "Account",
+      menuItems: <ProfilePopup/>,
+      img: "",
+    }
+  ]
+
   return (
     <nav class="bar-list">
       <ul>
