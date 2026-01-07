@@ -107,6 +107,7 @@
   border-radius: 5px;
   background: white;
   box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  z-index: 1000;
 }
 
 .item-menu-item {
@@ -138,6 +139,7 @@
   border-radius: 20px;
   box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
   cursor: default;
+  z-index: 1000;
 }
 
 .profile-gmail {

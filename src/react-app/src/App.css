@@ -7,19 +7,12 @@ body {
   display: grid;
   grid-template-columns: 256px 1fr; 
   grid-template-rows: 66px 1fr;
-  grid-template-areas: "side-panel top-bar" "side-panel main-screen";
+  grid-template-areas: "side-panel x" "side-panel x";
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 
 .side-panel {
   grid-area: side-panel;
-}
-
-.top-bar {
-  grid-area: top-bar;
-}
-
-.files-view {
-  grid-area: main-screen;
 }

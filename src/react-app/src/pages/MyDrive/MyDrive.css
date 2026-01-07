@@ -1,0 +1,64 @@
+.files-screen {
+  margin-left: 16px;
+  overflow: auto;
+}
+
+#files-screen-title {
+  font-size: 25px;
+}
+
+.files-grid {
+  display: grid;
+  justify-content: start;
+  align-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding-right: 20px;
+}
+
+.files-grid-item {
+  height: 220px;
+  width: 220px;
+  border-radius: 10px;
+  background-color: #f0f4f9;
+  user-select: none;
+}
+
+.files-grid-item:hover {
+  background-color: #e3e4e4;
+}
+
+.files-header {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.files-header img {
+  width: 18px;
+  padding-top: 13px;
+  padding-right: 10px;
+}
+
+.files-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 155px;
+  margin-top: 0;
+  margin-right: 8px;
+  margin-left: 8px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.files-preview img {
+  height: 60px;
+  width: 60px;
+  opacity: 0.8;
+}
+
+.files-grid-item.selected {
+  background-color: #c2e7ff;
+}

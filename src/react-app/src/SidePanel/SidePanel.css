@@ -92,6 +92,7 @@
   border-radius: 5px;
   background: white;
   box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  z-index: 1000;
 }
 
 .new-item-menu-item {
@@ -134,6 +135,7 @@
   border-radius: 28px;
   box-shadow: 0 4px 12px #00000026;
   background-color: white;
+  z-index: 1000;
 }
 
 .new-folder-title {
