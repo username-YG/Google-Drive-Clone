@@ -35,8 +35,8 @@ function ProfilePopup() {
 function SimplePopup({items}) {
   return (
     <ul className="item-menu">
-      {items.map((item) => (
-        <li className="item-menu-item" onClick={item.onClick}>{item.text}</li>
+      {items.map((item, i) => (
+        <li key={i} className="item-menu-item" onClick={item.onClick}>{item.text}</li>
       ))}
     </ul>
   )
@@ -107,8 +107,8 @@ function TopBarList() {
   return (
     <nav className="bar-list">
       <ul>
-        {barButtons.map((item) => (
-            <BarListItem title={item.title} menuItems={item.menuItems} img={item.img}/>
+        {barButtons.map((item, i) => (
+            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img}/>
         ))}
       </ul>
     </nav>

@@ -168,7 +168,7 @@ function PanelList() {
     <nav className="panel-list">
       <ul>
         {listButtons.map((item, i) => (
-            <div>
+            <div key={i}>
               <PanelListItem title={item.title} link={item.link} img={item.img}/>
               {i % 3 === 2 && i !== listButtons.length - 1 && <br/>}
             </div>
