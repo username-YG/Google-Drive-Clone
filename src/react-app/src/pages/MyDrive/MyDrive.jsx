@@ -1,6 +1,6 @@
 import "./MyDrive.css"
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -10,6 +10,7 @@ import pdf from "../../../assets/pdf.png"
 import folder from "../../../assets/folder.png"
 import dots from "../../../assets/dots.png"
 import empty_folder from "../../../assets/empty_folder.svg"
+import right_arrow from "../../../assets/right_arrow.png"
 
 const icons = {
   "txt": txt,
@@ -65,17 +66,22 @@ function File({ file, selected, onSelect }) {
   )
 }
 
-function Folder({ file, selected, onSelect }) {
+function Folder({ file, selected, onSelect, path }) {
   
   const onFileClick = (e) => {
     e.stopPropagation();
     onSelect();
   }
 
+  const onFileDoubleClick = () => {
+    const newPath = [...path, {id: file.id, name: file.name}];
+    navigate("/folders/" + file.id, { state: { path: newPath } });
+  }
+
   const navigate = useNavigate();
   return (
     <div className={`files-grid-item is-folder ${(selected === file.id) ? "selected" : ""}`}
-      onClick={onFileClick} onDoubleClick={() => navigate("/folders/" + file.id)} >
+      onClick={onFileClick} onDoubleClick={onFileDoubleClick} >
       <div className="folder-item">
         <img src={folder} />
         <p>{file.name}</p>
@@ -86,59 +92,86 @@ function Folder({ file, selected, onSelect }) {
 
 }
 
+function EmptyFolder() {
+  return (
+    <div className="empty-folder">
+      <img src={empty_folder} />
+      <p id="empty-folder-title">This folder is empty and sad</p>
+      <p id="empty-folder-text">Upload something so it won't be sad</p>
+    </div>
+  )
+}
+
+const updateData = async (folderId, setItems) => {
+
+  const url = (folderId) ? ("/" + folderId) : ("");
+  const data = await getFiles("/files" + url);
+  if (!data) return;
+
+  if (folderId) {
+    for (let i = 0; i < data.content.length; i++) {
+      const item = await getFiles("/files/" + data.content[i]);
+      if (item) data.content[i] = item;
+    }
+    setItems(data.content);
+  } else {
+    setItems(data)
+  }
+
+}
+
+function PathTitle({path}) {
+
+  const navigate = useNavigate();
+
+  const onClickDrive = () => {
+    navigate("/my-drive", {state: { path:[] } });
+  }
+
+  const onClickFolder = (folder, i) => {
+    navigate("/folders/" + folder.id, { state: { path: path.slice(0, i + 1) } })
+  }
+
+  return (
+    <div className="path-bar">
+      <p className="files-screen-title" onClick={onClickDrive} title="My Drive">My Drive</p>
+      {path.map((folder, i) => (
+        <div key={i}>
+          <img src={right_arrow} />
+          <p className="files-screen-title" onClick={() => onClickFolder(folder, i)}>{folder.name}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function MyDrive() {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
 
   const { folderId } = useParams();
-  const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.state?.path || [];
 
   useEffect(() => {
-    const updateData = async () => {
-
-      const url = (folderId) ? ("/" + folderId) : ("");
-      const data = await getFiles("/files" + url);
-      if (!data) return;
-
-      if (folderId) {
-        for (let i = 0; i < data.content.length; i++) {
-          const item = await getFiles("/files/" + data.content[i]);
-          if (item) data.content[i] = item;
-        }
-        setItems(data.content);
-      } else {
-        setItems(data)
-      }
-
-    }
-    updateData();
+    updateData(folderId, setItems);
   }, [folderId]);
 
   const foldersObjects = items.filter(item => item.isFolder === true);
   const filesObjects = items.filter(item => item.isFolder === false);
 
   const folders = foldersObjects.map((item, i) =>
-    <Folder key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} />
+    <Folder key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} path={path} />
   );
 
   const files = filesObjects.map((item, i) =>
     <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} />
   );
 
-  function EmptyFolder() {
-    return (
-      <div className="empty-folder">
-        <img src={empty_folder} />
-        <p id="empty-folder-title">This folder is empty and sad</p>
-        <p id="empty-folder-text">Upload something so it won't be sad</p>
-      </div>
-    )
-  }
-
   return (
     <div className="files-screen" onClick={() => setSelected(null)}>
-      <p id="files-screen-title" onClick={() => navigate("/my-drive")}>My Drive</p>
+      <PathTitle path={path}/>
       {items.length === 0 ? (
         <EmptyFolder/>
       ) : (
