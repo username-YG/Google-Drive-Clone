@@ -17,7 +17,7 @@ import TopBar from "./TopBar/TopBar.jsx"
 
 function MainScreen() {
   return (
-    <div class="main-screen">
+    <div className="main-screen">
       <SidePanel />
       <TopBar />
       <Outlet />

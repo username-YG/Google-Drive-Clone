@@ -2,8 +2,6 @@
   background-color: #f8fafd;
   padding: 16px;
   padding-left: 10px;
-  height: 100vh;
-  width: 230px;
 }
 
 .logo {
@@ -33,7 +31,6 @@
   margin-bottom: 16px;
   cursor: pointer;
   box-shadow: 0 3px 5px #0000001f, 0 1px 2px #0000003d;
-  transition: box-shadow 0.3s;
   font-size: 14px;
 }
 
@@ -72,8 +69,6 @@
 
 .panel-list a.active-link {
   background-color: #c2e7ff;
-  margin-left: 5px;
-  padding-left: 19px;
   color: #001d35;
 }
 
@@ -145,7 +140,7 @@
   color: black;
   margin-top: 0;
   font-size: 24px;
-  font-weight: 1;
+  font-weight: normal;
 }
 
 .new-folder-input {

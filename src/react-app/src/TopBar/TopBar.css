@@ -1,9 +1,9 @@
 .top-bar {
   display: flex;
   align-items: center;
+  height: 66px;
   padding-right: 16px;
   background-color: #f8fafd;
-  height: 66px;
 }
 
 .bar-list > ul {

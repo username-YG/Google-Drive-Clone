@@ -1,12 +1,25 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: sans-serif;
   margin: 0;
 }
 
 .main-screen {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr auto;
+  grid-template-columns: 256px 1fr; 
+  grid-template-rows: 66px 1fr;
+  grid-template-areas: "side-panel top-bar" "side-panel main-screen";
   height: 100vh;
-  overflow: hidden;
+  width: 100vw;
+}
+
+.side-panel {
+  grid-area: side-panel;
+}
+
+.top-bar {
+  grid-area: top-bar;
+}
+
+.files-view {
+  grid-area: main-screen;
 }

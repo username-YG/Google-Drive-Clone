@@ -7,6 +7,8 @@ import question from "../../assets/question.png"
 import search from "../../assets/search.png"
 import lines from "../../assets/lines.png"
 
+import outsideClickListener from "../SidePanel/SidePanel.jsx"
+
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
 const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
 
@@ -43,15 +45,7 @@ function SimplePopup({items}) {
 function BarListItem({ title, menuItems, img }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-
-  const closePopup = (event) => {
-    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
-  }
-
-  useEffect(() => {
-    if (isOpen) document.addEventListener("mousedown", closePopup);
-    return () => document.removeEventListener("mousedown", closePopup);
-  }, [isOpen]);
+  outsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
     <li ref={popupRef}>
@@ -111,7 +105,7 @@ function TopBarList() {
   ]
 
   return (
-    <nav class="bar-list">
+    <nav className="bar-list">
       <ul>
         {barButtons.map((item) => (
             <BarListItem title={item.title} menuItems={item.menuItems} img={item.img}/>
@@ -123,17 +117,17 @@ function TopBarList() {
 
 function SearchBar() {
   return (
-    <div class="search-bar">
-      <img title="Search" class="search-icon" src={search}/>
-      <input type="text" placeholder="Search in Drive" class="search"/>
-      <img title="Advanced search" class="search-icon" src={lines}/>
+    <div className="search-bar">
+      <img title="Search" className="search-icon" src={search}/>
+      <input type="text" placeholder="Search in Drive" className="search"/>
+      <img title="Advanced search" className="search-icon" src={lines}/>
     </div>
   )
 }
 
 function TopBar() {
   return (
-    <div class="top-bar">
+    <div className="top-bar">
       <SearchBar/>
       <TopBarList />
     </div>
