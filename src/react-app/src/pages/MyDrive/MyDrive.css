@@ -6,6 +6,18 @@
 #files-screen-title {
   font-size: 25px;
   opacity: 0.7;
+  cursor: pointer;
+  display: inline-block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 18px;
+}
+
+#files-screen-title:hover {
+  width: fit-content;
+  background-color: #e3e4e4;
 }
 
 .files-grid {
@@ -41,6 +53,16 @@
   background-color: #c2e7ff;
 }
 
+.files-header p,
+.folder-item p {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  padding-right: 30px;
+}
+
 .files-header {
   display: flex;
   align-items: flex-start;
@@ -50,7 +72,7 @@
 
 .files-header img {
   width: 18px;
-  padding-top: 13px;
+  padding-top: 15px;
   padding-right: 10px;
 }
 
@@ -74,7 +96,6 @@
 
 .folder-item {
   display: flex;
-  align-items: flex-start;
   align-items: center;
   padding-left: 10px;
   font-size: 15px;
@@ -108,8 +129,23 @@
   opacity: 0.85;
 }
 
-
 #empty-folder-text {
   font-size: 20px;
   opacity: 0.8;
+}
+
+#dots {
+  width: 15px;
+  cursor: pointer;
+  border-radius: 18px;
+  padding: 9px;
+  margin: 4px;
+}
+
+#dots:hover {
+  background-color: #d6d8d7;
+}
+
+.files-grid-item.selected #dots:hover {
+  background-color: #b8dbf1;
 }
