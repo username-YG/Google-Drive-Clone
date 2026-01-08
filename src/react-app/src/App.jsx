@@ -17,7 +17,7 @@ import TopBar from "./TopBar/TopBar.jsx"
 
 function MainScreen() {
   return (
-    <div class="main-screen">
+    <div className="main-screen">
       <SidePanel />
       <TopBar />
       <Outlet />
@@ -36,13 +36,19 @@ function App() {
           <Route path="settings" element={<Settings />} />
 
           <Route element={<MainScreen/>}>
+
             <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="home" element={<Home />} />
+
             <Route path="my-drive" element={<MyDrive />} />
+            <Route path="folders/" element={<Navigate to="/my-drive" replace />} />
+            <Route path="folders/:folderId" element={<MyDrive />} />
+
+            <Route path="home" element={<Home />} />
             <Route path="recent" element={<Recent />} />
             <Route path="shared-with-me" element={<SharedWithMe />} />
             <Route path="starred" element={<Starred />} />
             <Route path="trash" element={<Trash />} />
+
           </Route>
         </Route>
         

@@ -51,7 +51,7 @@ const listButtons = [
 function Logo() {
   const navigate = useNavigate();
   return (
-    <div class="logo" onClick={() => navigate("/home")}>
+    <div className="logo" onClick={() => navigate("/home")}>
       <img title="Drive" src={logo} />
       <span>Drive</span>
     </div>
@@ -90,19 +90,26 @@ function createFolder(name) {
   //
 }
 
-function NewItemPopup() {
-
-  const [isOpen, setIsOpen] = useState(false);
-  const popupRef = useRef(null);
+export function outsideClickListener(isOpen, setIsOpen, ref) {
 
   const closePopup = (event) => {
-    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsOpen(false);
+    }
   }
 
   useEffect(() => {
     if (isOpen) document.addEventListener("mousedown", closePopup);
     return () => document.removeEventListener("mousedown", closePopup);
   }, [isOpen]);
+
+}
+
+function NewItemPopup() {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const popupRef = useRef(null);
+  outsideClickListener(isOpen, setIsOpen, popupRef)
   
   return (
     <ul className="new-item-menu" ref={popupRef}>
@@ -132,15 +139,7 @@ function NewItemButton() {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-
-  const closePopup = (event) => {
-    if (popupRef.current && !popupRef.current.contains(event.target)) setIsOpen(false);
-  }
-
-  useEffect(() => {
-    if (isOpen) document.addEventListener("mousedown", closePopup);
-    return () => document.removeEventListener("mousedown", closePopup);
-  }, [isOpen]);
+  outsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
     <div className="new-item-div" ref={popupRef}>
@@ -166,10 +165,10 @@ function PanelListItem({ title, link, img }) {
 
 function PanelList() {
   return (
-    <nav class="panel-list">
+    <nav className="panel-list">
       <ul>
         {listButtons.map((item, i) => (
-            <div>
+            <div key={i}>
               <PanelListItem title={item.title} link={item.link} img={item.img}/>
               {i % 3 === 2 && i !== listButtons.length - 1 && <br/>}
             </div>
@@ -181,7 +180,7 @@ function PanelList() {
 
 function SidePanel() {
   return (
-    <div class="side-panel">
+    <div className="side-panel">
       <Logo/>
       <NewItemButton/>
       <PanelList/>
