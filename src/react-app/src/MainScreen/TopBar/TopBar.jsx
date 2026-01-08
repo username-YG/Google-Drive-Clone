@@ -1,7 +1,3 @@
-<<<<<<< HEAD:src/react-app/src/TopBar/TopBar.jsx
-import { useState, useEffect, useRef, use } from 'react';
-=======
->>>>>>> GDPA-128-Create-filters-and-their-corresponding-screens:src/react-app/src/MainScreen/TopBar/TopBar.jsx
 import { useNavigate } from 'react-router-dom';
 import { SimplePopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
 import { useState, useRef, useEffect } from 'react';
@@ -14,21 +10,6 @@ import lines from "../../../assets/lines.png"
 import ProfilePopup from "../Popups/ProfilePopup/ProfilePopup.jsx"
 
 import "./TopBar.css"
-<<<<<<< HEAD:src/react-app/src/TopBar/TopBar.jsx
-import settings from "../../assets/settings.png"
-import question from "../../assets/question.png"
-import search from "../../assets/search.png"
-import lines from "../../assets/lines.png"
-import docs from "../../assets/docs.png"
-import txt from "../../assets/txt.png"
-import notype from "../../assets/notype.png"
-import image from "../../assets/image.png"
-import pdf from "../../assets/pdf.png"
-import folder from "../../assets/folder.png"
-
-import outsideClickListener from "../SidePanel/SidePanel.jsx"
-=======
->>>>>>> GDPA-128-Create-filters-and-their-corresponding-screens:src/react-app/src/MainScreen/TopBar/TopBar.jsx
 
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
 const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
@@ -117,89 +98,10 @@ function TopBarList() {
 }
 
 function SearchBar() {
-  const [query, setQuery] = useState("")
-  const [results, setResults] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  const icons = {
-    "txt": txt,
-    "docs": docs,
-    "docx": docs,
-    "notype": notype,
-    "jpg": image,
-    "jpeg": image,
-    "png": image,
-    "pdf": pdf
-  }
-
-  const searchQuery = async (query) => {
-    if (!query.trim()) {
-      setResults([])
-      return
-    }
-
-    try {
-      setLoading(true)
-
-      const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/search/${query}`, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-
-      if (response.status === 201 || response.status === 200) {
-        const data = await response.json();
-        setResults(data)
-      } else {
-        setResults([])
-      }
-    } catch (err) {}
-
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      searchQuery(query);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [query]);
-
   return (
     <div className="search-bar">
       <img title="Search" className="search-icon" src={search}/>
-      <input 
-        type="text" 
-        value={query}
-        placeholder="Search in Drive" 
-        className="search"
-        onChange={(e) => setQuery(e.target.value)}
-      />
-
-      {results.length > 0 && (
-        <ul className="search-results">
-          {results.slice(0,5).map((file) => (
-            <li 
-              key={file.id} 
-              className="search-result-item"
-              onClick={ () => {
-                // navigating to the item
-
-              }}
-            > 
-              <img className="search-result-icon" src={file.isFolder ? folder : icons[file.name.split('.').pop()] || icons["notype"]}/>
-              <span className="search-result-name">
-                {file.name}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-
+      <input type="text" placeholder="Search in Drive" className="search"/>
       <img title="Advanced search" className="search-icon" src={lines}/>
     </div>
   )
