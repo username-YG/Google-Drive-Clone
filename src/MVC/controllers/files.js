@@ -57,7 +57,7 @@ function doesOwn(item, userId) {
 }
 
 function isStarred(item, userId) {
-    return item.starred.contains(userId);
+    return item.starred.includes(userId);
 }
 
 function isTrashed(item) {
@@ -71,7 +71,8 @@ function filterFiles(files, filterType, userId) {
         "OWNS": (item) => { return doesOwn(item, userId) },
         "SHARES": (item) => { return !doesOwn(item, userId) },
         "STARRED": (item) => { return isStarred(item, userId) },
-        "TRASHED": (item) => { return isTrashed(item) }
+        "TRASHED": (item) => { return isTrashed(item) },
+        "NOT TRASHED": (item) => { return !isTrashed(item) }
     }
 
     // Get the function to filter with
@@ -105,7 +106,10 @@ exports.getAllFiles = async (req, res) => {
         // If a filter has been specified in request body, apply i
         let filteredFiles = permittedFiles;
         if (req.headers && req.headers.filter) {
-            filteredFiles = filterFiles(permittedFiles, req.headers.filter, usrId);
+            const filters = req.headers.filter.split(',');
+            for (const filterType of filters) {
+                filteredFiles = filterFiles(filteredFiles, filterType, usrId);
+            }
         }
 
         res.json(filteredFiles);

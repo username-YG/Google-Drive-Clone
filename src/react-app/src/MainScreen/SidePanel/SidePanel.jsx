@@ -59,7 +59,7 @@ function Logo() {
   )
 }
 
-function NewItemButton() {
+function NewItemButton({ reload, setReload }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
@@ -69,7 +69,7 @@ function NewItemButton() {
     <div className="new-item-div" ref={popupRef}>
       <button className="new-item-button" onClick={() => setIsOpen(!isOpen)}>
         <img id="plus" src={plus}/>New</button>
-      {isOpen && <NewItemPopup/>}
+      {isOpen && <NewItemPopup reload={reload} setReload={setReload} />}
     </div>
   );
 }
@@ -102,11 +102,11 @@ function PanelList() {
   )
 }
 
-function SidePanel() {
+function SidePanel( { reload, setReload } ) {
   return (
     <div className="side-panel">
       <Logo/>
-      <NewItemButton/>
+      <NewItemButton reload={reload} setReload={setReload} />
       <PanelList/>
     </div>
   )

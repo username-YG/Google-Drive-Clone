@@ -9,7 +9,7 @@ import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 
 import "./NewItemPopup.css"
 
-function NewItemPopup() {
+function NewItemPopup( { reload, setReload } ) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
@@ -22,7 +22,7 @@ function NewItemPopup() {
       <li className="new-item-menu-item" onClick={() => setIsOpen(!isOpen)}>
         <img src={folderplus}/>
         New folder
-        {isOpen && <InputNamePopup toggle={() => setIsOpen(!isOpen)} parentId={folderId} />}
+        {isOpen && <InputNamePopup toggle={() => setIsOpen(!isOpen)} parentId={folderId} realod={reload} setReload={setReload} />}
       </li>
 
       <hr />

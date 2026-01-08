@@ -54,3 +54,19 @@ export async function getUser(setUser) {
   }
 
 }
+
+export async function trashItem(id) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "trashed": true
+    })
+  });
+
+}

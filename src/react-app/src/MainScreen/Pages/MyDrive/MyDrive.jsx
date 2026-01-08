@@ -1,3 +1,5 @@
+import { useOutletContext } from 'react-router-dom';
+
 import FilesGrid from "../../FilesGrid/FilesGrid.jsx"
 import empty_folder from "../../../../assets/empty_folder_mydrive.svg"
 
@@ -14,8 +16,9 @@ function EmptyFolder() {
 }
 
 function MyDrive() {
+  const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter="OWNS" emptyFolder={<EmptyFolder/>} title="My Drive" />
+    <FilesGrid filter={["OWNS", "NOT TRASHED"]} emptyFolder={<EmptyFolder/>} title="My Drive" reload={reload} setReload={setReload} />
   )
 }
 

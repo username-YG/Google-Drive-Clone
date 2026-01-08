@@ -131,6 +131,7 @@
   padding: 10px;
   white-space: nowrap;
   flex-wrap: nowrap;
+  user-select: none;
 }
 
 .path-bar img {

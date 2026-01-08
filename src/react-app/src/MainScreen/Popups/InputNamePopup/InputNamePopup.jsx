@@ -1,16 +1,21 @@
 import { useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import { createFolder } from "../PopupLogic.js"
 
 import "./InputNamePopup.css"
 
-const InputNamePopup = ({ toggle, parentId }) => {
+const InputNamePopup = ({ toggle, parentId, realod, setReload }) => {
 
   const [name, setName] = useState("Untitled folder");
   const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   const onCreateFolder = () => {
     createFolder(name, parentId);
     toggle();
+    const url = window.location.href;
+    if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
+    setReload(!realod);
   };
 
   return (

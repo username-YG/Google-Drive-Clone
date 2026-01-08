@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { trashItem } from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -48,7 +49,7 @@ function PathTitle( {path, title} ) {
   );
 }
 
-async function getFiles(url, filter) {
+async function getFiles(url, filter, navigate) {
   
   const token = localStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api" + url, {
@@ -64,19 +65,25 @@ async function getFiles(url, filter) {
     const data = await response.json();
     return data;
   }
+
+  if (response.status == 404 || response.status == 403) {
+    navigate("/login");
+    return;
+  }
+
 }
 
-const updateData = async (folderId, setItems, filter) => {
+const updateData = async (folderId, setItems, filter, navigate) => {
 
   const url = (folderId) ? ("/" + folderId) : ("");
-  const data = await getFiles("/files" + url, filter);
+  const data = await getFiles("/files" + url, filter, navigate);
   if (!data) return;
 
   let finalData;
   if (folderId) {
     finalData = await Promise.all(
       data.content.map(async (id) => {
-        const item = await getFiles("/files/" + id, filter);
+        const item = await getFiles("/files/" + id, filter, navigate);
         return item || id;
       })
     );
@@ -142,7 +149,7 @@ function Folder({ file, selected, onSelect, path }) {
 
 }
 
-function FilesGrid({ filter, emptyFolder, title }) {
+function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -151,9 +158,21 @@ function FilesGrid({ filter, emptyFolder, title }) {
   const location = useLocation();
   const path = location.state?.path || [];
 
+  const navigate = useNavigate();
   useEffect(() => {
-    updateData(folderId, setItems, filter);
-  }, [folderId]);
+    updateData(folderId, setItems, filter, navigate);
+  }, [folderId, reload]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Delete" && selected !== null) {
+        setReload(!reload)
+        trashItem(selected);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => { document.removeEventListener("keydown", handleKeyDown); };
+  }, [selected]);
 
   const foldersObjects = items.filter(item => item.isFolder === true);
   const filesObjects = items.filter(item => item.isFolder === false);
