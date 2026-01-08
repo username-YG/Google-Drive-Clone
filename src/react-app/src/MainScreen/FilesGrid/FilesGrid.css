@@ -1,0 +1,146 @@
+.files-grid-screen {
+  margin-left: 16px;
+  overflow: auto;
+}
+
+.files-grid-screen-title {
+  display: flex;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-left: -10px;
+  border-radius: 18px;
+  font-size: 25px;
+  opacity: 0.7;
+  cursor: pointer;
+  display: inline-block;
+  min-width: min-content;
+}
+
+.files-grid-screen-title:hover {
+  background-color: #e3e4e4;
+}
+
+.files-grid {
+  display: grid;
+  justify-content: start;
+  align-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: 20px;
+  padding-right: 20px;
+  margin-bottom: 40px;
+}
+
+.is-file {
+  height: 225px;
+}
+
+.is-folder {
+  height: 50px;
+}
+
+.files-grid-item {
+  width: 225px;
+  border-radius: 10px;
+  background-color: #f0f4f9;
+  user-select: none;
+}
+
+.files-grid-item:hover {
+  background-color: #e3e4e4;
+}
+
+.files-grid-item.selected {
+  background-color: #c2e7ff;
+}
+
+.files-header p,
+.folder-item p {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  padding-right: 30px;
+}
+
+.files-header {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.files-header img {
+  width: 18px;
+  padding-top: 15px;
+  padding-right: 10px;
+}
+
+.files-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 155px;
+  margin-top: 0;
+  margin-right: 8px;
+  margin-left: 8px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.files-preview img {
+  height: 60px;
+  width: 60px;
+  opacity: 0.8;
+}
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.folder-item img {
+  width: 25px;
+  padding-right: 10px;
+  opacity: 0.7;
+}
+
+#dots {
+  width: 15px;
+  cursor: pointer;
+  border-radius: 18px;
+  padding: 9px;
+  margin: 4px;
+}
+
+#dots:hover {
+  background-color: #d6d8d7;
+}
+
+.files-grid-item.selected #dots:hover {
+  background-color: #b8dbf1;
+}
+
+.path-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.path-bar img {
+  width: 25px;
+  height: 25px;
+  margin-right: 12px;
+  opacity: 0.6;
+}
+
+.path-bar div {
+  display: flex;
+  align-items: center;
+}
