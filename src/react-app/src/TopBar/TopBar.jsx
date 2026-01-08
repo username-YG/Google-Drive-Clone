@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import "./TopBar.css"
@@ -6,6 +6,12 @@ import settings from "../../assets/settings.png"
 import question from "../../assets/question.png"
 import search from "../../assets/search.png"
 import lines from "../../assets/lines.png"
+import docs from "../../assets/docs.png"
+import txt from "../../assets/txt.png"
+import notype from "../../assets/notype.png"
+import image from "../../assets/image.png"
+import pdf from "../../assets/pdf.png"
+import folder from "../../assets/folder.png"
 
 import outsideClickListener from "../SidePanel/SidePanel.jsx"
 
@@ -116,10 +122,89 @@ function TopBarList() {
 }
 
 function SearchBar() {
+  const [query, setQuery] = useState("")
+  const [results, setResults] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const icons = {
+    "txt": txt,
+    "docs": docs,
+    "docx": docs,
+    "notype": notype,
+    "jpg": image,
+    "jpeg": image,
+    "png": image,
+    "pdf": pdf
+  }
+
+  const searchQuery = async (query) => {
+    if (!query.trim()) {
+      setResults([])
+      return
+    }
+
+    try {
+      setLoading(true)
+
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:3000/api/search/${query}`, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        const data = await response.json();
+        setResults(data)
+      } else {
+        setResults([])
+      }
+    } catch (err) {}
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      searchQuery(query);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [query]);
+
   return (
     <div className="search-bar">
       <img title="Search" className="search-icon" src={search}/>
-      <input type="text" placeholder="Search in Drive" className="search"/>
+      <input 
+        type="text" 
+        value={query}
+        placeholder="Search in Drive" 
+        className="search"
+        onChange={(e) => setQuery(e.target.value)}
+      />
+
+      {results.length > 0 && (
+        <ul className="search-results">
+          {results.slice(0,5).map((file) => (
+            <li 
+              key={file.id} 
+              className="search-result-item"
+              onClick={ () => {
+                // navigating to the item
+
+              }}
+            > 
+              <img className="search-result-icon" src={file.isFolder ? folder : icons[file.name.split('.').pop()] || icons["notype"]}/>
+              <span className="search-result-name">
+                {file.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+
       <img title="Advanced search" className="search-icon" src={lines}/>
     </div>
   )
