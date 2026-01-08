@@ -34,3 +34,23 @@ export async function createFolder(name, parentId) {
     })
   });
 }
+
+export async function getUser(setUser) {
+
+  const token = localStorage.getItem("token")
+  const id = localStorage.getItem("id");
+
+  const response = await fetch("http://localhost:3000/api/users/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+  });
+
+  if (response.status == 200) {
+    const data = await response.json();
+    setUser(data);
+  }
+
+}

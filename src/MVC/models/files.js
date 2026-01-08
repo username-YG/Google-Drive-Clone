@@ -2,7 +2,7 @@ import net from "net";
 import { getPermissions, deleteAllPermissions } from './permissions.js'
 
 const rootId = crypto.randomUUID();
-const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {} } ];
+const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {}, trashed: false, starred: [] } ];
 
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ async function createFile(name, content, isFolder, parentId) {
 
     // Add new item to array
     if (parentId === null) parentId = rootId;
-    const newItem = { id, name, isFolder, parentId, content: [], permissions: {} };
+    const newItem = { id, name, isFolder, parentId, content: [], permissions: {}, trashed: false, starred: [] };
     filesystem.push(newItem);
 
     // If it is a folder, update parent
@@ -92,13 +92,29 @@ async function getFile(id) {
     return copy;
 }
 
-async function updateFile(id, name, content, parentId) {
+async function updateFile(id, name, content, parentId, userId, trashed, starred) {
 
     const item = getMetadata(id);
 
-    // Update name is asked to
+    // Update name if asked to
     if (name) {
         item.name = name;
+    }
+
+    // Update trashed if asked to
+    if (trashed !== undefined) {
+        item.trashed = trashed;
+    }
+
+    // Update starred if asked to
+    if (starred !== undefined) {
+        if (starred) {
+            item.starred = item.starred.filter(id => id !== userId);
+        } else {
+            if (!item.starred.includes(userId)) {
+                item.starred.push(userId);
+            }
+        }
     }
 
     // Update content if asked to

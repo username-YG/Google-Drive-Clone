@@ -337,6 +337,8 @@ const translations = {
         if (response.status === 201 || response.status === 200) {
             const data = await response.json();
             localStorage.setItem("token", data.token)
+            const locationHeader = response.headers.get('Location'); 
+            localStorage.setItem("id", locationHeader.split('/').pop())
             navigate('/home');
         } else {
             setUserNotExistFlag(true);

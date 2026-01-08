@@ -2,6 +2,7 @@
   background-color: #f8fafd;
   padding: 16px;
   padding-left: 10px;
+  user-select: none;
 }
 
 .logo {

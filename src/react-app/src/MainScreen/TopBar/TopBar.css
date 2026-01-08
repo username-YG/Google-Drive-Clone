@@ -4,6 +4,7 @@
   height: 66px;
   padding-right: 16px;
   background-color: #f8fafd;
+  user-select: none;
 }
 
 .bar-list > ul {

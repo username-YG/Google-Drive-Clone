@@ -1,7 +1,7 @@
 import FilesGrid from "../../FilesGrid/FilesGrid.jsx"
-import empty_folder from "../../../../assets/empty_folder.svg"
+import empty_folder from "../../../../assets/empty_folder_mydrive.svg"
 
-import "./MyDrive.css"
+import "../../FilesGrid/EmptyFolder.css"
 
 function EmptyFolder() {
   return (
@@ -13,13 +13,9 @@ function EmptyFolder() {
   )
 }
 
-function filter() {
-  ////////////////
-}
-
 function MyDrive() {
   return (
-    <FilesGrid filter={filter} emptyFolder={<EmptyFolder/>} />
+    <FilesGrid filter="OWNS" emptyFolder={<EmptyFolder/>} title="My Drive" />
   )
 }
 

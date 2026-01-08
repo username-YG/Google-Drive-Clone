@@ -13,6 +13,7 @@
   border-radius: 20px;
   box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
   cursor: default;
+  user-select: none;
   z-index: 1000;
 }
 
@@ -21,7 +22,7 @@
   margin-bottom: 20px;
 }
 
-.profile-image {
+.profile-no-image {
   width: 90px;
   height: 90px;
   border-radius: 50%;
@@ -31,6 +32,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
+}
+
+.profile-image {
+  min-width: 90px;
+  min-height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
   margin-bottom: 10px;
 }
 

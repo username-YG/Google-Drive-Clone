@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SimplePopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
-import { useState, useRef } from 'react';
-import { outsideClickListener  } from "../Popups/PopupLogic.js";
+import { useState, useRef, useEffect } from 'react';
+import { outsideClickListener, getUser  } from "../Popups/PopupLogic.js";
 
 import settings from "../../../assets/settings.png"
 import question from "../../../assets/question.png"
@@ -40,6 +40,12 @@ function TopBarList() {
 
   const navigate = useNavigate();
 
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    getUser(setUser)
+  }, []);
+  const profilePic = user?.profilePic || "";
+
   const supportMenuItems = [
     {
       text: "Project readme",
@@ -76,7 +82,7 @@ function TopBarList() {
     {
       title: "Account",
       menuItems: <ProfilePopup/>,
-      img: "",
+      img: profilePic,
     }
   ]
 

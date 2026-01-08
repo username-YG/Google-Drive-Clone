@@ -30,7 +30,7 @@ exports.processLogin = (req, res) => {
             )
 
             // Return the token in the JSON response
-            res.status(201).json({ token });
+            res.status(201).location(`/api/users/${user.ID}`).json({ token });
         } else {
             // Return 404 if authentication fails
             res.status(404).json({ error: "User not found" });

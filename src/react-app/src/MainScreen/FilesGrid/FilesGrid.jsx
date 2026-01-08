@@ -23,11 +23,11 @@ const icons = {
   "pdf": pdf
 }
 
-function PathTitle({path}) {
+function PathTitle( {path, title} ) {
 
   const navigate = useNavigate();
 
-  const onClickDrive = () => {
+  const onClickTitle = () => {
     navigate("/my-drive", {state: { path:[] } });
   }
 
@@ -37,7 +37,7 @@ function PathTitle({path}) {
 
   return (
     <div className="path-bar">
-      <p className="files-grid-screen-title" onClick={onClickDrive} title="My Drive">My Drive</p>
+      <p className="files-grid-screen-title" onClick={onClickTitle} >{title}</p>
       {path.map((folder, i) => (
         <div key={i}>
           <img src={right_arrow} />
@@ -48,15 +48,18 @@ function PathTitle({path}) {
   );
 }
 
-async function getFiles(url) {
+async function getFiles(url, filter) {
+  
   const token = localStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api" + url, {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
-      'authorization': 'bearer ' + token
+      'authorization': 'bearer ' + token,
+      'filter': filter
     },
   });
+
   if (response.status == 200) {
     const data = await response.json();
     return data;
@@ -66,21 +69,22 @@ async function getFiles(url) {
 const updateData = async (folderId, setItems, filter) => {
 
   const url = (folderId) ? ("/" + folderId) : ("");
-  const data = await getFiles("/files" + url);
+  const data = await getFiles("/files" + url, filter);
   if (!data) return;
 
+  let finalData;
   if (folderId) {
-    for (let i = 0; i < data.content.length; i++) {
-      const item = await getFiles("/files/" + data.content[i]);
-      if (item) data.content[i] = item;
-    }
-    setItems(data.content);
+    finalData = await Promise.all(
+      data.content.map(async (id) => {
+        const item = await getFiles("/files/" + id, filter);
+        return item || id;
+      })
+    );
   } else {
-    setItems(data)
+    finalData = data;
   }
-  
-  //////////////////// filter items
 
+  setItems(finalData)
 }
 
 function File({ file, selected, onSelect }) {
@@ -138,7 +142,7 @@ function Folder({ file, selected, onSelect, path }) {
 
 }
 
-function FilesGrid({ filter, emptyFolder }) {
+function FilesGrid({ filter, emptyFolder, title }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -164,7 +168,7 @@ function FilesGrid({ filter, emptyFolder }) {
 
   return (
     <div className="files-grid-screen" onClick={() => setSelected(null)}>
-      <PathTitle path={path}/>
+      <PathTitle path={path} title={title}/>
       {items.length === 0 ? (
         emptyFolder
       ) : (
