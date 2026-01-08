@@ -2,8 +2,6 @@
   background-color: #f8fafd;
   padding: 16px;
   padding-left: 10px;
-  height: 100vh;
-  width: 230px;
 }
 
 .logo {
@@ -33,7 +31,6 @@
   margin-bottom: 16px;
   cursor: pointer;
   box-shadow: 0 3px 5px #0000001f, 0 1px 2px #0000003d;
-  transition: box-shadow 0.3s;
   font-size: 14px;
 }
 
@@ -72,8 +69,6 @@
 
 .panel-list a.active-link {
   background-color: #c2e7ff;
-  margin-left: 5px;
-  padding-left: 19px;
   color: #001d35;
 }
 
@@ -97,6 +92,7 @@
   border-radius: 5px;
   background: white;
   box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  z-index: 1000;
 }
 
 .new-item-menu-item {
@@ -139,13 +135,14 @@
   border-radius: 28px;
   box-shadow: 0 4px 12px #00000026;
   background-color: white;
+  z-index: 1000;
 }
 
 .new-folder-title {
   color: black;
   margin-top: 0;
   font-size: 24px;
-  font-weight: 1;
+  font-weight: normal;
 }
 
 .new-folder-input {
