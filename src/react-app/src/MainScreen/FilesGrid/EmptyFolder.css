@@ -1,0 +1,26 @@
+.empty-folder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.empty-folder img {
+  height: 200px;
+}
+
+.empty-folder p {
+  margin: 0; 
+}
+
+#empty-folder-title {
+  font-size: 25px;
+  opacity: 0.85;
+}
+
+#empty-folder-text {
+  font-size: 20px;
+  opacity: 0.8;
+}

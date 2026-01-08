@@ -51,6 +51,38 @@ exports.createFile = async (req, res) => {
     }
 }
 
+function doesOwn(item, userId) {
+    const permissions = Perms.getPermissions(item.id);
+    return (permissions[userId] == "owner");
+}
+
+function isStarred(item, userId) {
+    return item.starred.contains(userId);
+}
+
+function isTrashed(item) {
+    return item.trashed;
+}
+
+function filterFiles(files, filterType, userId) {
+
+    // Possible filters
+    const Filters = {
+        "OWNS": (item) => { return doesOwn(item, userId) },
+        "SHARES": (item) => { return !doesOwn(item, userId) },
+        "STARRED": (item) => { return isStarred(item, userId) },
+        "TRASHED": (item) => { return isTrashed(item) }
+    }
+
+    // Get the function to filter with
+    const filterFunc = Filters[filterType];
+    if (typeof filterFunc !== 'function') return files;
+
+    // Return filtered items
+    let filteredFiles = files.filter(filterFunc);
+    return filteredFiles;
+}
+
 exports.getAllFiles = async (req, res) => {
     try {
         const usrId = req.user.ID;
@@ -69,7 +101,14 @@ exports.getAllFiles = async (req, res) => {
                 permittedFiles.push(fileObj);
             }
         }
-        res.json(permittedFiles);
+
+        // If a filter has been specified in request body, apply i
+        let filteredFiles = permittedFiles;
+        if (req.headers && req.headers.filter) {
+            filteredFiles = filterFiles(permittedFiles, req.headers.filter, usrId);
+        }
+
+        res.json(filteredFiles);
 
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -112,8 +151,10 @@ exports.updateFile = async (req, res) => {
         - name
         - parentId
         - content (if it is a file)
+        - trashed (is the file in trash)
+        - starred (is starred for this user)
         */
-        let { name, content, parentId } = req.body
+        let { name, content, parentId, starred, trashed } = req.body
 
         // Ensure the file and user exists
         const item = Files.getMetadata(req.params.id);
@@ -129,7 +170,7 @@ exports.updateFile = async (req, res) => {
 
         // Return 400 when all fields are missing
         // Return 400 when new name is empty
-        if (!name && content === undefined && parentId === undefined) {
+        if (!name && content === undefined && parentId === undefined && starred == undefined && trashed == undefined) {
             return res.status(400).json({ error: "Missing args" })
         }
 
@@ -144,11 +185,25 @@ exports.updateFile = async (req, res) => {
             }
         }
 
+        // Return 403 if the user doesn't have permissions to read the file
+        const perm = Perms.getPermissions(req.params.id);
+        if (!perm || !perm[usrId]) {
+            return res.status(403).json({ error: "Forbidden" })
+        }
+
+        // Return 403 if the user doesn't have owner permissions
+        if (trashed !== undefined) {
+            if (perm[usrId] != "owner") {
+                return res.status(403).json({ error: "Forbidden" })
+            }
+        }
+
         // Return 403 if the user doesn't have permissions to write to the file
         // Everyone is allowed to write to the root so we don't check that
-        const perm = Perms.getPermissions(req.params.id);
-        if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
-            return res.status(403).json({ error: "Forbidden" })
+        if (name || content !== undefined || parentId !== undefined) {
+            if (perm[usrId] != "owner" && perm[usrId] != "writer") {
+                return res.status(403).json({ error: "Forbidden" })
+            }
         }
 
         // Return 403 if the user doesn't have permissions to write to the folder
@@ -160,7 +215,7 @@ exports.updateFile = async (req, res) => {
             }
         }
 
-        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
+        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId, usrId, trashed, starred);
         res.status(204).end()
 
     } catch(err) {

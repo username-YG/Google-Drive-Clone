@@ -1,7 +1,20 @@
+<<<<<<< HEAD:src/react-app/src/TopBar/TopBar.jsx
 import { useState, useEffect, useRef, use } from 'react';
+=======
+>>>>>>> GDPA-128-Create-filters-and-their-corresponding-screens:src/react-app/src/MainScreen/TopBar/TopBar.jsx
 import { useNavigate } from 'react-router-dom';
+import { SimplePopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
+import { useState, useRef, useEffect } from 'react';
+import { outsideClickListener, getUser  } from "../Popups/PopupLogic.js";
+
+import settings from "../../../assets/settings.png"
+import question from "../../../assets/question.png"
+import search from "../../../assets/search.png"
+import lines from "../../../assets/lines.png"
+import ProfilePopup from "../Popups/ProfilePopup/ProfilePopup.jsx"
 
 import "./TopBar.css"
+<<<<<<< HEAD:src/react-app/src/TopBar/TopBar.jsx
 import settings from "../../assets/settings.png"
 import question from "../../assets/question.png"
 import search from "../../assets/search.png"
@@ -14,38 +27,14 @@ import pdf from "../../assets/pdf.png"
 import folder from "../../assets/folder.png"
 
 import outsideClickListener from "../SidePanel/SidePanel.jsx"
+=======
+>>>>>>> GDPA-128-Create-filters-and-their-corresponding-screens:src/react-app/src/MainScreen/TopBar/TopBar.jsx
 
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
 const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
 
 function openLink(url) {
   window.open(url);
-}
-
-function ProfilePopup() {
-
-  const navigate = useNavigate();
-  const username = "username@gmail.com";
-  const displayName = "displayName";
-
-  return (
-    <div className="profile-menu">
-      <div className="profile-gmail">{username}</div>
-      <div className="profile-image">{displayName[0]}</div>
-      <div className="profile-name">Hi, {displayName}!</div>
-      <button className="manage-button" onClick={() => {navigate("/settings#User")}}>Manage your account</button>
-    </div>
-  )
-}
-
-function SimplePopup({items}) {
-  return (
-    <ul className="item-menu">
-      {items.map((item, i) => (
-        <li key={i} className="item-menu-item" onClick={item.onClick}>{item.text}</li>
-      ))}
-    </ul>
-  )
 }
 
 function BarListItem({ title, menuItems, img }) {
@@ -69,6 +58,12 @@ function BarListItem({ title, menuItems, img }) {
 function TopBarList() {
 
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    getUser(setUser)
+  }, []);
+  const profilePic = user?.profilePic || "";
 
   const supportMenuItems = [
     {
@@ -106,7 +101,7 @@ function TopBarList() {
     {
       title: "Account",
       menuItems: <ProfilePopup/>,
-      img: "",
+      img: profilePic,
     }
   ]
 
