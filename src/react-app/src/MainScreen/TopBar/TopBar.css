@@ -28,7 +28,7 @@
   background-color: #00000033;
 }
 
-.bar-list img {
+#reguler-icon {
   width: 24px;
   height: 24px;
   opacity: 0.7;
@@ -43,6 +43,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .search-bar {

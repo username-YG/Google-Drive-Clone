@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { SimplePopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
+import { SimpleMenuPopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
 import { useState, useRef, useEffect } from 'react';
-import { outsideClickListener, getUser  } from "../Popups/PopupLogic.js";
+import { outsideClickListener, getUser } from "../Popups/PopupLogic.js";
 
 import settings from "../../../assets/settings.png"
 import question from "../../../assets/question.png"
 import search from "../../../assets/search.png"
 import lines from "../../../assets/lines.png"
+import logout from "../../../assets/logout.png"
 import ProfilePopup from "../Popups/ProfilePopup/ProfilePopup.jsx"
 
 import "./TopBar.css"
@@ -18,7 +19,7 @@ function openLink(url) {
   window.open(url);
 }
 
-function BarListItem({ title, menuItems, img }) {
+function BarListItem({ title, menuItems, img, isProfile }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   outsideClickListener(isOpen, setIsOpen, popupRef)
@@ -27,7 +28,7 @@ function BarListItem({ title, menuItems, img }) {
     <li ref={popupRef}>
       <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
         {img ?
-          <img src={img}/> :
+          <img id={isProfile ? "profile-pic" : "reguler-icon"} src={img}/> :
           <div className="no-profile-pic">{title[0]}</div>
         }
       </a>
@@ -68,16 +69,38 @@ function TopBarList() {
     }
   ]
 
+  const logoutMenuItems = [
+    {
+      text: "Sign out",
+      onClick: () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("id");
+        navigate("/login");
+      }
+    },
+    {
+      text: "Create new account",
+      onClick: async () => {
+        navigate("/register");
+      }
+    }
+  ]
+
   const barButtons = [
     {
       title: "Support",
-      menuItems: <SimplePopup items={supportMenuItems}/>,
+      menuItems: <SimpleMenuPopup items={supportMenuItems}/>,
       img: question,
     },
     {
       title: "Settings",
-      menuItems: <SimplePopup items={settingsMenuItems}/>,
+      menuItems: <SimpleMenuPopup items={settingsMenuItems}/>,
       img: settings,
+    },
+    {
+      title: "Log out",
+      menuItems: <SimpleMenuPopup items={logoutMenuItems}/>,
+      img: logout,
     },
     {
       title: "Account",
@@ -90,7 +113,7 @@ function TopBarList() {
     <nav className="bar-list">
       <ul>
         {barButtons.map((item, i) => (
-            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img}/>
+            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img} isProfile={item.title == "Account"} />
         ))}
       </ul>
     </nav>

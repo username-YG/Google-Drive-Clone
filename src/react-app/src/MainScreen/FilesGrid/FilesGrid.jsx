@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { trashItem } from "../Popups/PopupLogic.js";
+import { trashItem, outsideClickListener } from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -10,6 +10,7 @@ import pdf from "../../../assets/pdf.png"
 import folder from "../../../assets/folder.png"
 import dots from "../../../assets/dots.png"
 import right_arrow from "../../../assets/right_arrow.png"
+import ItemActionsPopup from "../Popups/ItemActionsPopup/ItemActionsPopup.jsx"
 
 import "./FilesGrid.css"
 
@@ -66,7 +67,7 @@ async function getFiles(url, filter, navigate) {
     return data;
   }
 
-  if (response.status == 404 || response.status == 403) {
+  if (response.status == 404 || response.status == 403 || response.status == 401) {
     navigate("/login");
     return;
   }
@@ -94,7 +95,7 @@ const updateData = async (folderId, setItems, filter, navigate) => {
   setItems(finalData)
 }
 
-function File({ file, selected, onSelect }) {
+function File({ file, selected, onSelect, reload, setReload }) {
 
   const type = file.name.split('.').pop();
   const icon = icons[type] || icons["notype"];
@@ -108,13 +109,20 @@ function File({ file, selected, onSelect }) {
     onSelect();
   }
 
+  const [isOpen, setIsOpen] = useState(false);
+  const popupRef = useRef(null);
+  outsideClickListener(isOpen, setIsOpen, popupRef)
+
   return (
     <div className={`files-grid-item is-file ${(selected === file.id) ? "selected" : ""}`}
-      onClick={onFileClick} onDoubleClick={openItem} >
-      <div className="files-header">
+      onClick={onFileClick} onDoubleClick={openItem} ref={popupRef} >
+      <div className="files-header" >
         <img src={icon} />
         <p>{file.name}</p>
-        <img id="dots" src={dots} title="More actions" />
+        <div className="actions-popup-div">
+          <img id="dots" src={dots} title="More actions" onClick={() => setIsOpen(!isOpen)} />
+          {isOpen && <ItemActionsPopup id={file.id} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+        </div>
       </div>
       <div className="files-preview">
         <img src={icon} />
@@ -123,7 +131,7 @@ function File({ file, selected, onSelect }) {
   )
 }
 
-function Folder({ file, selected, onSelect, path }) {
+function Folder({ file, selected, onSelect, path, reload, setReload }) {
   
   const onFileClick = (e) => {
     e.stopPropagation();
@@ -135,14 +143,21 @@ function Folder({ file, selected, onSelect, path }) {
     navigate("/folders/" + file.id, { state: { path: newPath } });
   }
 
+  const [isOpen, setIsOpen] = useState(false);
+  const popupRef = useRef(null);
+  outsideClickListener(isOpen, setIsOpen, popupRef)
+
   const navigate = useNavigate();
   return (
     <div className={`files-grid-item is-folder ${(selected === file.id) ? "selected" : ""}`}
-      onClick={onFileClick} onDoubleClick={onFileDoubleClick} >
+      onClick={onFileClick} onDoubleClick={onFileDoubleClick} ref={popupRef} >
       <div className="folder-item">
         <img src={folder} />
         <p>{file.name}</p>
-        <img id="dots" src={dots} title="More actions" />
+        <div className="actions-popup-div">
+          <img id="dots" src={dots} title="More actions"  onClick={() => setIsOpen(!isOpen)} />
+          {isOpen && <ItemActionsPopup id={file.id} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+        </div>
       </div>
     </div>
   )
@@ -167,7 +182,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
     const handleKeyDown = (event) => {
       if (event.key === "Delete" && selected !== null) {
         setReload(!reload)
-        trashItem(selected);
+        trashItem(selected, true);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -178,11 +193,26 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
   const filesObjects = items.filter(item => item.isFolder === false);
 
   const folders = foldersObjects.map((item, i) =>
-    <Folder key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} path={path} />
+    <Folder
+      key={i}
+      file={item}
+      selected={selected}
+      onSelect={() => setSelected(item.id)}
+      path={path}
+      reload={reload}
+      setReload={setReload}
+    />
   );
 
   const files = filesObjects.map((item, i) =>
-    <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} />
+    <File
+      key={i}
+      file={item}
+      selected={selected}
+      onSelect={() => setSelected(item.id)}
+      reload={reload}
+      setReload={setReload}
+    />
   );
 
   return (

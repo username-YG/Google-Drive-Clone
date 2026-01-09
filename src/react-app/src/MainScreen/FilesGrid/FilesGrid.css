@@ -125,6 +125,12 @@
   background-color: #b8dbf1;
 }
 
+.actions-popup-div {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .path-bar {
   display: flex;
   align-items: center;

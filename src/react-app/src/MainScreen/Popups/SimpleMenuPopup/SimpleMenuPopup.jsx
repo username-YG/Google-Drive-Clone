@@ -1,6 +1,6 @@
 import "./SimpleMenuPopup.css"
 
-export function SimplePopup({items}) {
+export function SimpleMenuPopup({items}) {
   return (
     <ul className="item-menu">
       {items.map((item, i) => (

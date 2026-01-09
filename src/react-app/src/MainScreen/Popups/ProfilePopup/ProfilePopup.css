@@ -38,6 +38,8 @@
 .profile-image {
   min-width: 90px;
   min-height: 90px;
+  max-width: 90px;
+  max-height: 90px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;

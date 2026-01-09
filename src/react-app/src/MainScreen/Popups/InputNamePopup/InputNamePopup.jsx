@@ -1,22 +1,13 @@
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { createFolder } from "../PopupLogic.js"
 
 import "./InputNamePopup.css"
 
-const InputNamePopup = ({ toggle, parentId, realod, setReload }) => {
+const InputNamePopup = ({ toggle, onDone, doneText }) => {
 
   const [name, setName] = useState("Untitled folder");
   const inputRef = useRef(null);
   const navigate = useNavigate();
-
-  const onCreateFolder = () => {
-    createFolder(name, parentId);
-    toggle();
-    const url = window.location.href;
-    if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
-    setReload(!realod);
-  };
 
   return (
     <div className="input-name-screen">
@@ -29,7 +20,7 @@ const InputNamePopup = ({ toggle, parentId, realod, setReload }) => {
         
         <div className="input-name-buttons">
           <button onClick={toggle}>Cancel</button>
-          <button onClick={onCreateFolder}>Create</button>
+          <button onClick={async () => await onDone(name) }>{doneText}</button>
         </div>
 
       </div>
