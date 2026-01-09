@@ -1,0 +1,67 @@
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  padding: 20px;
+  background: #e9eef6;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  cursor: default;
+  user-select: none;
+  z-index: 1000;
+}
+
+.profile-gmail {
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.profile-no-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #512da8;
+  color: white;
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.profile-image {
+  min-width: 90px;
+  min-height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.profile-name {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.manage-button {
+  background: transparent;
+  border: 1px solid #747775;
+  color: #175fd3;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.manage-button:hover {
+  background-color: #d8e2f3;
+}

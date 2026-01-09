@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import './Registration.css';
-import googleLogo from "../../../assets/google_logo.png";
+import googleLogo from "../../assets/google_logo.png";
 import { useNavigate } from "react-router-dom";
+
+import './Registration.css';
 
 /**
  * Sub-Component: Displays validation errors with a red icon
