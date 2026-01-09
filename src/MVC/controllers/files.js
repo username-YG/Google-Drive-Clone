@@ -2,6 +2,39 @@ const Files = require('../models/files')
 const Perms = require('../models/permissions')
 const Users = require('../models/users')
 
+function doesOwn(item, userId) {
+    const permissions = Perms.getPermissions(item.id);
+    return (permissions[userId] == "owner");
+}
+
+function isStarred(item, userId) {
+    return item.starred.includes(userId);
+}
+
+function isTrashed(item) {
+    return item.trashed;
+}
+
+function filterFiles(files, filterType, userId) {
+
+    // Possible filters
+    const Filters = {
+        "OWNS": (item) => { return doesOwn(item, userId) },
+        "SHARES": (item) => { return !doesOwn(item, userId) },
+        "STARRED": (item) => { return isStarred(item, userId) },
+        "TRASHED": (item) => { return isTrashed(item) },
+        "NOT TRASHED": (item) => { return !isTrashed(item) }
+    }
+
+    // Get the function to filter with
+    const filterFunc = Filters[filterType];
+    if (typeof filterFunc !== 'function') return files;
+
+    // Return filtered items
+    let filteredFiles = files.filter(filterFunc);
+    return filteredFiles;
+}
+
 exports.createFile = async (req, res) => {
     try {
 
@@ -51,39 +84,6 @@ exports.createFile = async (req, res) => {
     }
 }
 
-function doesOwn(item, userId) {
-    const permissions = Perms.getPermissions(item.id);
-    return (permissions[userId] == "owner");
-}
-
-function isStarred(item, userId) {
-    return item.starred.includes(userId);
-}
-
-function isTrashed(item) {
-    return item.trashed;
-}
-
-function filterFiles(files, filterType, userId) {
-
-    // Possible filters
-    const Filters = {
-        "OWNS": (item) => { return doesOwn(item, userId) },
-        "SHARES": (item) => { return !doesOwn(item, userId) },
-        "STARRED": (item) => { return isStarred(item, userId) },
-        "TRASHED": (item) => { return isTrashed(item) },
-        "NOT TRASHED": (item) => { return !isTrashed(item) }
-    }
-
-    // Get the function to filter with
-    const filterFunc = Filters[filterType];
-    if (typeof filterFunc !== 'function') return files;
-
-    // Return filtered items
-    let filteredFiles = files.filter(filterFunc);
-    return filteredFiles;
-}
-
 exports.getAllFiles = async (req, res) => {
     try {
         const usrId = req.user.ID;
@@ -103,7 +103,7 @@ exports.getAllFiles = async (req, res) => {
             }
         }
 
-        // If a filter has been specified in request body, apply i
+        // If a filter has been specified in request, apply it
         let filteredFiles = permittedFiles;
         if (req.headers && req.headers.filter) {
             const filters = req.headers.filter.split(',');
@@ -138,7 +138,24 @@ exports.getFile = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" })
         }
 
-        const file = await Files.getFile(req.params.id);
+        let file = await Files.getFile(req.params.id);
+        
+        // If a filter has been specified for folder content, apply it
+        if (file.isFolder && req.headers && req.headers.filter) {
+
+            // Replace id's with actual files
+            let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
+
+            // Filter 
+            const filters = req.headers.filter.split(',');
+            for (const filterType of filters) {
+                filteredContent = filterFiles(filteredContent, filterType, usrId);
+            }
+
+            // Replace actual file with id
+            file.content = filteredContent.map(item => item.id);
+        }
+
         res.json(file);
 
     } catch(err) {

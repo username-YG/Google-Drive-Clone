@@ -85,6 +85,7 @@ const updateData = async (folderId, setItems, filter, navigate) => {
     finalData = await Promise.all(
       data.content.map(async (id) => {
         const item = await getFiles("/files/" + id, filter, navigate);
+        if (item) { item.id = id; }
         return item || id;
       })
     );

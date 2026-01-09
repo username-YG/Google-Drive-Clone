@@ -109,11 +109,11 @@ async function updateFile(id, name, content, parentId, userId, trashed, starred)
     // Update starred if asked to
     if (starred !== undefined) {
         if (starred) {
-            item.starred = item.starred.filter(id => id !== userId);
-        } else {
             if (!item.starred.includes(userId)) {
                 item.starred.push(userId);
             }
+        } else {
+            item.starred = item.starred.filter(id => id !== userId);
         }
     }
 
