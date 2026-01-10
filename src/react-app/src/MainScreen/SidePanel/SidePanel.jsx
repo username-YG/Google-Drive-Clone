@@ -109,19 +109,25 @@ function PanelList() {
 }
 
 function SidePanel( { reload, setReload } ) {
+
+  const createChildren = ({ uploadFile, uploadFolder}) => {
+    return (
+      <NewItemButton
+        reload={reload}
+        setReload={setReload}
+        onUploadFile={uploadFile}
+        onUploadFolder={uploadFolder}
+      />
+  )};
+
   return (
     <div className="side-panel">
       <Logo/>
-      <UploadController>
-        {({ uploadFile, uploadFolder}) => (
-          <NewItemButton
-            reload={reload}
-            setReload={setReload}
-            onUploadFile={uploadFile}
-            onUploadFolder={uploadFolder}
-          />
-        )}
-      </UploadController>
+      <UploadController
+        children={createChildren}
+        reload={reload}
+        setReload={setReload}
+      />
       <PanelList/>
     </div>
   )

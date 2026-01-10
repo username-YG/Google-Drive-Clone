@@ -1,4 +1,7 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Import Popup logic to use its fetches
 
 const folderCache = new Map();
 
@@ -47,7 +50,6 @@ async function createFolder(path, rootId) {
 async function createFile(file, parentId) {
     const content = await file.text();
     const token = localStorage.getItem("token");
-    console.log(token);
 
     try {
         await fetch("http://localhost:3000/api/files", {
@@ -72,17 +74,18 @@ async function uploadToServer(files, isFolder) {
         if (isFolder) {
             const parts = file.webkitRelativePath.split("/");
             const folders = parts.slice(0, -1);
-
-            const parentId = await createFolder(folders.join("/"), null);
+            
+            parentId = await createFolder(folders.join("/"), null);
         }
         
         await createFile(file, parentId);
     }
 }
 
-function UploadController({ children }) {
+function UploadController({ children, reload, setReload }) {
     const fileInputRef = useRef(null);
     const folderInputRef = useRef(null);
+    const navigate = useNavigate();
 
     const uploadFile = () => {
         fileInputRef.current.click();
@@ -96,12 +99,19 @@ function UploadController({ children }) {
         const file = Array.from(e.target.files);
         await uploadToServer(file, false);
         e.target.value = "";
+        const url = window.location.href;
+        if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
+        setReload(!reload);
     };
 
     const handleFolderSelected = async (e) => {
         const folder = Array.from(e.target.files);
         await uploadToServer(folder, true);
         e.target.value = "";
+        const url = window.location.href;
+        if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
+        setReload(!reload);
+
     };
 
     return (
