@@ -54,3 +54,68 @@ export async function getUser(setUser) {
   }
 
 }
+
+export async function trashItem(id, toTrash) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "trashed": toTrash
+    })
+  });
+
+}
+
+export async function renameItem(id, name) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "name": name
+    })
+  });
+
+}
+
+export async function starItem(id, toStar) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "starred": toStar
+    })
+  });
+
+}
+
+export async function deleteItem(id) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'DELETE',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    }
+  });
+
+  if (response.status == 403) {
+    await trashItem(id, true);
+  }
+
+}

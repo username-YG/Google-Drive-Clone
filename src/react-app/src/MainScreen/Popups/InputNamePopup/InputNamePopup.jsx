@@ -1,17 +1,13 @@
 import { useState, useRef } from "react"
-import { createFolder } from "../PopupLogic.js"
+import { useNavigate } from "react-router-dom"
 
 import "./InputNamePopup.css"
 
-const InputNamePopup = ({ toggle, parentId }) => {
+const InputNamePopup = ({ toggle, onDone, doneText }) => {
 
   const [name, setName] = useState("Untitled folder");
   const inputRef = useRef(null);
-
-  const onCreateFolder = () => {
-    createFolder(name, parentId);
-    toggle();
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="input-name-screen">
@@ -24,7 +20,7 @@ const InputNamePopup = ({ toggle, parentId }) => {
         
         <div className="input-name-buttons">
           <button onClick={toggle}>Cancel</button>
-          <button onClick={onCreateFolder}>Create</button>
+          <button onClick={async () => await onDone(name) }>{doneText}</button>
         </div>
 
       </div>

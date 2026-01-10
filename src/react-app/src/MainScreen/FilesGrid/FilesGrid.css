@@ -125,12 +125,19 @@
   background-color: #b8dbf1;
 }
 
+.actions-popup-div {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .path-bar {
   display: flex;
   align-items: center;
   padding: 10px;
   white-space: nowrap;
   flex-wrap: nowrap;
+  user-select: none;
 }
 
 .path-bar img {

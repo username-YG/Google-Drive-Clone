@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css"
 
@@ -11,19 +11,7 @@ import SharedWithMe from "./MainScreen/Pages/SharedWithMe/SharedWithMe.jsx";
 import Starred from "./MainScreen/Pages/Starred/Starred.jsx";
 import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
 import Settings from "./MainScreen/Pages/Settings/Settings.jsx";
-
-import SidePanel from "./MainScreen/SidePanel/SidePanel.jsx"
-import TopBar from "./MainScreen/TopBar/TopBar.jsx"
-
-function MainScreen() {
-  return (
-    <div className="main-screen">
-      <SidePanel />
-      <TopBar />
-      <Outlet />
-    </div>
-  );
-}
+import MainScreen from "./MainScreen/MainScreen.jsx"
 
 function App() {
   return (

@@ -60,7 +60,8 @@ function Logo() {
   )
 }
 
-function NewItemButton({ onUploadFile, onUploadFolder }) {
+function NewItemButton({ reload, setReload, onUploadFile, onUploadFolder }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   outsideClickListener(isOpen, setIsOpen, popupRef)
@@ -69,11 +70,12 @@ function NewItemButton({ onUploadFile, onUploadFolder }) {
     <div className="new-item-div" ref={popupRef}>
       <button className="new-item-button" onClick={() => setIsOpen(!isOpen)}>
         <img id="plus" src={plus}/>New</button>
-      {isOpen && (
-        <NewItemPopup
-          onUploadFile={onUploadFile}
-          onUploadFolder={onUploadFolder}
-        />)}
+      {isOpen && <NewItemPopup
+        reload={reload}
+        setReload={setReload}
+        onUploadFile={onUploadFile}
+        onUploadFolder={onUploadFolder}
+      />}
     </div>
   );
 }
@@ -106,13 +108,15 @@ function PanelList() {
   )
 }
 
-function SidePanel() {
+function SidePanel( { reload, setReload } ) {
   return (
     <div className="side-panel">
       <Logo/>
       <UploadController>
         {({ uploadFile, uploadFolder}) => (
           <NewItemButton
+            reload={reload}
+            setReload={setReload}
             onUploadFile={uploadFile}
             onUploadFolder={uploadFolder}
           />
