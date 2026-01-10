@@ -119,7 +119,7 @@ async function updateFile(id, name, content, parentId, userId, trashed, starred,
 
     // Update content if asked to
     // Attempting to change folder content is invalid and ignored
-    if (content && !item.isFolder) {
+    if (content !== undefined && !item.isFolder) {
         await sendToServer(`DELETE ${id}`);
         await sendToServer(`POST ${id} ${content}`);
     }
