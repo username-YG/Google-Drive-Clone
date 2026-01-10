@@ -223,7 +223,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
         emptyFolder
       ) : (
         <div>
-          <div className="files-grid">{folders}</div>
+          { folders.length > 0 &&  <div className="files-grid">{folders}</div> }
           <div className="files-grid">{files}</div>
         </div>
       )}

@@ -18,7 +18,7 @@ function EmptyFolder() {
 function Trash() {
   const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter={["TRASHED"]} emptyFolder={<EmptyFolder/>} title="Trash" reload={reload} setReload={setReload} />
+    <FilesGrid filter={["TRASHED", "ALL LEVELS"]} emptyFolder={<EmptyFolder/>} title="Trash" reload={reload} setReload={setReload} />
   )
 }
 

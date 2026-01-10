@@ -18,7 +18,7 @@ function EmptyFolder() {
 function SharedWithMe() {
   const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter={["SHARES", "NOT TRASHED"]} emptyFolder={<EmptyFolder/>} title="Shared with me" reload={reload} setReload={setReload} />
+    <FilesGrid filter={["SHARES", "NOT TRASHED", "ALL LEVELS"]} emptyFolder={<EmptyFolder/>} title="Shared with me" reload={reload} setReload={setReload} />
   )
 }
 

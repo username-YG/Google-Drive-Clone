@@ -5,7 +5,6 @@ import people from "../../../../assets/people.png"
 import star from "../../../../assets/star.png"
 import folder from "../../../../assets/folder.png"
 import trash from "../../../../assets/trash.png"
-import download from "../../../../assets/download.png"
 import pencil from "../../../../assets/pencil.png"
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 
@@ -30,13 +29,6 @@ function ItemActionsPopup( { id, reload, setReload, toggle } ) {
 
   return (
     <ul className="item-actions-menu" ref={popupRef}>
-
-      { !inTrash && (
-        <li className="item-actions-menu-item">
-        <img src={download}/>
-        Download
-      </li>
-      )}
 
       { !inTrash && (
         <li className="item-actions-menu-item" onClick={() => setIsOpen(!isOpen) } >

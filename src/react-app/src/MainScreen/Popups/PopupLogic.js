@@ -114,4 +114,8 @@ export async function deleteItem(id) {
     }
   });
 
+  if (response.status == 403) {
+    await trashItem(id, true);
+  }
+
 }

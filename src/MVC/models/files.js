@@ -2,7 +2,7 @@ import net from "net";
 import { getPermissions, deleteAllPermissions } from './permissions.js'
 
 const rootId = crypto.randomUUID();
-const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {}, trashed: false, starred: [] } ];
+const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() } ];
 
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
@@ -60,7 +60,7 @@ async function createFile(name, content, isFolder, parentId) {
 
     // Add new item to array
     if (parentId === null) parentId = rootId;
-    const newItem = { id, name, isFolder, parentId, content: [], permissions: {}, trashed: false, starred: [] };
+    const newItem = { id, name, isFolder, parentId, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() };
     filesystem.push(newItem);
 
     // If it is a folder, update parent
@@ -92,7 +92,7 @@ async function getFile(id) {
     return copy;
 }
 
-async function updateFile(id, name, content, parentId, userId, trashed, starred) {
+async function updateFile(id, name, content, parentId, userId, trashed, starred, timestamp) {
 
     const item = getMetadata(id);
 
@@ -132,6 +132,13 @@ async function updateFile(id, name, content, parentId, userId, trashed, starred)
         const newParent = getMetadata(parentId);
         newParent.content.push(id);
         item.parentId = parentId;
+    }
+
+    // Update the timestamp
+    if (timestamp !== undefined) {
+        item.timestamp = timestamp;
+    } else {
+        item.timestamp = new Date();
     }
 
     // We also want to return content and permissions

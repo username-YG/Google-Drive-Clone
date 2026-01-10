@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { outsideClickListener } from "../PopupLogic.js"
 import { createFolder } from "../PopupLogic.js";
 
@@ -16,6 +16,7 @@ function NewItemPopup( { reload, setReload } ) {
   const popupRef = useRef(null);
   outsideClickListener(isOpen, setIsOpen, popupRef)
   const { folderId } = useParams();
+  const navigate = useNavigate();
 
   const onCreateFolder = (name) => {
     createFolder(name, folderId);

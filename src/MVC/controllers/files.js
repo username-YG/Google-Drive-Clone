@@ -4,15 +4,18 @@ const Users = require('../models/users')
 
 function doesOwn(item, userId) {
     const permissions = Perms.getPermissions(item.id);
-    return (permissions[userId] == "owner");
+    return (permissions && permissions[userId] == "owner");
 }
 
-function isStarred(item, userId) {
-    return item.starred.includes(userId);
-}
+function isToday(timestamp) {
+    if (!timestamp) return false;
+    
+    const date = new Date(timestamp);
+    const today = new Date();
 
-function isTrashed(item) {
-    return item.trashed;
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
 }
 
 function filterFiles(files, filterType, userId) {
@@ -21,9 +24,11 @@ function filterFiles(files, filterType, userId) {
     const Filters = {
         "OWNS": (item) => { return doesOwn(item, userId) },
         "SHARES": (item) => { return !doesOwn(item, userId) },
-        "STARRED": (item) => { return isStarred(item, userId) },
-        "TRASHED": (item) => { return isTrashed(item) },
-        "NOT TRASHED": (item) => { return !isTrashed(item) }
+        "STARRED": (item) => { return (item.starred.includes(userId)) },
+        "TRASHED": (item) => { return item.trashed },
+        "NOT TRASHED": (item) => { return !(item.trashed) },
+        "NOT FOLDER": (item) => { return !(item.isFolder) },
+        "RECENT": (item) => { return isToday(item.timestamp); }
     }
 
     // Get the function to filter with
@@ -93,9 +98,15 @@ exports.getAllFiles = async (req, res) => {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
+        // This special filter allows us to fetch items from all levels and not just root
+        let allFiles = Files.getAllFiles();
+        if (req.headers && req.headers.filter && req.headers.filter.includes("ALL LEVELS")) {
+            allFiles = Files.getAllIDs();
+        }
+
         // Filter only items the user is allowed to read
         const permittedFiles = [];
-        for (const fileId of Files.getAllFiles()) {
+        for (const fileId of allFiles) {
             const perm = Perms.getPermissions(fileId);
             if (perm && perm[usrId]) {
                 const fileObj = await Files.getFile(fileId);
@@ -146,7 +157,7 @@ exports.getFile = async (req, res) => {
             // Replace id's with actual files
             let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
 
-            // Filter 
+            // Filter
             const filters = req.headers.filter.split(',');
             for (const filterType of filters) {
                 filteredContent = filterFiles(filteredContent, filterType, usrId);
@@ -174,8 +185,9 @@ exports.updateFile = async (req, res) => {
         - content (if it is a file)
         - trashed (is the file in trash)
         - starred (is starred for this user)
+        - timestamp
         */
-        let { name, content, parentId, starred, trashed } = req.body
+        let { name, content, parentId, starred, trashed, timestamp } = req.body
 
         // Ensure the file and user exists
         const item = Files.getMetadata(req.params.id);
@@ -191,7 +203,12 @@ exports.updateFile = async (req, res) => {
 
         // Return 400 when all fields are missing
         // Return 400 when new name is empty
-        if (!name && content === undefined && parentId === undefined && starred == undefined && trashed == undefined) {
+        if (!name
+            && content === undefined
+            && parentId === undefined
+            && starred == undefined
+            && trashed == undefined
+            && timestamp == undefined) {
             return res.status(400).json({ error: "Missing args" })
         }
 
@@ -236,7 +253,8 @@ exports.updateFile = async (req, res) => {
             }
         }
 
-        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId, usrId, trashed, starred);
+        const updatedFile = await Files.updateFile(req.params.id,name, content, parentId, 
+                                                    usrId, trashed, starred, timestamp);
         res.status(204).end()
 
     } catch(err) {
