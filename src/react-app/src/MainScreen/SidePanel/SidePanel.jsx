@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { outsideClickListener } from "../Popups/PopupLogic.js"
 
 import NewItemPopup from "../Popups/NewItemPopup/NewItemPopup.jsx"
+import UploadController from "../Popups/UploadItemPopup/UploadItemPopup.jsx"
 
 import logo from "../../../assets/logo.svg"
 import plus from "../../../assets/plus.png"
@@ -59,8 +60,7 @@ function Logo() {
   )
 }
 
-function NewItemButton() {
-
+function NewItemButton({ onUploadFile, onUploadFolder }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   outsideClickListener(isOpen, setIsOpen, popupRef)
@@ -69,7 +69,11 @@ function NewItemButton() {
     <div className="new-item-div" ref={popupRef}>
       <button className="new-item-button" onClick={() => setIsOpen(!isOpen)}>
         <img id="plus" src={plus}/>New</button>
-      {isOpen && <NewItemPopup/>}
+      {isOpen && (
+        <NewItemPopup
+          onUploadFile={onUploadFile}
+          onUploadFolder={onUploadFolder}
+        />)}
     </div>
   );
 }
@@ -106,7 +110,14 @@ function SidePanel() {
   return (
     <div className="side-panel">
       <Logo/>
-      <NewItemButton/>
+      <UploadController>
+        {({ uploadFile, uploadFolder}) => (
+          <NewItemButton
+            onUploadFile={uploadFile}
+            onUploadFolder={uploadFolder}
+          />
+        )}
+      </UploadController>
       <PanelList/>
     </div>
   )
