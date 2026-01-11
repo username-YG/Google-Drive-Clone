@@ -16,8 +16,8 @@ function ItemActionsPopup( { id, reload, setReload, toggle } ) {
   const popupRef = useRef(null);
   outsideClickListener(isOpen, setIsOpen, popupRef)
 
-  const onRenameItem = (name) => {
-    renameItem(id, name);
+  const onRenameItem = async (name) => {
+    await renameItem(id, name);
     toggle();
     setIsOpen(!isOpen);
     setReload(!reload);

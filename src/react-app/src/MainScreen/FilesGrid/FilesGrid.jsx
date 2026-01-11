@@ -169,6 +169,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { folderId } = useParams();
   const location = useLocation();
@@ -176,14 +177,19 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   const navigate = useNavigate();
   useEffect(() => {
-    updateData(folderId, setItems, filter, navigate, query);
+    const loadData = async () => {
+      setLoading(true);
+      await updateData(folderId, setItems, filter, navigate, query);
+      setLoading(false);
+    }
+    loadData();
   }, [folderId, reload, query]);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = async (event) => {
       if (event.key === "Delete" && selected !== null) {
+        await trashItem(selected, true);
         setReload(!reload)
-        trashItem(selected, true);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -219,14 +225,14 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
   return (
     <div className="files-grid-screen" onClick={() => setSelected(null)}>
       <PathTitle path={path} title={title}/>
-      {items.length === 0 ? (
-        emptyFolder
-      ) : (
+      {
+      loading ? ( <div className="loader"></div> ) : (
+      items.length === 0 ? ( emptyFolder ) : (
         <div>
           { folders.length > 0 &&  <div className="files-grid">{folders}</div> }
           <div className="files-grid">{files}</div>
         </div>
-      )}
+      ))}
     </div>
   )
 }
