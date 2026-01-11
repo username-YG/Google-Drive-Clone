@@ -328,6 +328,8 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                                         toggle={() => setIsEditOpen(false)}
                                         onDone={onEditText}
                                         doneText="Save"
+                                        title="Edit Text"
+                                        currentName={fileContent}
                                     />
                                 </div>
                             )}
