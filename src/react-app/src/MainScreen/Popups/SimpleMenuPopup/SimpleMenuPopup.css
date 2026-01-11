@@ -1,0 +1,29 @@
+.item-menu {
+  position: absolute;
+  flex-direction: column;
+  list-style: none;
+  right: 0;
+  width: 250px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  z-index: 1000;
+}
+
+.item-menu-item {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #484848;
+}
+
+.item-menu-item:hover {
+  background-color: #e4e4e4;
+}

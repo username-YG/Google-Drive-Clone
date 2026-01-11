@@ -1,29 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import "./App.css"
 
-import Home from "./pages/Home/Home.jsx";
-import Login from "./pages/Login/Login.jsx";
-import Registration from "./pages/Registration/Registration.jsx";
-import MyDrive from "./pages/MyDrive/MyDrive.jsx";
-import Recent from "./pages/Recent/Recent.jsx";
-import SharedWithMe from "./pages/SharedWithMe/SharedWithMe.jsx";
-import Starred from "./pages/Starred/Starred.jsx";
-import Trash from "./pages/Trash/Trash.jsx";
-import Settings from "./pages/Settings/Settings.jsx";
-
-import SidePanel from "./SidePanel/SidePanel.jsx"
-import TopBar from "./TopBar/TopBar.jsx"
-
-function MainScreen() {
-  return (
-    <div className="main-screen">
-      <SidePanel />
-      <TopBar />
-      <Outlet />
-    </div>
-  );
-}
+import Home from "./MainScreen/Pages/Home/Home.jsx";
+import Login from "./Login/Login.jsx";
+import Registration from "./Registration/Registration.jsx";
+import MyDrive from "./MainScreen/Pages/MyDrive/MyDrive.jsx";
+import Recent from "./MainScreen/Pages/Recent/Recent.jsx";
+import SharedWithMe from "./MainScreen/Pages/SharedWithMe/SharedWithMe.jsx";
+import Starred from "./MainScreen/Pages/Starred/Starred.jsx";
+import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
+import Settings from "./MainScreen/Pages/Settings/Settings.jsx";
+import MainScreen from "./MainScreen/MainScreen.jsx"
 
 function App() {
   return (
