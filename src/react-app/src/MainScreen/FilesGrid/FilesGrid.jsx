@@ -50,7 +50,7 @@ function PathTitle( {path, title} ) {
   );
 }
 
-async function getFiles(url, filter, navigate) {
+async function getFiles(url, filter, navigate, withContent) {
   
   const token = localStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api" + url, {
@@ -58,7 +58,8 @@ async function getFiles(url, filter, navigate) {
     'headers': {
       'Content-Type': 'application/json',
       'authorization': 'bearer ' + token,
-      'filter': filter
+      'filter': filter,
+      "withcontent": withContent
     },
   });
 
@@ -77,14 +78,14 @@ async function getFiles(url, filter, navigate) {
 const updateData = async (folderId, setItems, filter, navigate, query) => {
 
   const url = (folderId) ? ("/" + folderId) : ("");
-  const data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate));
+  const data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate, "false"));
   if (!data) return;
 
   let finalData;
   if (folderId) {
     finalData = await Promise.all(
       data.content.map(async (id) => {
-        const item = await getFiles("/files/" + id, filter, navigate);
+        const item = await getFiles("/files/" + id, filter, navigate, "false");
         if (item) { item.id = id; }
         return item || id;
       })
