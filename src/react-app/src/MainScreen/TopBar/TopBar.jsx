@@ -74,8 +74,8 @@ function TopBarList() {
     {
       text: "Sign out",
       onClick: () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("id");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("id");
         navigate("/login");
       }
     },

@@ -39,7 +39,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                     const data = await getFile(file?.id);
                     setFileContent(String(data.content));
 
-                    const currentUserId = localStorage.getItem("id");
+                    const currentUserId = sessionStorage.getItem("id");
 
                     const isUserStarred = Array.isArray(data.starred)
                         ? data.starred.includes(currentUserId)
