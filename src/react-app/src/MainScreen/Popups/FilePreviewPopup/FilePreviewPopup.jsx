@@ -7,7 +7,6 @@ import txtLogo from '../../../../assets/txt.png';
 import './FilePreviewPopup.css';
 
 const FilePreviewPopup = ({ file, isOpen, setIsOpen }) => {
-    // Refs נפרדים לאזורים שחוסמים את היציאה
     const toolbarRef = useRef(null);
     const contentRef = useRef(null);
     const zoomBarRef = useRef(null);
@@ -38,7 +37,6 @@ const FilePreviewPopup = ({ file, isOpen, setIsOpen }) => {
         };
     }, [isOpen]);
 
-    // לוגיקת סגירה מותאמת אישית: לחיצה מחוץ לשלושת ה-Refs תסגור את הפופאפ
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!isOpen) return;
@@ -47,7 +45,6 @@ const FilePreviewPopup = ({ file, isOpen, setIsOpen }) => {
             const clickedInContent = contentRef.current?.contains(event.target);
             const clickedInZoomBar = zoomBarRef.current?.contains(event.target);
 
-            // אם הלחיצה לא הייתה באף אחד מהאזורים המוגנים - סגור
             if (!clickedInToolbar && !clickedInContent && !clickedInZoomBar) {
                 handleClose();
             }
@@ -202,7 +199,6 @@ const FilePreviewPopup = ({ file, isOpen, setIsOpen }) => {
                     )}
                 </div>
 
-                {/* 3. אזור הזום - מוגן באמצעות zoomBarRef */}
                 <div
                     ref={zoomBarRef}
                     className={`zoom-floating-bar-wrapper ${!showUI ? 'ui-hidden' : ''}`}
