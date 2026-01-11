@@ -18,8 +18,8 @@ function NewItemPopup({ reload, setReload, onUploadFile, onUploadFolder }) {
   const { folderId } = useParams();
   const navigate = useNavigate();
 
-  const onCreateFolder = (name) => {
-    createFolder(name, folderId);
+  const onCreateFolder = async (name) => {
+    await createFolder(name, folderId);
     setIsOpen(!isOpen)
     const url = window.location.href;
     if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");

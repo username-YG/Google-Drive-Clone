@@ -84,11 +84,11 @@ function getAllIDs() {
     return allIds;
 }
 
-async function getFile(id) {
+async function getFile(id, withContent) {
     // We use a copy so we don't store the content or permissions on the server
     const copy = JSON.parse(JSON.stringify(getMetadata(id)));
     copy.permissions = getPermissions(id);
-    if (copy.isFolder === false) copy.content = await sendToServer(`GET ${id}`);
+    if (copy.isFolder === false && withContent !== false) copy.content = await sendToServer(`GET ${id}`);
     return copy;
 }
 

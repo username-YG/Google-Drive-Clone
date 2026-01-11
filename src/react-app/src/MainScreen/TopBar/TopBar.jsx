@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SimpleMenuPopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
 import { useState, useRef, useEffect } from 'react';
-import { outsideClickListener, getUser } from "../Popups/PopupLogic.js";
+import { outsideClickListener, getUser, searchItems } from "../Popups/PopupLogic.js";
 
 import settings from "../../../assets/settings.png"
 import question from "../../../assets/question.png"
@@ -9,13 +9,12 @@ import search from "../../../assets/search.png"
 import lines from "../../../assets/lines.png"
 import logout from "../../../assets/logout.png"
 import ProfilePopup from "../Popups/ProfilePopup/ProfilePopup.jsx"
+import SearchPopup from "../Popups/SearchPopup/SearchPopup.jsx"
 
 import "./TopBar.css"
 
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
 const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
-
-
 
 function openLink(url) {
   window.open(url);
@@ -126,7 +125,8 @@ function SearchBar() {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
-  
+  const navigate = useNavigate();
+
   const popupRef = useRef(null);
   outsideClickListener(() => { return results.length > 0 }, (flag) => { setResults([]) }, popupRef)
 
@@ -138,24 +138,9 @@ function SearchBar() {
 
     try {
       setLoading(true)
-
-      const token = sessionStorage.getItem("token");
-      const response = await fetch(`http://localhost:3000/api/search/${query}`, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-
-      if (response.status === 201 || response.status === 200) {
-        const data = await response.json();
-        setResults(data)
-      } else {
-        setResults([])
-      }
+      const data = await searchItems(query)
+      setResults(data)
     } catch (err) {}
-
     setLoading(false)
   }
 
@@ -167,9 +152,21 @@ function SearchBar() {
     return () => clearTimeout(timeout);
   }, [query]);
 
+  const onSearch = () => {
+    if (query.trim()) navigate(`/search?q=${encodeURIComponent(query)}`);
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') onSearch();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => { document.removeEventListener('keydown', handleKeyDown); };
+  }, [navigate, query]);
+
   return (
     <div className="search-bar">
-      <img title="Search" className="search-icon" src={search}/>
+      <img title="Search" className="search-icon" src={search} onClick={onSearch}/>
       <input 
         type="text" 
         value={query}

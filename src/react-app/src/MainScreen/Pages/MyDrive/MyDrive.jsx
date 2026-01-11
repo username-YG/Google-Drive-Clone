@@ -18,7 +18,13 @@ function EmptyFolder() {
 function MyDrive() {
   const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter={["OWNS", "NOT TRASHED"]} emptyFolder={<EmptyFolder/>} title="My Drive" reload={reload} setReload={setReload} />
+    <FilesGrid
+      filter={["OWNS", "NOT TRASHED"]}
+      emptyFolder={<EmptyFolder/>}
+      title="My Drive"
+      reload={reload}
+      setReload={setReload}
+    />
   )
 }
 
