@@ -43,7 +43,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
       ref={(element) => { popuRenamepRef.current = element; popuMovetoRef.current = element; }}>
 
       { !inTrash && (
-        <li className={`item-actions-menu-item ${!canPatch ? "disabled" : ""}`} onClick={() => setIsRenameOpen(!isRenameOpen) } >
+        <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsRenameOpen(!isRenameOpen) } >
           <img src={pencil} />
           Rename
           {isRenameOpen && <InputNamePopup toggle={() => setIsRenameOpen(!isRenameOpen)} onDone={onRenameItem} doneText="Ok" />}
@@ -53,14 +53,14 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
       { !inTrash && <hr />}
 
       { !inTrash && (
-        <li className={`item-actions-menu-item ${!canShare ? "disabled" : ""}`}>
+        <li className={`item-actions-menu-item ${!canShare ? "not-permitted" : ""}`}>
           <img src={people} />
           Share
         </li>
       )}
 
       { !inTrash && (
-        <li className={`item-actions-menu-item ${!canPatch ? "disabled" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
+        <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
           <img src={folder} />
           Move to
           {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} id={file.id} reload={reload} setReload={setReload} />}
