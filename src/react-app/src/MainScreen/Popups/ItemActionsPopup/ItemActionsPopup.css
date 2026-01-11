@@ -44,3 +44,9 @@
 .item-actions-menu-item:hover {
   background-color: #e4e4e4;
 }
+
+.item-actions-menu-item.not-permitted {
+  pointer-events: none; 
+  cursor: default;
+  opacity: 0.5;
+}

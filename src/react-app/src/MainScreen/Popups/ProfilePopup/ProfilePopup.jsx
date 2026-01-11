@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom";
 import { getUser } from "../PopupLogic.js"
 
 import "./ProfilePopup.css"
 
 function ProfilePopup() {
 
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -27,7 +25,7 @@ function ProfilePopup() {
         <div className="profile-no-image">{displayName ? displayName[0] : "?"}</div>
       )}
       <div className="profile-name">Hi, {displayName}!</div>
-      <button className="manage-button" onClick={() => {navigate("/settings#User")}}>Manage your account</button>
+      <button className="switch-account-button" onClick={() => window.open("/login", "_blank")}>Use another account</button>
     </div>
   )
 }

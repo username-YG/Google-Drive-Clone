@@ -61,12 +61,8 @@ function TopBarList() {
 
   const settingsMenuItems = [
     {
-      text: "Display settings",
-      onClick: () => navigate("/settings#Display")
-    },
-    {
-      text: "User settings",
-      onClick: () => navigate("/settings#User")
+      text: "Toggle dark mode",
+      onClick: () => alert("DARKMODE!")
     }
   ]
 

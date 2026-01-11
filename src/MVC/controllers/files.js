@@ -27,6 +27,7 @@ function filterFiles(files, filterType, userId) {
         "STARRED": (item) => { return (item.starred.includes(userId)) },
         "TRASHED": (item) => { return item.trashed },
         "NOT TRASHED": (item) => { return !(item.trashed) },
+        "FOLDER": (item) => { return item.isFolder },
         "NOT FOLDER": (item) => { return !(item.isFolder) },
         "RECENT": (item) => { return isToday(item.timestamp); }
     }
@@ -226,7 +227,7 @@ exports.updateFile = async (req, res) => {
         }
 
         // Return 403 if the user doesn't have permissions to read the file
-        const perm = Perms.getPermissions(req.params.id);
+        const perm = Perms.getPermissFions(req.params.id);
         if (!perm || !perm[usrId]) {
             return res.status(403).json({ error: "Forbidden" })
         }

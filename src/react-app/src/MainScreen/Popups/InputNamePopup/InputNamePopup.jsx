@@ -11,7 +11,7 @@ const InputNamePopup = ({ toggle, onDone, doneText }) => {
     <div className="input-name-screen">
       <div className="input-name-popup" onClick={(e) => e.stopPropagation()}>
 
-        <h2 className="input-name-title">New folder</h2>
+        <h2 className="input-name-title">Rename</h2>
         
         <input ref={inputRef} type="text" className="input-name-input" value={name}
           onChange={(e) => setName(e.target.value)}/>

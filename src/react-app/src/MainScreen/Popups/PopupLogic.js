@@ -54,7 +54,7 @@ export async function getUser(setUser) {
   }
 }
 
-export async function trashItem(id, toTrash) {
+export async function trashItem(id, toTrash, pid) {
 
   const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
@@ -67,6 +67,17 @@ export async function trashItem(id, toTrash) {
       "trashed": toTrash
     })
   });
+
+  if (response.status == 403) {
+    const pid = sessionStorage.getItem("id")
+    const response = await fetch("http://localhost:3000/api/files/" + id + "/permissions/" + pid, {
+      'method': 'DELETE',
+      'headers': {
+        'Content-Type': 'application/json',
+        'authorization': 'bearer ' + token
+      }
+    });
+  }
 
 }
 
@@ -113,10 +124,6 @@ export async function deleteItem(id) {
     }
   });
 
-  if (response.status == 403) {
-    await trashItem(id, true);
-  }
-
 }
 
 export async function searchItems(query) {
@@ -136,6 +143,42 @@ export async function searchItems(query) {
   } else {
     return []
   }
+
+}
+
+export async function moveItem(id, newParentId) {
+
+  const token = sessionStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "parentId": newParentId
+    })
+  });
+
+}
+
+export async function getAllFolders() {
+  
+  const token = sessionStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files", {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token,
+      'filter': "ALL LEVELS, NOT TRASHED, FOLDER"
+    },
+  });
+
+  if (response.status == 200) {
+    const data = await response.json();
+    return data;
+  }
+  return [];
 
 }
 
