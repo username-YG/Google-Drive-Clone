@@ -92,6 +92,7 @@ exports.createFile = async (req, res) => {
 exports.getAllFiles = async (req, res) => {
     try {
         const usrId = req.user.ID;
+        const withContent = req.headers["withcontent"] !== "false";
 
         // Return 404 if the user doesn't exist
         if (!Users.findByID(usrId)) {
@@ -109,7 +110,7 @@ exports.getAllFiles = async (req, res) => {
         for (const fileId of allFiles) {
             const perm = Perms.getPermissions(fileId);
             if (perm && perm[usrId]) {
-                const fileObj = await Files.getFile(fileId);
+                const fileObj = await Files.getFile(fileId, withContent);
                 permittedFiles.push(fileObj);
             }
         }
@@ -149,7 +150,8 @@ exports.getFile = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" })
         }
 
-        let file = await Files.getFile(req.params.id);
+        const withContent = req.headers["withcontent"] !== "false";
+        let file = await Files.getFile(req.params.id, withContent);
         
         // If a filter has been specified for folder content, apply it
         if (file.isFolder && req.headers && req.headers.filter) {

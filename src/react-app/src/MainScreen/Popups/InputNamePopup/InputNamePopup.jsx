@@ -1,5 +1,4 @@
 import { useState, useRef } from "react"
-import { useNavigate } from "react-router-dom"
 
 import "./InputNamePopup.css"
 
@@ -7,7 +6,6 @@ const InputNamePopup = ({ toggle, onDone, doneText }) => {
 
   const [name, setName] = useState("Untitled folder");
   const inputRef = useRef(null);
-  const navigate = useNavigate();
 
   return (
     <div className="input-name-screen">

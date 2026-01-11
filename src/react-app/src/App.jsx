@@ -12,6 +12,7 @@ import Starred from "./MainScreen/Pages/Starred/Starred.jsx";
 import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
 import Settings from "./MainScreen/Pages/Settings/Settings.jsx";
 import MainScreen from "./MainScreen/MainScreen.jsx"
+import SearchScreen from "./MainScreen/Pages/SearchScreen/SearchScreen.jsx";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
             <Route path="shared-with-me" element={<SharedWithMe />} />
             <Route path="starred" element={<Starred />} />
             <Route path="trash" element={<Trash />} />
+
+            <Route path="search" element={<SearchScreen />} />
 
           </Route>
         </Route>
