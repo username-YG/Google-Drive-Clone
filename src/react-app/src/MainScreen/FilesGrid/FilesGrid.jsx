@@ -123,7 +123,7 @@ function File({ file, selected, onSelect, reload, setReload }) {
         <p>{file.name}</p>
         <div className="actions-popup-div">
           <img id="dots" src={dots} title="More actions" onClick={() => setIsOpen(!isOpen)} />
-          {isOpen && <ItemActionsPopup id={file.id} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+          {isOpen && <ItemActionsPopup file={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
         </div>
       </div>
       <div className="files-preview">
@@ -158,7 +158,7 @@ function Folder({ file, selected, onSelect, path, reload, setReload }) {
         <p>{file.name}</p>
         <div className="actions-popup-div">
           <img id="dots" src={dots} title="More actions"  onClick={() => setIsOpen(!isOpen)} />
-          {isOpen && <ItemActionsPopup id={file.id} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+          {isOpen && <ItemActionsPopup file={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
         </div>
       </div>
     </div>

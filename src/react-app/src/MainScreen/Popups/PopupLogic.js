@@ -161,10 +161,6 @@ export async function moveItem(id, newParentId) {
     })
   });
 
-  //if (response.status == 403) {
-  //  alert("")
-  //}
-
 }
 
 export async function getAllFolders() {
