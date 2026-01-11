@@ -6,44 +6,99 @@ import { useNavigate } from "react-router-dom";
 const folderCache = new Map();
 
 async function createFolder(path, rootId) {
-    if (folderCache.has(path)) {
-        return folderCache.get(path);
-    }
-
     const token = localStorage.getItem("token");
-    const parts = path.split("/")
-    let parentId = rootId
-    let cwd = ""
+    const parts = path.split("/");
+    let parentId = rootId;
 
     for (const part of parts) {
-        cwd = cwd ? `${cwd}/${part}` : part;
+        const key = `${parentId ?? "root"}:${part}`;
 
-        if (!folderCache.has(cwd)) {
+        if (folderCache.has(key)) {
+            parentId = folderCache.get(key);
+            continue;
+        }
+
+        // else
+        let folderIdFound = null;
+        let response = null
+
+        try {
+            response = await fetch("http://localhost:3000/api/files", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name: part,
+                    isFolder: true,
+                    parentId
+                })
+            });
+
+            if (response.status === 201 || response.status === 200) {
+                console.log("hello")
+                const data = await response.json();
+                console.log(data)
+                folderIdFound = data.id;
+            }
+        } catch (err) { }
+
+        if (!folderIdFound) {
             try {
-                const response = await fetch("http://localhost:3000/api/files", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+                const url = parentId
+                    ? `http://localhost:3000/api/files/${parentId}` 
+                    : `http://localhost:3000/api/files`;
+
+                response = await fetch(url, {
+                    method: "GET",
+                    headers: { 
                         Authorization: `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        name: part,
-                        isFolder: true,
-                        parentId
-                    })
+                    }
                 });
 
-                if (response.status === 201 || response.status === 200) {   
-                    const data = await response.json();
-                    folderCache.set(cwd, data.id);
-                    parentId = data.id;
-                } else {}
+                if (response.status === 201 || response.status === 200) {
+                    const folderData = await response.json();
+
+                    if (parentId) {
+                        const subItemsID = folderData.content || [];
+                
+                        for (const id of subItemsID) {
+                            try {
+                                const res = await fetch(`/api/files/${id}`, {
+                                    method: "GET",
+                                    headers: { 
+                                        Authorization: `Bearer ${token}`
+                                    }
+                                });
+                                
+                                const item = await res.json();
+
+                                if (item.isFolder && item.name === part) {
+                                    folderIdFound = item.id;
+                                    break;
+                                }
+                            } catch (err) {}
+                        }
+                    } else {
+                        const subItems = folderData.content;  
+                        const match = subItems.find(f => f.name === part && f.isFolder);
+                        
+                        if (match) {
+                            folderIdFound = match.id;
+                        }
+                    }
+                }
             } catch (err) {}
+        }
+
+        if (folderIdFound) {
+            folderCache.set(key, folderIdFound);
+            parentId = folderIdFound;
         } else {
-            parentId = folderCache.get(cwd);
+            return null; 
         }
     }
-
     return parentId;
 }
 
@@ -69,13 +124,17 @@ async function createFile(file, parentId) {
 }
 
 async function uploadToServer(files, isFolder) {
+    folderCache.clear();
+
     for (const file of files) {
         let parentId = null;
-        if (isFolder) {
+        if (isFolder && file.webkitRelativePath) {
             const parts = file.webkitRelativePath.split("/");
-            const folders = parts.slice(0, -1);
+            const folderPath = parts.slice(0, -1).join("/");
             
-            parentId = await createFolder(folders.join("/"), null);
+            if (folderPath) {
+                parentId = await createFolder(folderPath, null);
+            }
         }
         
         await createFile(file, parentId);
