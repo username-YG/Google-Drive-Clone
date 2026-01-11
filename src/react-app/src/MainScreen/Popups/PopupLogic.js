@@ -55,7 +55,7 @@ export async function getUser(setUser) {
 
 }
 
-export async function trashItem(id, toTrash) {
+export async function trashItem(id, toTrash, pid) {
 
   const token = localStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
@@ -68,6 +68,17 @@ export async function trashItem(id, toTrash) {
       "trashed": toTrash
     })
   });
+
+  if (response.status == 403) {
+    const pid = localStorage.getItem("id")
+    const response = await fetch("http://localhost:3000/api/files/" + id + "/permissions/" + pid, {
+      'method': 'DELETE',
+      'headers': {
+        'Content-Type': 'application/json',
+        'authorization': 'bearer ' + token
+      }
+    });
+  }
 
 }
 
@@ -114,10 +125,6 @@ export async function deleteItem(id) {
     }
   });
 
-  if (response.status == 403) {
-    await trashItem(id, true);
-  }
-
 }
 
 export async function searchItems(query) {
@@ -153,6 +160,10 @@ export async function moveItem(id, newParentId) {
       "parentId": newParentId
     })
   });
+
+  //if (response.status == 403) {
+  //  alert("")
+  //}
 
 }
 
