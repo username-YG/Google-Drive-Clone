@@ -7,8 +7,8 @@ const tokensRoutes = require('./routes/tokens')
 const cors = require('cors');
 
 app.use(cors({ exposedHeaders: ['Location'] })); // Enables Cross-Origin Resource Sharing
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ limit: '5mb', extended: true }));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 app.use('/api/files', filesRoutes)
 app.use('/api/search', searchRoutes)
 app.use('/api/users', usersRoutes)

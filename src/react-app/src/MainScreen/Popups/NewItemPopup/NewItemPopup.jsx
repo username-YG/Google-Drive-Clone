@@ -10,7 +10,7 @@ import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 
 import "./NewItemPopup.css"
 
-function NewItemPopup( { reload, setReload } ) {
+function NewItemPopup({ reload, setReload, onUploadFile, onUploadFolder }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
@@ -37,12 +37,12 @@ function NewItemPopup( { reload, setReload } ) {
 
       <hr />
 
-      <li className="new-item-menu-item">
+      <li className="new-item-menu-item" onClick={onUploadFile}>
         <img src={fileup} />
         File upload
       </li>
 
-      <li className="new-item-menu-item">
+      <li className="new-item-menu-item" onClick={onUploadFolder}>
         <img src={folderup} />
         Folder upload
       </li>
