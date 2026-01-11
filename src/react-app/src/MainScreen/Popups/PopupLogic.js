@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
 export function outsideClickListener(isOpen, setIsOpen, ref) {
 
@@ -52,7 +52,6 @@ export async function getUser(setUser) {
     const data = await response.json();
     setUser(data);
   }
-
 }
 
 export async function trashItem(id, toTrash) {
@@ -138,4 +137,42 @@ export async function searchItems(query) {
     return []
   }
 
+}
+
+export async function getFile(id) {
+
+  const token = localStorage.getItem("token")
+
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+
+}
+
+export async function updateFile(id, updateData) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    body: JSON.stringify(updateData)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to update file");
+  }
+
+  return true;
 }

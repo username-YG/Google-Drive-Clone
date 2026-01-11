@@ -116,6 +116,57 @@
     border: none;
 }
 
+.rename-context-wrapper .input-name-input,
+.edit-context-wrapper .input-name-input {
+    color: black !important;
+    background-color: white !important;
+    caret-color: #4285f4 !important;
+}
+
+.rename-context-wrapper .input-name-input::selection,
+.edit-context-wrapper .input-name-input::selection {
+    background: rgba(66, 133, 244, 0.3);
+}
+
+.rename-context-wrapper, .edit-context-wrapper {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 1000;
+}
+
+.rename-context-wrapper .input-name-title {
+    visibility: hidden;
+    position: relative;
+}
+
+.rename-context-wrapper .input-name-title::after {
+    content: 'Rename';
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    text-align: center;
+}
+
+.rename-context-wrapper .input-name-input::selection {
+    background: rgba(66, 133, 244, 0.3);
+}
+
+.edit-context-wrapper .input-name-title {
+    visibility: hidden;
+    position: relative;
+}
+
+.edit-context-wrapper .input-name-title::after {
+    content: 'Edit Text';
+    visibility: visible;
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    text-align: center;
+}
+
 .preview-toolbar {
     position: sticky;
     top: 0;

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import {useEffect, useRef, useState} from 'react';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import FilePreviewPopup from '../Popups/FilePreviewPopup/FilePreviewPopup.jsx';
-import { trashItem, outsideClickListener, searchItems } from "../Popups/PopupLogic.js";
+import {outsideClickListener, searchItems, trashItem} from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -64,14 +64,12 @@ async function getFiles(url, filter, navigate, withContent) {
     },
   });
 
-  if (response.status == 200) {
-    const data = await response.json();
-    return data;
+  if (response.status === 200) {
+    return await response.json();
   }
 
-  if (response.status == 404 || response.status == 403 || response.status == 401) {
+  if (response.status === 404 || response.status === 403 || response.status === 401) {
     navigate("/login");
-    return;
   }
 
 }
@@ -180,6 +178,10 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
   const location = useLocation();
   const path = location.state?.path || [];
 
+  const refreshFiles = () => {
+    void updateData(folderId, setItems, filter);
+  };
+
   const navigate = useNavigate();
   useEffect(() => {
     const loadData = async () => {
@@ -244,6 +246,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
           file={selectedPreviewFile}
           isOpen={isPreviewOpen}
           setIsOpen={setIsPreviewOpen}
+          onActionComplete={refreshFiles}
       />
     </div>
   )
