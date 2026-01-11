@@ -11,7 +11,7 @@ const sendToServer = (msg) => {
         const ip = process.argv[2];
         const port = +process.argv[3];
         const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
-        sock.setTimeout(2000); // 2 sec before we give up
+        sock.setTimeout(20000); // 20 sec before we give up
 
         // Get response from server
         let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes

@@ -32,7 +32,12 @@ function NewItemPopup({ reload, setReload, onUploadFile, onUploadFolder }) {
       <li className="new-item-menu-item" onClick={() => setIsOpen(!isOpen)}>
         <img src={folderplus}/>
         New folder
-        {isOpen && <InputNamePopup toggle={() => setIsOpen(!isOpen)} onDone={onCreateFolder} doneText="Create" />}
+        {isOpen && <InputNamePopup
+                    toggle={() => setIsOpen(!isOpen)}
+                    onDone={onCreateFolder}
+                    doneText="Create"
+                    title="New folder"
+                  />}
       </li>
 
       <hr />

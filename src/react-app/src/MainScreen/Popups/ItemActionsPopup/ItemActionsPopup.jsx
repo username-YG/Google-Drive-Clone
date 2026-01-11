@@ -46,7 +46,13 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
         <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsRenameOpen(!isRenameOpen) } >
           <img src={pencil} />
           Rename
-          {isRenameOpen && <InputNamePopup toggle={() => setIsRenameOpen(!isRenameOpen)} onDone={onRenameItem} doneText="Ok" />}
+          {isRenameOpen && <InputNamePopup
+                              toggle={() => setIsRenameOpen(!isRenameOpen)}
+                              onDone={onRenameItem}
+                              doneText="Ok"
+                              title="Rename"
+                              currentName={file.name}
+                            />}
         </li>
       )}
 

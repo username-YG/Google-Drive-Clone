@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { getFile, updateFile, trashItem, renameItem, starItem } from '../PopupLogic.js';import docsLogo from '../../../../assets/docs.png';
+import { getFile, updateFile, trashItem, renameItem, starItem } from '../PopupLogic.js';
+import docsLogo from '../../../../assets/docs.png';
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx";
 import pdfLogo from '../../../../assets/pdf.png';
 import imageLogo from '../../../../assets/image.png';
@@ -345,6 +346,8 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                                     toggle={() => setIsRenameOpen(false)}
                                     onDone={onRenameItem}
                                     doneText="Ok"
+                                    title="Rename"
+                                    currentName={file.name}
                                 />
                             </div>
                         )}
