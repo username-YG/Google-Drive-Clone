@@ -119,3 +119,23 @@ export async function deleteItem(id) {
   }
 
 }
+
+export async function searchItems(query) {
+
+  const token = localStorage.getItem("token");
+  const response = await fetch(`http://localhost:3000/api/search/${query}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  });
+
+  if (response.status === 201 || response.status === 200) {
+    const data = await response.json();
+    return data
+  } else {
+    return []
+  }
+
+}

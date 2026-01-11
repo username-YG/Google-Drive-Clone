@@ -18,7 +18,13 @@ function EmptyFolder() {
 function Starred() {
   const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter={["STARRED", "NOT TRASHED", "ALL LEVELS"]} emptyFolder={<EmptyFolder/>} title="Starred" reload={reload} setReload={setReload} />
+    <FilesGrid
+      filter={["STARRED", "NOT TRASHED", "ALL LEVELS"]}
+      emptyFolder={<EmptyFolder/>}
+      title="Starred"
+      reload={reload}
+      setReload={setReload}
+    />
   )
 }
 

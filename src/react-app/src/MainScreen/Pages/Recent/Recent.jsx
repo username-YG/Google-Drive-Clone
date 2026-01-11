@@ -18,7 +18,13 @@ function EmptyFolder() {
 function Recent() {
   const { reload, setReload } = useOutletContext();
   return (
-    <FilesGrid filter={["NOT TRASHED", "ALL LEVELS", "NOT FOLDER", "RECENT"]} emptyFolder={<EmptyFolder/>} title="Recent" reload={reload} setReload={setReload} />
+    <FilesGrid
+      filter={["NOT TRASHED", "ALL LEVELS", "NOT FOLDER", "RECENT"]}
+      emptyFolder={<EmptyFolder/>}
+      title="Recent"
+      reload={reload}
+      setReload={setReload}
+    />
   )
 }
 

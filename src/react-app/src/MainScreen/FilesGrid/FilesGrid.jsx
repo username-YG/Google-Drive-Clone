@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { trashItem, outsideClickListener } from "../Popups/PopupLogic.js";
+import { trashItem, outsideClickListener, searchItems } from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -74,10 +74,10 @@ async function getFiles(url, filter, navigate) {
 
 }
 
-const updateData = async (folderId, setItems, filter, navigate) => {
+const updateData = async (folderId, setItems, filter, navigate, query) => {
 
   const url = (folderId) ? ("/" + folderId) : ("");
-  const data = await getFiles("/files" + url, filter, navigate);
+  const data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate));
   if (!data) return;
 
   let finalData;
@@ -165,7 +165,7 @@ function Folder({ file, selected, onSelect, path, reload, setReload }) {
 
 }
 
-function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
+function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -176,8 +176,8 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload }) {
 
   const navigate = useNavigate();
   useEffect(() => {
-    updateData(folderId, setItems, filter, navigate);
-  }, [folderId, reload]);
+    updateData(folderId, setItems, filter, navigate, query);
+  }, [folderId, reload, query]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
