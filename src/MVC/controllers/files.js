@@ -119,7 +119,7 @@ exports.getAllFiles = async (req, res) => {
         // If a filter has been specified in request, apply it
         let filteredFiles = permittedFiles;
         if (req.headers && req.headers.filter) {
-            const filters = req.headers.filter.split(',');
+            const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
                 filteredFiles = filterFiles(filteredFiles, filterType, usrId);
             }
@@ -161,7 +161,7 @@ exports.getFile = async (req, res) => {
             let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
 
             // Filter
-            const filters = req.headers.filter.split(',');
+            const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
                 filteredContent = filterFiles(filteredContent, filterType, usrId);
             }

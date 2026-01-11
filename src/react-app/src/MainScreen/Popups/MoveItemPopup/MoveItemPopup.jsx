@@ -21,7 +21,7 @@ const MoveItemPopup = ({ id, toggle, reload, setReload }) => {
   const onMoveItem = async (newParentId) => {
     await moveItem(id, newParentId);
     toggle();
-    setReload(!reload);
+    if (setReload) setReload(!reload);
   }
 
   return (

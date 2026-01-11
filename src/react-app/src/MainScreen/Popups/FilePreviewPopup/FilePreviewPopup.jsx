@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import { getFile, updateFile, trashItem, renameItem, starItem } from '../PopupLogic.js';
 import docsLogo from '../../../../assets/docs.png';
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx";
+import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx";
 import pdfLogo from '../../../../assets/pdf.png';
 import imageLogo from '../../../../assets/image.png';
 import txtLogo from '../../../../assets/txt.png';
@@ -13,6 +14,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     const [isStarred, setIsStarred] = useState(!!file?.starred);
     const [isRenameOpen, setIsRenameOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isMoveToOpen, setIsMoveToOpen] = useState(false);
 
     const toolbarRef = useRef(null);
     const contentRef = useRef(null);
@@ -207,6 +209,19 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
             return;
         }
 
+        if (extension === 'txt') {
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', file?.name || 'download');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            return;
+        }
+
         try {
             const response = await fetch(fileContent);
             const blob = await response.blob();
@@ -285,6 +300,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
 
     const isPDF = extension === 'pdf';
     const isTXT = extension === 'txt';
+    const isImage = ['jpg', 'jpeg', 'png'].includes(extension);
 
     return (
         <div
@@ -308,7 +324,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                 </div>
 
                 <div className="toolbar-right">
-                    {!isPDF && (
+                    {(isTXT || isImage) && (
                         <div className="edit-action-wrapper" style={{ display: 'inline-block', position: 'relative' }}>
                             <button
                                 className="icon-btn-white"
@@ -318,7 +334,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                                 {isTXT ? 'edit' : 'published_with_changes'}
                             </span>
                                 <span className="tooltip-text">
-                                {isTXT ? 'Edit text' : 'Swap image'}
+                                {isTXT ? 'Edit text' : 'Swap content'}
                             </span>
                             </button>
 
@@ -375,9 +391,12 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                         <span className="tooltip-text">Move to trash</span>
                     </button>
 
-                    <button className="icon-btn-white">
+                    <button className="icon-btn-white" onClick={() => setIsMoveToOpen(true)}>
                         <span className="material-symbols-outlined">drive_file_move</span>
                         <span className="tooltip-text">Move to</span>
+                        {isMoveToOpen && (
+                            <MoveItemPopup id={file?.id}
+                                toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
                     </button>
 
                     <div className="toolbar-divider"></div>
