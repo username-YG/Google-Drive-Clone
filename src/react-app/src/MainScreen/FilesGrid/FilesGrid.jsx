@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import FilePreviewPopup from '../Popups/FilePreviewPopup/FilePreviewPopup.jsx';
 import { trashItem, outsideClickListener, searchItems } from "../Popups/PopupLogic.js";
