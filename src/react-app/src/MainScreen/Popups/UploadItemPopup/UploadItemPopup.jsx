@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 async function createItem(name, content, isFolder, parentId) {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     
     const body = {
         name,

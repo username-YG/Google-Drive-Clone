@@ -52,7 +52,7 @@ function PathTitle( {path, title} ) {
 
 async function getFiles(url, filter, navigate) {
   
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api" + url, {
     'method': 'GET',
     'headers': {
