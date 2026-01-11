@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import FilePreviewPopup from '../Popups/FilePreviewPopup/FilePreviewPopup.jsx';
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -87,7 +88,7 @@ const updateData = async (folderId, setItems, filter) => {
   setItems(finalData)
 }
 
-function File({ file, selected, onSelect }) {
+function File({ file, selected, onSelect, onDoubleClick }) {
 
   const type = file.name.split('.').pop();
   const icon = icons[type] || icons["notype"];
@@ -103,7 +104,7 @@ function File({ file, selected, onSelect }) {
 
   return (
     <div className={`files-grid-item is-file ${(selected === file.id) ? "selected" : ""}`}
-      onClick={onFileClick} onDoubleClick={openItem} >
+      onClick={onFileClick} onDoubleClick={onDoubleClick} >
       <div className="files-header">
         <img src={icon} />
         <p>{file.name}</p>
@@ -146,10 +147,17 @@ function FilesGrid({ filter, emptyFolder, title }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [previewFile, setPreviewFile] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const { folderId } = useParams();
   const location = useLocation();
   const path = location.state?.path || [];
+
+  const handleOpenPreview = (file) => {
+    setPreviewFile(file);
+    setIsPreviewOpen(true);
+  };
 
   useEffect(() => {
     updateData(folderId, setItems, filter);
@@ -163,7 +171,7 @@ function FilesGrid({ filter, emptyFolder, title }) {
   );
 
   const files = filesObjects.map((item, i) =>
-    <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} />
+    <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)}  onDoubleClick={() => handleOpenPreview(item)} />
   );
 
   return (
@@ -177,6 +185,7 @@ function FilesGrid({ filter, emptyFolder, title }) {
           <div className="files-grid">{files}</div>
         </div>
       )}
+      <FilePreviewPopup file={previewFile} isOpen={isPreviewOpen} setIsOpen={setIsPreviewOpen} />
     </div>
   )
 }
