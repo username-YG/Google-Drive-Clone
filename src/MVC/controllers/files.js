@@ -27,6 +27,7 @@ function filterFiles(files, filterType, userId) {
         "STARRED": (item) => { return (item.starred.includes(userId)) },
         "TRASHED": (item) => { return item.trashed },
         "NOT TRASHED": (item) => { return !(item.trashed) },
+        "FOLDER": (item) => { return item.isFolder },
         "NOT FOLDER": (item) => { return !(item.isFolder) },
         "RECENT": (item) => { return isToday(item.timestamp); }
     }

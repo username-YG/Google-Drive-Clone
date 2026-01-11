@@ -7,19 +7,24 @@ import folder from "../../../../assets/folder.png"
 import trash from "../../../../assets/trash.png"
 import pencil from "../../../../assets/pencil.png"
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
+import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx"
 
 import "./ItemActionsPopup.css"
 
 function ItemActionsPopup( { id, reload, setReload, toggle } ) {
 
-  const [isOpen, setIsOpen] = useState(false);
-  const popupRef = useRef(null);
-  outsideClickListener(isOpen, setIsOpen, popupRef)
+  const [isRenameOpen, setIsRenameOpen] = useState(false);
+  const popuRenamepRef = useRef(null);
+  outsideClickListener(isRenameOpen, setIsRenameOpen, popuRenamepRef)
+
+  const [isMovetoOpen, setIsMovetoOpen] = useState(false);
+  const popuMovetoRef = useRef(null);
+  outsideClickListener(isMovetoOpen, setIsMovetoOpen, popuMovetoRef)
 
   const onRenameItem = async (name) => {
     await renameItem(id, name);
     toggle();
-    setIsOpen(!isOpen);
+    setIsRenameOpen(!isRenameOpen);
     setReload(!reload);
   };
 
@@ -28,13 +33,14 @@ function ItemActionsPopup( { id, reload, setReload, toggle } ) {
   const inStarred = url.includes("/starred");
 
   return (
-    <ul className="item-actions-menu" ref={popupRef}>
+    <ul className="item-actions-menu"
+      ref={(element) => { popuRenamepRef.current = element; popuMovetoRef.current = element; }}>
 
       { !inTrash && (
-        <li className="item-actions-menu-item" onClick={() => setIsOpen(!isOpen) } >
+        <li className="item-actions-menu-item" onClick={() => setIsRenameOpen(!isRenameOpen) } >
           <img src={pencil} />
           Rename
-          {isOpen && <InputNamePopup toggle={() => setIsOpen(!isOpen)} onDone={onRenameItem} doneText="Ok" />}
+          {isRenameOpen && <InputNamePopup toggle={() => setIsRenameOpen(!isRenameOpen)} onDone={onRenameItem} doneText="Ok" />}
         </li>
       )}
 
@@ -48,9 +54,10 @@ function ItemActionsPopup( { id, reload, setReload, toggle } ) {
       )}
 
       { !inTrash && (
-        <li className="item-actions-menu-item">
+        <li className="item-actions-menu-item" onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
           <img src={folder} />
           Move to
+          {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} id={id} reload={reload} setReload={setReload} />}
         </li>
       )}
 

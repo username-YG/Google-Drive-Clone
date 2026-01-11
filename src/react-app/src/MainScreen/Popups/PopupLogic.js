@@ -139,3 +139,39 @@ export async function searchItems(query) {
   }
 
 }
+
+export async function moveItem(id, newParentId) {
+
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "parentId": newParentId
+    })
+  });
+
+}
+
+export async function getAllFolders() {
+  
+  const token = localStorage.getItem("token")
+  const response = await fetch("http://localhost:3000/api/files", {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token,
+      'filter': "ALL LEVELS, NOT TRASHED, FOLDER"
+    },
+  });
+
+  if (response.status == 200) {
+    const data = await response.json();
+    return data;
+  }
+  return [];
+
+}
