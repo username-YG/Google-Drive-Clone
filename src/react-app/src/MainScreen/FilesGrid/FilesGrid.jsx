@@ -90,13 +90,14 @@ const updateData = async (folderId, setItems, filter) => {
   setItems(finalData)
 }
 
-function File({ file, selected, onSelect }) {
+function File({ file, selected, onSelect, setSelectedFile, setIsPreviewOpen }) {
 
   const type = file.name.split('.').pop();
   const icon = icons[type] || icons["notype"];
-  
+
   const openItem = () => {
-    alert(file.content);
+    setSelectedFile(file);
+    setIsPreviewOpen(true);
   };
 
   const onFileClick = (e) => {
@@ -149,6 +150,8 @@ function FilesGrid({ filter, emptyFolder, title }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [selectedPreviewFile, setSelectedPreviewFile] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const { folderId } = useParams();
   const location = useLocation();
@@ -165,8 +168,13 @@ function FilesGrid({ filter, emptyFolder, title }) {
     <Folder key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} path={path} />
   );
 
+  console.log(items);
+
   const files = filesObjects.map((item, i) =>
-    <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)} />
+    <File key={i} file={item} selected={selected} onSelect={() => setSelected(item.id)}
+          setSelectedFile={setSelectedPreviewFile}
+          setIsPreviewOpen={setIsPreviewOpen}
+    />
   );
 
   return (
@@ -180,6 +188,11 @@ function FilesGrid({ filter, emptyFolder, title }) {
           <div className="files-grid">{files}</div>
         </div>
       )}
+      <FilePreviewPopup
+          file={selectedPreviewFile}
+          isOpen={isPreviewOpen}
+          setIsOpen={setIsPreviewOpen}
+      />
     </div>
   )
 }

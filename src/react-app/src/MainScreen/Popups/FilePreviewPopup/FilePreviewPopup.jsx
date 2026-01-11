@@ -203,15 +203,17 @@ const FilePreviewPopup = ({ file, isOpen, setIsOpen }) => {
                     ref={zoomBarRef}
                     className={`zoom-floating-bar-wrapper ${!showUI ? 'ui-hidden' : ''}`}
                 >
-                    <div className="zoom-floating-bar" onClick={(e) => e.stopPropagation()}>
-                        <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'in')}>+</button>
-                        <div className="zoom-divider"></div>
-                        <button className="zoom-icon-btn reset-text" onClick={(e) => handleZoom(e, 'reset')}>
-                            <span className="material-symbols-outlined reset-icon">search_check</span>
-                        </button>
-                        <div className="zoom-divider"></div>
-                        <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'out')}>−</button>
-                    </div>
+                    {!isPDF && (
+                        <div className="zoom-floating-bar" onClick={(e) => e.stopPropagation()}>
+                            <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'in')}>+</button>
+                            <div className="zoom-divider"></div>
+                            <button className="zoom-icon-btn reset-text" onClick={(e) => handleZoom(e, 'reset')}>
+                                <span className="material-symbols-outlined reset-icon">search_check</span>
+                            </button>
+                            <div className="zoom-divider"></div>
+                            <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'out')}>−</button>
+                        </div>
+                        )}
                 </div>
             </div>
         </div>
