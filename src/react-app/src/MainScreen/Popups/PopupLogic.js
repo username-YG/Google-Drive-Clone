@@ -21,7 +21,6 @@ export async function createFolder(name, parentId) {
   if (!parentId) parentId = null;
 
   const token = sessionStorage.getItem("token")
-  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files", {
     'method': 'POST',
     'headers': {
@@ -38,8 +37,6 @@ export async function createFolder(name, parentId) {
 
 export async function getUser(setUser) {
 
-  const token = sessionStorage.getItem("token")
-  const id = sessionStorage.getItem("id");
   const token = sessionStorage.getItem("token")
   const id = sessionStorage.getItem("id");
 
@@ -59,7 +56,6 @@ export async function getUser(setUser) {
 
 export async function trashItem(id, toTrash, pid) {
 
-  const token = sessionStorage.getItem("token")
   const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
@@ -88,7 +84,6 @@ export async function trashItem(id, toTrash, pid) {
 export async function renameItem(id, name) {
 
   const token = sessionStorage.getItem("token")
-  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -105,7 +100,6 @@ export async function renameItem(id, name) {
 export async function starItem(id, toStar) {
 
   const token = sessionStorage.getItem("token")
-  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -121,7 +115,6 @@ export async function starItem(id, toStar) {
 
 export async function deleteItem(id) {
 
-  const token = sessionStorage.getItem("token")
   const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'DELETE',
