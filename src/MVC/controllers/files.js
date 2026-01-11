@@ -2,6 +2,44 @@ const Files = require('../models/files')
 const Perms = require('../models/permissions')
 const Users = require('../models/users')
 
+function doesOwn(item, userId) {
+    const permissions = Perms.getPermissions(item.id);
+    return (permissions && permissions[userId] == "owner");
+}
+
+function isToday(timestamp) {
+    if (!timestamp) return false;
+    
+    const date = new Date(timestamp);
+    const today = new Date();
+
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
+}
+
+function filterFiles(files, filterType, userId) {
+
+    // Possible filters
+    const Filters = {
+        "OWNS": (item) => { return doesOwn(item, userId) },
+        "SHARES": (item) => { return !doesOwn(item, userId) },
+        "STARRED": (item) => { return (item.starred.includes(userId)) },
+        "TRASHED": (item) => { return item.trashed },
+        "NOT TRASHED": (item) => { return !(item.trashed) },
+        "NOT FOLDER": (item) => { return !(item.isFolder) },
+        "RECENT": (item) => { return isToday(item.timestamp); }
+    }
+
+    // Get the function to filter with
+    const filterFunc = Filters[filterType];
+    if (typeof filterFunc !== 'function') return files;
+
+    // Return filtered items
+    let filteredFiles = files.filter(filterFunc);
+    return filteredFiles;
+}
+
 exports.createFile = async (req, res) => {
     try {
 
@@ -51,38 +89,6 @@ exports.createFile = async (req, res) => {
     }
 }
 
-function doesOwn(item, userId) {
-    const permissions = Perms.getPermissions(item.id);
-    return (permissions[userId] == "owner");
-}
-
-function isStarred(item, userId) {
-    return item.starred.contains(userId);
-}
-
-function isTrashed(item) {
-    return item.trashed;
-}
-
-function filterFiles(files, filterType, userId) {
-
-    // Possible filters
-    const Filters = {
-        "OWNS": (item) => { return doesOwn(item, userId) },
-        "SHARES": (item) => { return !doesOwn(item, userId) },
-        "STARRED": (item) => { return isStarred(item, userId) },
-        "TRASHED": (item) => { return isTrashed(item) }
-    }
-
-    // Get the function to filter with
-    const filterFunc = Filters[filterType];
-    if (typeof filterFunc !== 'function') return files;
-
-    // Return filtered items
-    let filteredFiles = files.filter(filterFunc);
-    return filteredFiles;
-}
-
 exports.getAllFiles = async (req, res) => {
     try {
         const usrId = req.user.ID;
@@ -92,9 +98,15 @@ exports.getAllFiles = async (req, res) => {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
+        // This special filter allows us to fetch items from all levels and not just root
+        let allFiles = Files.getAllFiles();
+        if (req.headers && req.headers.filter && req.headers.filter.includes("ALL LEVELS")) {
+            allFiles = Files.getAllIDs();
+        }
+
         // Filter only items the user is allowed to read
         const permittedFiles = [];
-        for (const fileId of Files.getAllFiles()) {
+        for (const fileId of allFiles) {
             const perm = Perms.getPermissions(fileId);
             if (perm && perm[usrId]) {
                 const fileObj = await Files.getFile(fileId);
@@ -102,10 +114,13 @@ exports.getAllFiles = async (req, res) => {
             }
         }
 
-        // If a filter has been specified in request body, apply i
+        // If a filter has been specified in request, apply it
         let filteredFiles = permittedFiles;
         if (req.headers && req.headers.filter) {
-            filteredFiles = filterFiles(permittedFiles, req.headers.filter, usrId);
+            const filters = req.headers.filter.split(',');
+            for (const filterType of filters) {
+                filteredFiles = filterFiles(filteredFiles, filterType, usrId);
+            }
         }
 
         res.json(filteredFiles);
@@ -134,7 +149,24 @@ exports.getFile = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" })
         }
 
-        const file = await Files.getFile(req.params.id);
+        let file = await Files.getFile(req.params.id);
+        
+        // If a filter has been specified for folder content, apply it
+        if (file.isFolder && req.headers && req.headers.filter) {
+
+            // Replace id's with actual files
+            let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
+
+            // Filter
+            const filters = req.headers.filter.split(',');
+            for (const filterType of filters) {
+                filteredContent = filterFiles(filteredContent, filterType, usrId);
+            }
+
+            // Replace actual file with id
+            file.content = filteredContent.map(item => item.id);
+        }
+
         res.json(file);
 
     } catch(err) {
@@ -153,8 +185,9 @@ exports.updateFile = async (req, res) => {
         - content (if it is a file)
         - trashed (is the file in trash)
         - starred (is starred for this user)
+        - timestamp
         */
-        let { name, content, parentId, starred, trashed } = req.body
+        let { name, content, parentId, starred, trashed, timestamp } = req.body
 
         // Ensure the file and user exists
         const item = Files.getMetadata(req.params.id);
@@ -170,7 +203,12 @@ exports.updateFile = async (req, res) => {
 
         // Return 400 when all fields are missing
         // Return 400 when new name is empty
-        if (!name && content === undefined && parentId === undefined && starred == undefined && trashed == undefined) {
+        if (!name
+            && content === undefined
+            && parentId === undefined
+            && starred == undefined
+            && trashed == undefined
+            && timestamp == undefined) {
             return res.status(400).json({ error: "Missing args" })
         }
 
@@ -215,7 +253,8 @@ exports.updateFile = async (req, res) => {
             }
         }
 
-        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId, usrId, trashed, starred);
+        const updatedFile = await Files.updateFile(req.params.id,name, content, parentId, 
+                                                    usrId, trashed, starred, timestamp);
         res.status(204).end()
 
     } catch(err) {
