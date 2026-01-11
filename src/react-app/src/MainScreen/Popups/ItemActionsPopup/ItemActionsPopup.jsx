@@ -32,7 +32,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
   const inTrash = url.includes("/trash");
   const inStarred = url.includes("/starred");
 
-  const userId = localStorage.getItem("id");
+  const userId = sessionStorage.getItem("id");
   const permissions = file?.permissions || {};
   const role = permissions[userId];
   const canPatch = (role === "owner" || role === "writer");

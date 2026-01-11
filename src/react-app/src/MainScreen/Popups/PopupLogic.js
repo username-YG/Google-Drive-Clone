@@ -20,7 +20,7 @@ export async function createFolder(name, parentId) {
   if (!name) name = "New Folder";
   if (!parentId) parentId = null;
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files", {
     'method': 'POST',
     'headers': {
@@ -37,8 +37,8 @@ export async function createFolder(name, parentId) {
 
 export async function getUser(setUser) {
 
-  const token = localStorage.getItem("token")
-  const id = localStorage.getItem("id");
+  const token = sessionStorage.getItem("token")
+  const id = sessionStorage.getItem("id");
 
   const response = await fetch("http://localhost:3000/api/users/" + id, {
     'method': 'GET',
@@ -57,7 +57,7 @@ export async function getUser(setUser) {
 
 export async function trashItem(id, toTrash, pid) {
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -70,7 +70,7 @@ export async function trashItem(id, toTrash, pid) {
   });
 
   if (response.status == 403) {
-    const pid = localStorage.getItem("id")
+    const pid = sessionStorage.getItem("id")
     const response = await fetch("http://localhost:3000/api/files/" + id + "/permissions/" + pid, {
       'method': 'DELETE',
       'headers': {
@@ -84,7 +84,7 @@ export async function trashItem(id, toTrash, pid) {
 
 export async function renameItem(id, name) {
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -100,7 +100,7 @@ export async function renameItem(id, name) {
 
 export async function starItem(id, toStar) {
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -116,7 +116,7 @@ export async function starItem(id, toStar) {
 
 export async function deleteItem(id) {
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'DELETE',
     'headers': {
@@ -129,7 +129,7 @@ export async function deleteItem(id) {
 
 export async function searchItems(query) {
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const response = await fetch(`http://localhost:3000/api/search/${query}`, {
     method: 'GET',
     headers: {
@@ -149,7 +149,7 @@ export async function searchItems(query) {
 
 export async function moveItem(id, newParentId) {
 
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -165,7 +165,7 @@ export async function moveItem(id, newParentId) {
 
 export async function getAllFolders() {
   
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files", {
     'method': 'GET',
     'headers': {

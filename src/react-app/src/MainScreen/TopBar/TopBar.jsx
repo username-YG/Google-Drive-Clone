@@ -61,12 +61,8 @@ function TopBarList() {
 
   const settingsMenuItems = [
     {
-      text: "Display settings",
-      onClick: () => navigate("/settings#Display")
-    },
-    {
-      text: "User settings",
-      onClick: () => navigate("/settings#User")
+      text: "Toggle dark mode",
+      onClick: () => alert("DARKMODE!")
     }
   ]
 
@@ -74,8 +70,8 @@ function TopBarList() {
     {
       text: "Sign out",
       onClick: () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("id");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("id");
         navigate("/login");
       }
     },

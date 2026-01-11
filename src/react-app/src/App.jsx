@@ -10,7 +10,6 @@ import Recent from "./MainScreen/Pages/Recent/Recent.jsx";
 import SharedWithMe from "./MainScreen/Pages/SharedWithMe/SharedWithMe.jsx";
 import Starred from "./MainScreen/Pages/Starred/Starred.jsx";
 import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
-import Settings from "./MainScreen/Pages/Settings/Settings.jsx";
 import MainScreen from "./MainScreen/MainScreen.jsx"
 import SearchScreen from "./MainScreen/Pages/SearchScreen/SearchScreen.jsx";
 
@@ -22,7 +21,6 @@ function App() {
 
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Registration />} />
-          <Route path="settings" element={<Settings />} />
 
           <Route element={<MainScreen/>}>
 

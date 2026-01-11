@@ -50,7 +50,7 @@
   margin-bottom: 20px;
 }
 
-.manage-button {
+.switch-account-button {
   background: transparent;
   border: 1px solid #747775;
   color: #175fd3;
@@ -64,6 +64,6 @@
   cursor: pointer;
 }
 
-.manage-button:hover {
+.switch-account-button:hover {
   background-color: #d8e2f3;
 }
