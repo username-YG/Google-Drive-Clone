@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { trashItem, outsideClickListener, searchItems } from "../Popups/PopupLogic.js";
+import {useEffect, useRef, useState} from 'react';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import FilePreviewPopup from '../Popups/FilePreviewPopup/FilePreviewPopup.jsx';
+import {outsideClickListener, searchItems, trashItem} from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -63,14 +64,12 @@ async function getFiles(url, filter, navigate, withContent) {
     },
   });
 
-  if (response.status == 200) {
-    const data = await response.json();
-    return data;
+  if (response.status === 200) {
+    return await response.json();
   }
 
-  if (response.status == 404 || response.status == 403 || response.status == 401) {
+  if (response.status === 404 || response.status === 403 || response.status === 401) {
     navigate("/login");
-    return;
   }
 
 }
@@ -97,13 +96,14 @@ const updateData = async (folderId, setItems, filter, navigate, query) => {
   setItems(finalData)
 }
 
-function File({ file, selected, onSelect, reload, setReload }) {
+function File({ file, selected, onSelect, reload, setReload, setSelectedFile, setIsPreviewOpen }) {
 
   const type = file.name.split('.').pop();
   const icon = icons[type] || icons["notype"];
   
   const openItem = () => {
-    alert(file.content);
+    setSelectedFile(file);
+    setIsPreviewOpen(true);
   };
 
   const onFileClick = (e) => {
@@ -170,11 +170,17 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   const [items, setItems] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [selectedPreviewFile, setSelectedPreviewFile] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { folderId } = useParams();
   const location = useLocation();
   const path = location.state?.path || [];
+
+  const refreshFiles = () => {
+    void updateData(folderId, setItems, filter);
+  };
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -218,6 +224,8 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
       file={item}
       selected={selected}
       onSelect={() => setSelected(item.id)}
+      setSelectedFile={setSelectedPreviewFile}
+      setIsPreviewOpen={setIsPreviewOpen}
       reload={reload}
       setReload={setReload}
     />
@@ -234,6 +242,12 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
           <div className="files-grid">{files}</div>
         </div>
       ))}
+      <FilePreviewPopup
+          file={selectedPreviewFile}
+          isOpen={isPreviewOpen}
+          setIsOpen={setIsPreviewOpen}
+          onActionComplete={refreshFiles}
+      />
     </div>
   )
 }

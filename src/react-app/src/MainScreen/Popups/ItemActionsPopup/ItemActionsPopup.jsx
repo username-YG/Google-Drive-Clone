@@ -107,5 +107,4 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
     </ul>
   )
 }
-
 export default ItemActionsPopup

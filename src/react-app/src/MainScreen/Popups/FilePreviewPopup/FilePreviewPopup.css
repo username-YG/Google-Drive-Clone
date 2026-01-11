@@ -1,0 +1,321 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+.google-preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(28, 28, 28, 0.9);
+    z-index: 10000;
+    font-family: 'Roboto', sans-serif;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.protected-center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1050px;
+    min-height: 100%;
+    position: relative;
+}
+
+.all-content-protection-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+}
+
+.preview-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scroll-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 100px);
+}
+
+.google-text-viewer {
+    background: white;
+    width: 95%;
+    max-width: 1050px;
+    min-height: 80vh;
+    padding: 30px 30px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}
+
+.text-body {
+    font-family: 'Courier New', sans-serif;
+    line-height: 1.6;
+    color: #202124;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    width: 100%;
+}
+
+.preview-toolbar,
+.zoom-floating-bar-wrapper {
+    transition: opacity 0.5s ease-in-out, visibility 0.5s;
+    opacity: 1;
+    visibility: visible;
+}
+
+.ui-hidden {
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.image-viewer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: calc(100vh - 120px);
+    padding: 0;
+    overflow: visible;
+}
+
+.preview-image.dynamic-zoom {
+    max-height: 100%;
+    max-width: 95%;
+    object-fit: contain;
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease-out;
+}
+
+.pdf-viewer-container {
+    width: 80vw;
+    max-width: 1000px;
+    height: calc(100vh);
+    background: white;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+}
+
+.pdf-display {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.rename-context-wrapper .input-name-input,
+.edit-context-wrapper .input-name-input {
+    color: black !important;
+    background-color: white !important;
+    caret-color: #4285f4 !important;
+}
+
+.rename-context-wrapper .input-name-input::selection,
+.edit-context-wrapper .input-name-input::selection {
+    background: rgba(66, 133, 244, 0.3);
+}
+
+.rename-context-wrapper, .edit-context-wrapper {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 1000;
+}
+
+.rename-context-wrapper .input-name-title {
+    visibility: hidden;
+    position: relative;
+}
+
+.rename-context-wrapper .input-name-title::after {
+    content: 'Rename';
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    text-align: center;
+}
+
+.rename-context-wrapper .input-name-input::selection {
+    background: rgba(66, 133, 244, 0.3);
+}
+
+.edit-context-wrapper .input-name-title {
+    visibility: hidden;
+    position: relative;
+}
+
+.edit-context-wrapper .input-name-title::after {
+    content: 'Edit Text';
+    visibility: visible;
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    text-align: center;
+}
+
+.preview-toolbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    min-height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    color: white;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 8px;
+}
+
+.icon-btn-white,
+.close-circle-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    color: #AAAAAA;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-btn-white:hover,
+.close-circle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'wght' 300;
+    font-size: 24px;
+}
+
+.file-type-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 4px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.file-title-white {
+    font-size: 16px;
+    font-weight: 550;
+    color: #BBBBBB;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    bottom: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #CCCCCC;
+    color: rgba(32, 33, 36, 0.95);
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 6px;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.icon-btn-white:hover .tooltip-text,
+.close-circle-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.zoom-floating-bar-wrapper {
+    position: fixed;
+    bottom: 15px;
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10001;
+}
+
+.zoom-floating-bar {
+    background-color: #111111;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    gap: -10px;
+    pointer-events: auto;
+}
+
+.zoom-divider {
+    width: 1px;
+    height: 20px;
+    background: #111111;
+}
+
+.zoom-icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.zoom-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.zoom-icon-btn:active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.reset-icon {
+    font-size: 20px;
+    color: white;
+}

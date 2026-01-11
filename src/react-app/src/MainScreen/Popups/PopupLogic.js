@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
 export function outsideClickListener(isOpen, setIsOpen, ref) {
 
@@ -21,6 +21,7 @@ export async function createFolder(name, parentId) {
   if (!parentId) parentId = null;
 
   const token = sessionStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files", {
     'method': 'POST',
     'headers': {
@@ -39,6 +40,8 @@ export async function getUser(setUser) {
 
   const token = sessionStorage.getItem("token")
   const id = sessionStorage.getItem("id");
+  const token = sessionStorage.getItem("token")
+  const id = sessionStorage.getItem("id");
 
   const response = await fetch("http://localhost:3000/api/users/" + id, {
     'method': 'GET',
@@ -52,11 +55,11 @@ export async function getUser(setUser) {
     const data = await response.json();
     setUser(data);
   }
-
 }
 
 export async function trashItem(id, toTrash, pid) {
 
+  const token = sessionStorage.getItem("token")
   const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
@@ -85,6 +88,7 @@ export async function trashItem(id, toTrash, pid) {
 export async function renameItem(id, name) {
 
   const token = sessionStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -101,6 +105,7 @@ export async function renameItem(id, name) {
 export async function starItem(id, toStar) {
 
   const token = sessionStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'PATCH',
     'headers': {
@@ -116,6 +121,7 @@ export async function starItem(id, toStar) {
 
 export async function deleteItem(id) {
 
+  const token = sessionStorage.getItem("token")
   const token = sessionStorage.getItem("token")
   const response = await fetch("http://localhost:3000/api/files/" + id, {
     'method': 'DELETE',
@@ -181,4 +187,42 @@ export async function getAllFolders() {
   }
   return [];
 
+}
+
+export async function getFile(id) {
+
+  const token = sessionStorage.getItem("token")
+
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+
+}
+
+export async function updateFile(id, updateData) {
+  const token = sessionStorage.getItem("token");
+
+  const response = await fetch("http://localhost:3000/api/files/" + id, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    body: JSON.stringify(updateData)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to update file");
+  }
+
+  return true;
 }
