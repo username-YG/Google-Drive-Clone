@@ -1,176 +1,116 @@
 import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-// Import Popup logic to use its fetches
-
-const folderCache = new Map();
-
-async function createFolder(path, rootId) {
+async function createItem(name, content, isFolder, parentId) {
     const token = localStorage.getItem("token");
-    const parts = path.split("/");
-    let parentId = rootId;
+    
+    const body = {
+        name,
+        isFolder,
+        parentId: parentId || null
+    };
 
-    for (const part of parts) {
-        const key = `${parentId ?? "root"}:${part}`;
+    if (!isFolder) {
+        body.content = content;
+    }
 
-        if (folderCache.has(key)) {
-            parentId = folderCache.get(key);
-            continue;
-        }
+    const response = await fetch("http://localhost:3000/api/files", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
 
-        // else
-        let folderIdFound = null;
-        let response = null
-
-        try {
-            response = await fetch("http://localhost:3000/api/files", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    name: part,
-                    isFolder: true,
-                    parentId
-                })
-            });
-
-            if (response.status === 201 || response.status === 200) {
-                console.log("hello")
-                const data = await response.json();
-                console.log(data)
-                folderIdFound = data.id;
-            }
-        } catch (err) { }
-
-        if (!folderIdFound) {
-            try {
-                const url = parentId
-                    ? `http://localhost:3000/api/files/${parentId}` 
-                    : `http://localhost:3000/api/files`;
-
-                response = await fetch(url, {
-                    method: "GET",
-                    headers: { 
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (response.status === 201 || response.status === 200) {
-                    const folderData = await response.json();
-
-                    if (parentId) {
-                        const subItemsID = folderData.content || [];
-                
-                        for (const id of subItemsID) {
-                            try {
-                                const res = await fetch(`/api/files/${id}`, {
-                                    method: "GET",
-                                    headers: { 
-                                        Authorization: `Bearer ${token}`
-                                    }
-                                });
-                                
-                                const item = await res.json();
-
-                                if (item.isFolder && item.name === part) {
-                                    folderIdFound = item.id;
-                                    break;
-                                }
-                            } catch (err) {}
-                        }
-                    } else {
-                        const subItems = folderData.content;  
-                        const match = subItems.find(f => f.name === part && f.isFolder);
-                        
-                        if (match) {
-                            folderIdFound = match.id;
-                        }
-                    }
-                }
-            } catch (err) {}
-        }
-
-        if (folderIdFound) {
-            folderCache.set(key, folderIdFound);
-            parentId = folderIdFound;
-        } else {
-            return null; 
+    if (response.status === 201) {
+        const location = response.headers.get("location");
+        if (location) {
+            const path = location.split('/');
+            return path[path.length - 1];
         }
     }
-    return parentId;
-}
 
-async function createFile(file, parentId) {
-    const content = await file.text();
-    const token = localStorage.getItem("token");
-
-    try {
-        await fetch("http://localhost:3000/api/files", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                name: file.name,
-                content,
-                isFolder: false,
-                parentId
-            })
-        });
-    } catch (err) {}
-}
-
-async function uploadToServer(files, isFolder) {
-    folderCache.clear();
-
-    for (const file of files) {
-        let parentId = null;
-        if (isFolder && file.webkitRelativePath) {
-            const parts = file.webkitRelativePath.split("/");
-            const folderPath = parts.slice(0, -1).join("/");
-            
-            if (folderPath) {
-                parentId = await createFolder(folderPath, null);
-            }
-        }
-        
-        await createFile(file, parentId);
-    }
+    return null;
 }
 
 function UploadController({ children, reload, setReload }) {
     const fileInputRef = useRef(null);
     const folderInputRef = useRef(null);
     const navigate = useNavigate();
+    
+    const { folderId } = useParams();
 
     const uploadFile = () => {
         fileInputRef.current.click();
-    }
+    };
 
     const uploadFolder = () => {
         folderInputRef.current.click();
-    }
+    };
 
-    const handleFileSelected = async (e) => {
-        const file = Array.from(e.target.files);
-        await uploadToServer(file, false);
-        e.target.value = "";
+    const refreshAndRedirect = () => {
         const url = window.location.href;
-        if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
+        if (!url.includes("/folders") && !url.includes("/my-drive")) {
+            navigate("/my-drive");
+        }
         setReload(!reload);
     };
 
-    const handleFolderSelected = async (e) => {
-        const folder = Array.from(e.target.files);
-        await uploadToServer(folder, true);
+    const handleFileSelected = async (e) => {
+        const files = Array.from(e.target.files).sort((a, b) =>
+            a.webkitRelativePath.localeCompare(b.webkitRelativePath)
+        );
+        const parentId = folderId || null;
         e.target.value = "";
-        const url = window.location.href;
-        if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
-        setReload(!reload);
 
+        for (const file of files) {
+            const content = await file.text();
+            await createItem(file.name, content, false, parentId);
+        }
+
+        refreshAndRedirect();
+    };
+
+    const handleFolderSelected = async (e) => {
+        const files = Array.from(e.target.files).sort((a, b) =>
+            a.webkitRelativePath.localeCompare(b.webkitRelativePath)
+        );
+        const parentId = folderId || null;
+        e.target.value = "";
+        
+        const createdFolders = new Map();
+
+        for (const file of files) {
+            const path = file.webkitRelativePath; 
+            const pathParts = path.split('/');
+            
+            const folders = pathParts.slice(0, -1);
+            const fileName = pathParts[pathParts.length - 1];
+            
+            let currentParentId = parentId;
+            let cwd = "";
+
+            for (const folderName of folders) {
+                cwd = cwd ? `${cwd}/${folderName}` : folderName;
+
+                if (createdFolders.has(cwd)) {
+                    currentParentId = createdFolders.get(cwd);
+                } else {
+                    const newFolderId = await createItem(folderName, null, true, currentParentId);
+                    
+                    if (newFolderId) {
+                        createdFolders.set(cwd, newFolderId);
+                        currentParentId = newFolderId;
+                    }
+                }
+            }
+
+            const content = await file.text();
+            await createItem(fileName, content, false, currentParentId);
+        }
+
+        refreshAndRedirect();
     };
 
     return (
@@ -180,21 +120,20 @@ function UploadController({ children, reload, setReload }) {
             <input
                 ref={fileInputRef}
                 type="file"
-                style={{ display: "none" }}
                 multiple
-                accept=".txt,.doc,.docx,.jpg,.jpeg,.png,.pdf"
+                style={{ display: "none" }}
                 onChange={handleFileSelected}
             />
 
             <input
                 ref={folderInputRef}
                 type="file"
+                webkitdirectory="true"
                 style={{ display: "none" }}
-                webkitdirectory={"true"}
                 onChange={handleFolderSelected}
             />
         </>
-    )
+    );
 }
 
 export default UploadController
