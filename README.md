@@ -83,8 +83,8 @@ Note for the checker #1: you can modify some of the variables in each run, those
 - MAX_CLIENTS_AT_ONCE=[new_max] - The maximal number of clients the server can deal with concurrently
 
 For example: 
-PORT=8080 APP_PATH=/mypath docker compose up server
-REACT_PORT=4000 docker compose up --build react-app
+- PORT=8080 APP_PATH=/mypath docker compose up server
+- REACT_PORT=4000 docker compose up --build react-app
 
 Note for the checker #2: you can run all the servers with one line using the command:
 ```
