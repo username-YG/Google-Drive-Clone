@@ -201,7 +201,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         return (
             <div className="toolbar-right">
                 <button className="icon-btn-white" onClick={handleRestore}>
-                    <span className="material-symbols-outlined">restore_from_trash</span>
+                    <span className="material-symbols-outlined">restore</span>
                     <span className="tooltip-text">Restore</span>
                 </button>
 

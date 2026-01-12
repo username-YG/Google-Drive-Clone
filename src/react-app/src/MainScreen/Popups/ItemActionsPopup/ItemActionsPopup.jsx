@@ -5,6 +5,8 @@ import people from "../../../../assets/people.png"
 import star from "../../../../assets/star.png"
 import folder from "../../../../assets/folder.png"
 import trash from "../../../../assets/trash.png"
+import restore from "../../../../assets/restore.png"
+import delete_forever from "../../../../assets/delete_forever.png"
 import pencil from "../../../../assets/pencil.png"
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx"
@@ -49,14 +51,14 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
 
         { inTrash && (
           <li className="item-actions-menu-item" onClick={async() => { await trashItem(file.id, false); toggle(); setReload(!reload); }} >
-            <img src={trash} />
+            <img src={restore} />
             Restore
           </li>
         )}
 
         { inTrash && (
           <li className="item-actions-menu-item" onClick={async () => { await deleteItem(file.id); toggle(); setReload(!reload); }} >
-            <img src={trash} />
+            <img src={delete_forever} />
             Delete forever
           </li>
         )}

@@ -15,6 +15,15 @@ exports.createUser = (req, res) => {
             return res.status(400).json({ error: "Missing args" });
         }
 
+        // Return 404 if the username or password formats are invalid
+        const usernameRegex = /^[a-z0-9.]+$/i;
+        if (!usernameRegex.test(username)) {
+            return res.status(404).json({ error: "Invalid username" });
+        }
+        if (password.length < 8) {
+            return res.status(404).json({ error: "Invalid password" });
+        }
+
         // Check if the username (email) already exists
         if (User.findByUsername(username)) {
             // Return 404 for existing user as per your requirements
