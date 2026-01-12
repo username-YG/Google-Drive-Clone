@@ -11,6 +11,11 @@
   z-index: 1000;
 }
 
+.input-name-popup textarea.input-name-input {
+  height: 300px;
+  resize: none;
+}
+
 .input-name-popup {
   width: 350px;
   padding: 30px;

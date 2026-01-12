@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef } from 'react';
-import { outsideClickListener } from "../Popups/PopupLogic.js"
+import { useOutsideClickListener } from "../Popups/PopupLogic.js"
 
 import NewItemPopup from "../Popups/NewItemPopup/NewItemPopup.jsx"
 import UploadController from "../Popups/UploadItemPopup/UploadItemPopup.jsx"
@@ -64,7 +64,7 @@ function NewItemButton({ reload, setReload, onUploadFile, onUploadFolder }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-  outsideClickListener(isOpen, setIsOpen, popupRef)
+  useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
     <div className="new-item-div" ref={popupRef}>

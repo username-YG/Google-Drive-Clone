@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-export function outsideClickListener(isOpen, setIsOpen, ref) {
+export function useOutsideClickListener(isOpen, setIsOpen, ref) {
 
   const closePopup = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {

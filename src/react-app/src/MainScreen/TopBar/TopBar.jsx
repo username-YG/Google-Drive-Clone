@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SimpleMenuPopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
 import { useState, useRef, useEffect } from 'react';
-import { outsideClickListener, getUser, searchItems } from "../Popups/PopupLogic.js";
+import { useOutsideClickListener, getUser, searchItems } from "../Popups/PopupLogic.js";
 
 import settings from "../../../assets/settings.png"
 import question from "../../../assets/question.png"
@@ -23,7 +23,7 @@ function openLink(url) {
 function BarListItem({ title, menuItems, img, isProfile }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-  outsideClickListener(isOpen, setIsOpen, popupRef)
+  useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
     <li ref={popupRef}>
@@ -124,7 +124,7 @@ function SearchBar() {
   const navigate = useNavigate();
 
   const popupRef = useRef(null);
-  outsideClickListener(() => { return results.length > 0 }, (flag) => { setResults([]) }, popupRef)
+  useOutsideClickListener(() => { return results.length > 0 }, (flag) => { setResults([]) }, popupRef)
 
   const searchQuery = async (query) => {
     if (!query.trim()) {

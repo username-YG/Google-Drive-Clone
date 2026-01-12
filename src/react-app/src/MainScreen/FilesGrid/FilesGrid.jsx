@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import FilePreviewPopup from '../Popups/FilePreviewPopup/FilePreviewPopup.jsx';
-import {outsideClickListener, searchItems, trashItem} from "../Popups/PopupLogic.js";
+import {useOutsideClickListener, searchItems, trashItem} from "../Popups/PopupLogic.js";
 
 import docs from "../../../assets/docs.png"
 import txt from "../../../assets/txt.png"
@@ -113,7 +113,7 @@ function File({ file, selected, onSelect, reload, setReload, setSelectedFile, se
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-  outsideClickListener(isOpen, setIsOpen, popupRef)
+  useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
     <div className={`files-grid-item is-file ${(selected === file.id) ? "selected" : ""}`}
@@ -147,7 +147,7 @@ function Folder({ file, selected, onSelect, path, reload, setReload }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
-  outsideClickListener(isOpen, setIsOpen, popupRef)
+  useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   const navigate = useNavigate();
   return (

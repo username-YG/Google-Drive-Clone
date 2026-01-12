@@ -1,4 +1,4 @@
-import { renameItem, trashItem, starItem, deleteItem, outsideClickListener } from "../PopupLogic.js";
+import { renameItem, trashItem, starItem, deleteItem, useOutsideClickListener } from "../PopupLogic.js";
 import { useState , useRef } from 'react';
 
 import people from "../../../../assets/people.png"
@@ -15,11 +15,11 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const popuRenamepRef = useRef(null);
-  outsideClickListener(isRenameOpen, setIsRenameOpen, popuRenamepRef)
+  useOutsideClickListener(isRenameOpen, setIsRenameOpen, popuRenamepRef)
 
   const [isMovetoOpen, setIsMovetoOpen] = useState(false);
   const popuMovetoRef = useRef(null);
-  outsideClickListener(isMovetoOpen, setIsMovetoOpen, popuMovetoRef)
+  useOutsideClickListener(isMovetoOpen, setIsMovetoOpen, popuMovetoRef)
 
   const onRenameItem = async (name) => {
     await renameItem(file.id, name);
