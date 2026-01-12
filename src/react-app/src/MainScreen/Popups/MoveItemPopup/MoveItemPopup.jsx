@@ -19,7 +19,7 @@ const MoveItemPopup = ({ current, toggle, reload, setReload }) => {
   }, [current]);
 
   const onMoveItem = async (newParentId) => {
-    await moveItem(current, newParentId);
+    await moveItem(current.id, newParentId);
     toggle();
     if (setReload) setReload(!reload);
   }

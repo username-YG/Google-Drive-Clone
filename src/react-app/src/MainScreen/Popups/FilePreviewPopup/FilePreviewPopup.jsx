@@ -3,6 +3,7 @@ import { getFile, updateFile, trashItem, renameItem, starItem, useOutsideClickLi
 import docsLogo from '../../../../assets/docs.png';
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx";
 import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx";
+import SharePopup from "../SharePopup/SharePopup.jsx";
 import pdfLogo from '../../../../assets/pdf.png';
 import imageLogo from '../../../../assets/image.png';
 import txtLogo from '../../../../assets/txt.png';
@@ -39,10 +40,12 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                             isStarred, setIsStarred,
                             isRenameOpen, setIsRenameOpen,
                             isMoveToOpen, setIsMoveToOpen,
+                            isShareOpen, setIsShareOpen,
                             setIsEditOpen, isEditOpen } ) => {
 
     const moveToPopupRef = useRef(null);
     useOutsideClickListener(isMoveToOpen, setIsMoveToOpen, moveToPopupRef);
+    useOutsideClickListener(isShareOpen, setIsShareOpen, moveToPopupRef);
 
     const type = fileName?.split('.').pop().toLowerCase();
     const isTXT = type === 'txt';
@@ -216,6 +219,28 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                 )}
             </div>
 
+            <div className="toolbar-divider"></div>
+
+            <button className="icon-btn-white" onClick={() => setIsShareOpen(true)}>
+                <span className="material-symbols-outlined">people</span>
+                <span className="tooltip-text">Share</span>
+                {isShareOpen && (
+                    <SharePopup 
+                        file={file} 
+                        toggle={() => setIsShareOpen(false)} 
+                        reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
+                    />
+                )}
+            </button>
+
+            <button className="icon-btn-white" onClick={() => setIsMoveToOpen(true)}>
+                <span className="material-symbols-outlined">drive_file_move</span>
+                <span className="tooltip-text">Move to</span>
+                {isMoveToOpen && (
+                    <MoveItemPopup current={file}
+                        toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
+            </button>
+
             <button className="icon-btn-white" onClick={handleStar}>
             <span
                 className="material-symbols-outlined"
@@ -234,14 +259,6 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             <button className="icon-btn-white" onClick={handleTrash}>
                 <span className="material-symbols-outlined">delete</span>
                 <span className="tooltip-text">Move to trash</span>
-            </button>
-
-            <button className="icon-btn-white" onClick={() => setIsMoveToOpen(true)}>
-                <span className="material-symbols-outlined">drive_file_move</span>
-                <span className="tooltip-text">Move to</span>
-                {isMoveToOpen && (
-                    <MoveItemPopup current={file}
-                        toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
             </button>
 
             <div className="toolbar-divider"></div>
@@ -365,6 +382,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     const [isRenameOpen, setIsRenameOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isMoveToOpen, setIsMoveToOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
 
     const toolbarRef = useRef(null);
     const contentRef = useRef(null);
@@ -489,6 +507,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                             isStarred={isStarred} setIsStarred={setIsStarred}
                             isRenameOpen={isRenameOpen} setIsRenameOpen={setIsRenameOpen}
                             isMoveToOpen={isMoveToOpen} setIsMoveToOpen={setIsMoveToOpen}
+                            isShareOpen={isShareOpen} setIsShareOpen={setIsShareOpen}
                             setIsEditOpen={setIsEditOpen} isEditOpen={isEditOpen} />
             </div>
 
