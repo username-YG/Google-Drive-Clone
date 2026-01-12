@@ -13,6 +13,15 @@ import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
 import MainScreen from "./MainScreen/MainScreen.jsx"
 import SearchScreen from "./MainScreen/Pages/SearchScreen/SearchScreen.jsx";
 
+function NotFoundScreen() {
+  return (
+    <div style={{ padding: "20px", textAlign: "center" }}>
+      <h2>404 - Page Not Found</h2>
+      <p>Try "/home"</p>
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -40,7 +49,9 @@ function App() {
 
           </Route>
         </Route>
-        
+
+        <Route path="*" element={<NotFoundScreen />} />
+
       </Routes>
     </BrowserRouter>
   );
