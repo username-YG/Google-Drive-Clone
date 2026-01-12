@@ -252,9 +252,13 @@ const Registration = () => {
                     </form>
 
                     <div className="card-navigation">
-                        {step > 1 && (
+                        
+                        {step === 1 ? (
+                            <button type="button" className="secondary-action" onClick={() => navigate('/login')}>Sign in instead</button>
+                        ) : (
                             <button type="button" className="secondary-action" onClick={() => setStep(step - 1)}>Back</button>
                         )}
+                        
                         <div className="flex-grow"></div>
                         <button
                             type="button"
