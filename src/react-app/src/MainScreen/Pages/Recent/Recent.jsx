@@ -15,6 +15,14 @@ function EmptyFolder() {
   )
 }
 
+/*
+Recent screen shows:
+- Owned or shared files recently accessed
+- Doesn't show folders
+- Shows files from all levels, not just root level
+- Doesn't show files that are in trash
+- Recently is defined as 'today' and accessed is defined as created \ patched
+*/
 function Recent() {
   const { reload, setReload } = useOutletContext();
   return (

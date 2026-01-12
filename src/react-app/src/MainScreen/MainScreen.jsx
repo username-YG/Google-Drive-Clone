@@ -8,6 +8,7 @@ import "./MainScreen.css"
 
 function MainScreen({ toggleDarkMode, darkMode }) {
 
+  // Allows sub-components of SidePanel to reload main screen 
   const [reload, setReload] = useState(false)
 
   return (

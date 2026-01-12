@@ -15,9 +15,17 @@ function EmptyFolder() {
   )
 }
 
+/*
+Search screen shows:
+- Files that contain the query in name \ content
+- Folders that contains the query in name
+- Shows both shared and owned items
+- Shows items from all levels, not just root
+- Doesn't show items that are in trash
+*/
 function SearchScreen() {
   const { reload, setReload } = useOutletContext();
-  const [ params ] = useSearchParams();
+  const [ params ] = useSearchParams(); // We extract the query from the url
   return (
     <FilesGrid
         filter={["ALL LEVELS", "NOT TRASHED"]}

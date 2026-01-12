@@ -15,6 +15,12 @@ function EmptyFolder() {
   )
 }
 
+/*
+Starred screen shows:
+- Starred files and folders
+- Items from all levels, not just root level
+- Doesn't show items that are in trash 
+*/
 function Starred() {
   const { reload, setReload } = useOutletContext();
   return (

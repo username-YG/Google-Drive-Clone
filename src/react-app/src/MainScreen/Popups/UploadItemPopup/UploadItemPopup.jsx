@@ -14,6 +14,7 @@ async function createItem(name, content, isFolder, parentId) {
         body.content = content;
     }
 
+    // Create the uploaded item
     const port = import.meta.env.VITE_WEB_PORT || 3000;
     const response = await fetch(`http://localhost:${port}/api/files`, {
         method: "POST",
@@ -24,6 +25,7 @@ async function createItem(name, content, isFolder, parentId) {
         body: JSON.stringify(body)
     });
 
+    // Return its path to handle folder with content upload
     if (response.status === 201) {
         const location = response.headers.get("location");
         if (location) {
@@ -58,6 +60,7 @@ function UploadController({ children, reload, setReload }) {
         setReload(!reload);
     };
 
+    // Read the uploaded file
     const readFile = (file) => {
         return new Promise((resolve, reject) => {
             const type = file.name.split('.').pop().toLowerCase();
@@ -73,7 +76,7 @@ function UploadController({ children, reload, setReload }) {
                         'jpg': 'image/jpeg',
                         'jpeg': 'image/jpeg'
                     };
-                    const trueMime = mimeMap[type];
+                    const trueMime = mimeMap[type]; // Force the mimetype we excpect
                     if (trueMime) {
                         result = result.replace(/^data:[^;]*;/, `data:${trueMime};`);
                     }
@@ -86,12 +89,14 @@ function UploadController({ children, reload, setReload }) {
     };
 
     const handleFileSelected = async (e) => {
-        const files = Array.from(e.target.files).sort((a, b) =>
+        // Sort items so the order isn't random
+        const files = Array.from(e.target.files).sort((a, b) => 
             a.webkitRelativePath.localeCompare(b.webkitRelativePath)
         );
         const parentId = folderId || null;
         e.target.value = "";
 
+        // Create each seleced file
         for (const file of files) {
             const content = await readFile(file);
             await createItem(file.name, content, false, parentId);
@@ -107,8 +112,10 @@ function UploadController({ children, reload, setReload }) {
         const parentId = folderId || null;
         e.target.value = "";
         
+        // Avoid creating items multiple times
         const createdFolders = new Map();
 
+        // Create the whole directory, including parents of current item
         for (const file of files) {
             const path = file.webkitRelativePath; 
             const pathParts = path.split('/');
@@ -123,7 +130,7 @@ function UploadController({ children, reload, setReload }) {
                 cwd = cwd ? `${cwd}/${folderName}` : folderName;
 
                 if (createdFolders.has(cwd)) {
-                    currentParentId = createdFolders.get(cwd);
+                    currentParentId = createdFolders.get(cwd); // Don't recreate item
                 } else {
                     const newFolderId = await createItem(folderName, null, true, currentParentId);
                     

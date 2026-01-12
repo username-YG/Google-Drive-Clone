@@ -18,17 +18,17 @@ const icons = {
   "pdf": pdf
 }
 
-function SearchPopup({ results }) {
+// We suggest a few items to the user when they search something
+// Clicking a suggestion opens it
+function SearchPopup({ results, onFileClick }) {
+  // Show first five found items
   return (
     <div>
       {results.slice(0,5).map((file) => (
         <li 
           key={file.id} 
           className="search-result-item"
-          onClick={ () => {
-            // navigating to the item
-
-          }}
+          onClick={() => onFileClick(file)}
         > 
           <img className="search-result-icon" src={file.isFolder ? folder : icons[file.name.split('.').pop()] || icons["notype"]}/>
           <span className="search-result-name">

@@ -15,6 +15,12 @@ function EmptyFolder() {
   )
 }
 
+/*
+Trash screen shows:
+- Trashed files and folders
+- Because of trashing logic, it shared items
+- Items from all levels, not just root level
+*/
 function Trash() {
   const { reload, setReload } = useOutletContext();
   return (

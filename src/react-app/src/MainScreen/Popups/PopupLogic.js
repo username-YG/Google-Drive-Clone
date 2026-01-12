@@ -5,6 +5,7 @@ function getBaseUrl() {
   return `http://localhost:${port}/api/`;
 }
 
+// This listener closes a popup when the user clicks outside it 
 export function useOutsideClickListener(isOpen, setIsOpen, ref) {
 
   const closePopup = (event) => {

@@ -10,6 +10,7 @@ import lines from "../../../assets/lines.png"
 import logout from "../../../assets/logout.png"
 import ProfilePopup from "../Popups/ProfilePopup/ProfilePopup.jsx"
 import SearchPopup from "../Popups/SearchPopup/SearchPopup.jsx"
+import FilePreviewPopup from "../Popups/FilePreviewPopup/FilePreviewPopup.jsx"
 
 import "./TopBar.css"
 
@@ -20,24 +21,26 @@ function openLink(url) {
   window.open(url);
 }
 
+// Each button in top bar buttons
 function BarListItem({ title, menuItems, img, isProfile }) {
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
-      <li ref={popupRef}>
-        <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
-          {img ?
-              <img id={isProfile ? "profile-pic" : "reguler-icon"} src={img} alt={title} /> :
-              <div className="no-profile-pic">{title[0]}</div>
-          }
-        </a>
-        {isOpen && menuItems}
-      </li>
+    <li ref={popupRef}>
+      <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
+        {img ?
+            <img id={isProfile ? "profile-pic" : "reguler-icon"} src={img} alt={title} /> :
+            <div className="no-profile-pic">{title[0]}</div>
+        }
+      </a>
+      {isOpen && menuItems}
+    </li>
   )
 }
 
+// Buttons in the top bar
 function TopBarList({ toggleDarkMode, darkMode }) {
 
   const navigate = useNavigate();
@@ -48,6 +51,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
   }, []);
   const profilePic = user?.profilePic || "";
 
+  // Menu that appears when support is clicked
   const supportMenuItems = [
     {
       text: "Project readme",
@@ -59,6 +63,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
     }
   ]
 
+  // Menu that appears when settings is clicked
   const settingsMenuItems = [
     {
       text: darkMode ? "Toggle light mode" : "Toggle dark mode",
@@ -68,6 +73,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
     }
   ]
 
+  // Menu that appears when logout is clicked
   const logoutMenuItems = [
     {
       text: "Sign out",
@@ -85,6 +91,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
     }
   ]
 
+  // Buttons in the top bar
   const barButtons = [
     {
       title: "Support",
@@ -102,7 +109,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
       img: logout,
     },
     {
-      title: "Account",
+      title: user?.displayName || "Account",
       menuItems: <ProfilePopup/>,
       img: profilePic,
     }
@@ -124,8 +131,24 @@ function SearchBar() {
   const [results, setResults] = useState([])
   const navigate = useNavigate();
 
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  
   const popupRef = useRef(null);
   useOutsideClickListener(() => results.length > 0, () => setResults([]), popupRef)
+
+  // Clicking a file displays it, on a folder opens it
+  const onFileClick = (file) => {
+    if (file.isFolder) {
+      navigate("/folders/" + file.id);
+    } else {
+      setSelectedFile(file);
+      setIsPreviewOpen(true);
+    }
+    setResults([]);
+  }
+
+  // Perform query search
   const searchQuery = async (query) => {
     if (!query.trim()) {
       setResults([])
@@ -134,12 +157,14 @@ function SearchBar() {
 
     try {
       const data = await searchItems(query)
-      setResults(data)
+      const filteredData = data.filter(item => !item.trashed); 
+      setResults(filteredData)
     } catch (error) {
       console.error("Search failed:", error);
     }
   }
 
+  // Perform search 300ms after user finished inserting query
   useEffect(() => {
     const timeout = setTimeout(() => {
       searchQuery(query);
@@ -148,12 +173,14 @@ function SearchBar() {
     return () => clearTimeout(timeout);
   }, [query]);
 
+  // Searching moves us to searching page
   const onSearch = useCallback(() => {
     if (query.trim()) {
       navigate(`/search?q=${encodeURIComponent(query)}`);
     }
   }, [navigate, query]);
 
+  // Pressing 'Enter' should activate the search
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') onSearch();
@@ -175,10 +202,13 @@ function SearchBar() {
 
       {results.length > 0 && (
         <ul className="search-results" ref={popupRef}>
-          <SearchPopup results={results} />
+          <SearchPopup results={results} onFileClick={onFileClick} />
         </ul>
       )}
 
+      <FilePreviewPopup file={selectedFile} isOpen={isPreviewOpen} setIsOpen={setIsPreviewOpen} />
+
+      { /* For the good look like in google drive. it doesn't do anything. */ }
       <img title="Advanced search" className="search-icon" src={lines} alt="Options"/>
     </div>
   )

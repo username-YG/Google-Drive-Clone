@@ -11,7 +11,7 @@ exports.createUser = (req, res) => {
         const { username, password, displayName, profilePic } = req.body;
 
         // Check if all required fields are present
-        if (!username || !password || !displayName || !profilePic) {
+        if (!username || !password || !displayName || profilePic === undefined) {
             return res.status(400).json({ error: "Missing args" });
         }
 
