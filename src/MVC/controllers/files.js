@@ -119,7 +119,7 @@ exports.getAllFiles = async (req, res) => {
         // If a filter has been specified in request, apply it
         let filteredFiles = permittedFiles;
         if (req.headers && req.headers.filter) {
-            const filters = req.headers.filter.split(',');
+            const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
                 filteredFiles = filterFiles(filteredFiles, filterType, usrId);
             }
@@ -161,7 +161,7 @@ exports.getFile = async (req, res) => {
             let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
 
             // Filter
-            const filters = req.headers.filter.split(',');
+            const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
                 filteredContent = filterFiles(filteredContent, filterType, usrId);
             }
@@ -227,7 +227,7 @@ exports.updateFile = async (req, res) => {
         }
 
         // Return 403 if the user doesn't have permissions to read the file
-        const perm = Perms.getPermissFions(req.params.id);
+        const perm = Perms.getPermissions(req.params.id);
         if (!perm || !perm[usrId]) {
             return res.status(403).json({ error: "Forbidden" })
         }

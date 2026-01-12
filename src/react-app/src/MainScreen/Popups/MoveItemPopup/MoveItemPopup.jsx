@@ -6,28 +6,28 @@ import driveIcon from "../../../../assets/drive.png"
 
 import "./MoveItemPopup.css"
 
-const MoveItemPopup = ({ id, toggle, reload, setReload }) => {
+const MoveItemPopup = ({ current, toggle, reload, setReload }) => {
 
   const [folders, setFolders] = useState([]);
 
   useEffect(() => {
     const updateFolders = async () => {
       const allFolders = await getAllFolders();
-      setFolders(allFolders.filter(fold => fold.id !== id));
+      setFolders(allFolders.filter(fold => fold.id !== current.id));
     }
     updateFolders();
-  }, [id]);
+  }, [current]);
 
   const onMoveItem = async (newParentId) => {
-    await moveItem(id, newParentId);
+    await moveItem(current.id, newParentId);
     toggle();
-    setReload(!reload);
+    if (setReload) setReload(!reload);
   }
 
   return (
     <div className="move-screen">
-      <div className="move-popup" onClick={(e) => e.stopPropagation()}>
-        <h2 className="move-title">Move item</h2>
+      <div className="move-popup" onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()}>
+        <h2 className="move-title">Move "{current.name}"</h2>
         <ul className="move-list">
             
           <li className="move-list-item" onClick={() => onMoveItem(null)}>

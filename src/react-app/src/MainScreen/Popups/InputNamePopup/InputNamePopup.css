@@ -8,7 +8,12 @@
   width: 100%;
   height: 100%;
   background-color: #00000066;
-  z-index: 1000;
+  z-index: 3000;
+}
+
+.input-name-popup textarea.input-name-input {
+  height: 300px;
+  resize: none;
 }
 
 .input-name-popup {
@@ -18,6 +23,7 @@
   box-shadow: 0 4px 12px #00000026;
   background-color: white;
   z-index: 1000;
+  cursor: default;
 }
 
 .input-name-title {

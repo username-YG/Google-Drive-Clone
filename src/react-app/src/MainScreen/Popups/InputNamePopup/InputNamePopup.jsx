@@ -1,20 +1,28 @@
 import { useState, useRef } from "react"
+import { useOutsideClickListener } from "../PopupLogic.js"
 
 import "./InputNamePopup.css"
 
-const InputNamePopup = ({ toggle, onDone, doneText }) => {
+const InputNamePopup = ({ toggle, onDone, doneText, title, currentName, extended }) => {
 
-  const [name, setName] = useState("Untitled folder");
+  const [name, setName] = useState((currentName) ? (currentName) : ("Untitled folder"));
   const inputRef = useRef(null);
+  const popupRef = useRef(null);
+  useOutsideClickListener(true, toggle, popupRef);
 
   return (
-    <div className="input-name-screen">
-      <div className="input-name-popup" onClick={(e) => e.stopPropagation()}>
+    <div className="input-name-screen" >
+      <div className="input-name-popup" onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()} ref={popupRef}>
 
-        <h2 className="input-name-title">Rename</h2>
+        <h2 className="input-name-title">{title}</h2>
         
-        <input ref={inputRef} type="text" className="input-name-input" value={name}
-          onChange={(e) => setName(e.target.value)}/>
+        {extended ? (
+          <textarea ref={inputRef} className="input-name-input" value={name}
+          onChange={(e) => setName(e.target.value)} />
+        ) : (
+          <input ref={inputRef} className="input-name-input" value={name}
+          onChange={(e) => setName(e.target.value)} type="text" />
+        )}
         
         <div className="input-name-buttons">
           <button onClick={toggle}>Cancel</button>

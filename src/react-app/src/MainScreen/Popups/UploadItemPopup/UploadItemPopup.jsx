@@ -57,6 +57,33 @@ function UploadController({ children, reload, setReload }) {
         setReload(!reload);
     };
 
+    const readFile = (file) => {
+        return new Promise((resolve, reject) => {
+            const type = file.name.split('.').pop().toLowerCase();
+            if (type === 'txt') {
+                resolve(file.text());
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    let result = e.target.result;
+                    const mimeMap = {
+                        'pdf': 'application/pdf',
+                        'png': 'image/png',
+                        'jpg': 'image/jpeg',
+                        'jpeg': 'image/jpeg'
+                    };
+                    const trueMime = mimeMap[type];
+                    if (trueMime) {
+                        result = result.replace(/^data:[^;]*;/, `data:${trueMime};`);
+                    }
+                    resolve(result);
+                };
+                reader.onerror = (e) => reject(e);
+                reader.readAsDataURL(file);
+            }
+        });
+    };
+
     const handleFileSelected = async (e) => {
         const files = Array.from(e.target.files).sort((a, b) =>
             a.webkitRelativePath.localeCompare(b.webkitRelativePath)
@@ -65,7 +92,7 @@ function UploadController({ children, reload, setReload }) {
         e.target.value = "";
 
         for (const file of files) {
-            const content = await file.text();
+            const content = await readFile(file);
             await createItem(file.name, content, false, parentId);
         }
 
@@ -106,7 +133,7 @@ function UploadController({ children, reload, setReload }) {
                 }
             }
 
-            const content = await file.text();
+            const content = await readFile(file);
             await createItem(fileName, content, false, currentParentId);
         }
 
