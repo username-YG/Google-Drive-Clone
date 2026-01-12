@@ -63,33 +63,33 @@ docker compose up --build server
 ```
 docker compose up --build web-server
 ```
-5. (ARE WE DELETING THIS AND REPALCESING WITH THE NEW ONE OR ADDING ONTOP OF IT?)In the wsl, run the various HTTP requests listed above.
+5. In another terminal, run the react server:
+```
+docker compose up --build react-app
+```
+6. Open a new web tab and connent to the main page:
+```
+http://localhost:5173/
+```
+7. You will then be directed to the home page if you are already signed in and otherwise directed to the log in page in which you will have to log in into an existing user or create a new one and then log in with the new account.
+8. After having signed in you will reach the home page of the app.
 
-Note for the checker #1: you can run the tests using the command "docker-compose run --rm gtests".  
-You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
+Note for the checker #1: you can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
 - APP_PORT=[new_port] - The port the CPP server listens to 
 - APP_PATH=[new_path] - The path the files are saved to
 - WEB_PORT=[new_port] - The port the Web server listens to
+- REACT_PORT=[new_port] - The port the React server listens to
 - MAX_CLIENTS=[new_max] - The maximal number of clients that can wait in the queue to the server concurrently
 - MAX_CLIENTS_AT_ONCE=[new_max] - The maximal number of clients the server can deal with concurrently
 
 For example: 
 PORT=8080 APP_PATH=/mypath docker compose up server
+REACT_PORT=4000 docker compose up --build react-app
 
-Note for the checker #2: In order to use "curl" commands in our server's REST API using BASH, you must follow a specific syntax to handle JSON data and headers correctly:
-
-1. Command Flags:
-- -i (Include): Displays the HTTP response headers (e.g., Status Code, Content-Type, Location).
-- -X (Request Method): Specifies the HTTP method to use (GET, POST, PATCH, DELETE).
-- -H (Header): Sets required headers like Content-Type or the mandatory x-user-id.
-- -d (Data): Sends the data in the HTTP POST or PATCH request body.
-
-2. Core Syntax Requirements
-- Single Quotes for Data ('...'): Use single quotes to wrap the entire JSON body in the -d flag. This tells Bash to treat the content as a literal string, so you don't need to escape the double quotes inside.
-- Standard Double Quotes: Inside the JSON, simply use standard double quotes " for keys and values (e.g., "name":"aaa").
-- Authentication: Requests that require a logged-in user must include the x-user-id header.
-
-Note for the checker #3: We decided to use the syntax of the HTTP requests (using curl) for wsl since it is easier to use and more compact. However, there is an equivalent syntax for the cmd where there are additional slashes needed for the parameters in the headers and body request. Moreoever, it is worth mentioning that in the wsl the printing/display format is to print the output without going one line before reprinting the shell's line for input. In cmd there is an enter. That is a matter of the shell in use and not related to our app. 
+Note for the checker #2: you can run all the servers with one line using the command:
+```
+docker compose up --build react-app server web-server
+``` 
   
 ## For Example - Easy To Use HTTP Requests with Running Examples:
 
