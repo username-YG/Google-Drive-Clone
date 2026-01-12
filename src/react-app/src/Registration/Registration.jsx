@@ -203,7 +203,8 @@ const Registration = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/api/users", {
+            const port = import.meta.env.VITE_WEB_PORT || 3000;
+            const response = await fetch(`http://localhost:${port}/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userToRegister)

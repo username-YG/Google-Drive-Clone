@@ -5,6 +5,7 @@ x-env: &shared_env
     MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
     WEB_PORT: ${WEB_PORT:-3000} # The port the web server listens on
     JWT_SECRET: ${JWT_SECRET:-0c65905c90fc5bf2fa1bcef939b851c7} # Secret key for JWT authentication
+    REACT_PORT: ${REACT_PORT:-5173} # The port the react app runs on
 
 services:
   server:
@@ -50,6 +51,18 @@ services:
       dockerfile: src/MVC/dockerfile
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
+    networks:
+      - app_net
+
+  react-app:
+    environment:
+      - VITE_WEB_PORT=${WEB_PORT:-3000}
+      - REACT_PORT=${REACT_PORT:-5173}
+    build:
+      context: .
+      dockerfile: src/react-app/dockerfile
+    ports:
+      - "${REACT_PORT:-5173}:${REACT_PORT:-5173}"
     networks:
       - app_net
 
