@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { useState, useEffect } from "react";
 import "./App.css"
 
 import Home from "./MainScreen/Pages/Home/Home.jsx";
@@ -23,6 +23,18 @@ function NotFoundScreen() {
 }
 
 function App() {
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
+  useEffect(() => {
+    if (darkMode) {
+      document.body.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.removeAttribute("data-theme");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
   return (
     <BrowserRouter>
       <Routes>
@@ -31,7 +43,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Registration />} />
 
-          <Route element={<MainScreen/>}>
+          <Route element={<MainScreen toggleDarkMode={toggleDarkMode} darkMode={darkMode}/>}>
 
             <Route path="/" element={<Navigate to="/home" replace />} />
 

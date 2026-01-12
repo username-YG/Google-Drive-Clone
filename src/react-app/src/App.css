@@ -1,18 +1,61 @@
+:root {
+  --bg-color: #f7f9fc;
+  --text-color: #1f1f1f;
+  --card-bg: #f1f3f4;
+  --sidebar-bg: #f7f9fc;
+  --hover-color: #e3e4e4;
+  --border-color: #dadce0;
+  --selected-blue: #c2e7ff;
+  --main-content-bg: #ffffff;
+  --preview-bg: #ffffff;
+  --menu-text-color: #484848;
+  --topbar-icon-filter: brightness(0);
+  --icon-filter: none;
+}
+
+[data-theme='dark'] {
+  --bg-color: #131314;
+  --text-color: #e3e3e3;
+  --card-bg: #1e1f20;
+  --sidebar-bg: #131314;
+  --hover-color: #2d2e30;
+  --preview-bg: #18191a;
+  --main-content-bg: #131314;
+  --border-color: #444746;
+  --selected-blue: #004a77;
+  --icon-filter: brightness(0) invert(1);
+  --topbar-icon-filter: brightness(0) invert(1);
+  --menu-text-color: #e3e3e3;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .main-screen {
   display: grid;
-  grid-template-columns: 256px 1fr; 
+  grid-template-columns: 256px 1fr;
   grid-template-rows: 66px 1fr;
   grid-template-areas: "side-panel x" "side-panel x";
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background-color: var(--bg-color);
 }
 
 .side-panel {
   grid-area: side-panel;
+  background-color: var(--sidebar-bg);
+}
+
+.files-grid-screen {
+  background-color: var(--main-content-bg);
+  margin-left: 0;
+  padding-left: 16px;
+  border-top-left-radius: 24px;
+  overflow: auto;
 }

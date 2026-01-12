@@ -21,13 +21,13 @@
   padding: 30px;
   border-radius: 28px;
   box-shadow: 0 4px 12px #00000026;
-  background-color: white;
+  background-color: var(--card-bg);
   z-index: 1000;
   cursor: default;
 }
 
 .input-name-title {
-  color: black;
+  color: var(--text-color);
   margin-top: 0;
   font-size: 24px;
   font-weight: normal;
@@ -42,7 +42,9 @@
   padding-right: 16px;
   margin-bottom: 24px;
   font-size: 16px;
-  border: 1px solid #747775;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   border-radius: 4px;
   outline: none;
   box-sizing: border-box;
@@ -68,5 +70,5 @@
 }
 
 .input-name-buttons button:hover {
-  background-color: #f0f4f8;
+  background-color: var(--hover-color);
 }

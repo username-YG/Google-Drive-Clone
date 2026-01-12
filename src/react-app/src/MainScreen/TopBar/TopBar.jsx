@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { SimpleMenuPopup  } from "../Popups/SimpleMenuPopup/SimpleMenuPopup.jsx"
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useOutsideClickListener, getUser, searchItems } from "../Popups/PopupLogic.js";
 
 import settings from "../../../assets/settings.png"
@@ -26,19 +26,19 @@ function BarListItem({ title, menuItems, img, isProfile }) {
   useOutsideClickListener(isOpen, setIsOpen, popupRef)
 
   return (
-    <li ref={popupRef}>
-      <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
-        {img ?
-          <img id={isProfile ? "profile-pic" : "reguler-icon"} src={img}/> :
-          <div className="no-profile-pic">{title[0]}</div>
-        }
-      </a>
-      {isOpen && menuItems}
-    </li>
+      <li ref={popupRef}>
+        <a className="icon-button" title={title} onClick={() => setIsOpen(!isOpen)}>
+          {img ?
+              <img id={isProfile ? "profile-pic" : "reguler-icon"} src={img} alt={title} /> :
+              <div className="no-profile-pic">{title[0]}</div>
+          }
+        </a>
+        {isOpen && menuItems}
+      </li>
   )
 }
 
-function TopBarList() {
+function TopBarList({ toggleDarkMode, darkMode }) {
 
   const navigate = useNavigate();
 
@@ -61,8 +61,10 @@ function TopBarList() {
 
   const settingsMenuItems = [
     {
-      text: "Toggle dark mode",
-      onClick: () => alert("DARKMODE!")
+      text: darkMode ? "Toggle light mode" : "Toggle dark mode",
+      onClick: () => {
+        toggleDarkMode();
+      }
     }
   ]
 
@@ -110,7 +112,7 @@ function TopBarList() {
     <nav className="bar-list">
       <ul>
         {barButtons.map((item, i) => (
-            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img} isProfile={item.title == "Account"} />
+            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img} isProfile={item.title === "Account"} />
         ))}
       </ul>
     </nav>
@@ -120,12 +122,10 @@ function TopBarList() {
 function SearchBar() {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState([])
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const popupRef = useRef(null);
-  useOutsideClickListener(() => { return results.length > 0 }, (flag) => { setResults([]) }, popupRef)
-
+  useOutsideClickListener(() => results.length > 0, () => setResults([]), popupRef)
   const searchQuery = async (query) => {
     if (!query.trim()) {
       setResults([])
@@ -133,11 +133,11 @@ function SearchBar() {
     }
 
     try {
-      setLoading(true)
       const data = await searchItems(query)
       setResults(data)
-    } catch (err) {}
-    setLoading(false)
+    } catch (error) {
+      console.error("Search failed:", error);
+    }
   }
 
   useEffect(() => {
@@ -148,9 +148,11 @@ function SearchBar() {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  const onSearch = () => {
-    if (query.trim()) navigate(`/search?q=${encodeURIComponent(query)}`);
-  }
+  const onSearch = useCallback(() => {
+    if (query.trim()) {
+      navigate(`/search?q=${encodeURIComponent(query)}`);
+    }
+  }, [navigate, query]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -158,11 +160,11 @@ function SearchBar() {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => { document.removeEventListener('keydown', handleKeyDown); };
-  }, [navigate, query]);
+  }, [navigate, query, onSearch]);
 
   return (
     <div className="search-bar">
-      <img title="Search" className="search-icon" src={search} onClick={onSearch}/>
+      <img title="Search" className="search-icon" src={search} onClick={onSearch} alt="Search"/>
       <input 
         type="text" 
         value={query}
@@ -177,16 +179,16 @@ function SearchBar() {
         </ul>
       )}
 
-      <img title="Advanced search" className="search-icon" src={lines}/>
+      <img title="Advanced search" className="search-icon" src={lines} alt="Options"/>
     </div>
   )
 }
 
-function TopBar() {
+function TopBar({ toggleDarkMode, darkMode }) {
   return (
     <div className="top-bar">
       <SearchBar/>
-      <TopBarList />
+      <TopBarList toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
     </div>
   )
 }
