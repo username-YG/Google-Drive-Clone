@@ -6,17 +6,21 @@
   padding: 8px 16px;
   cursor: pointer;
   font-size: 14px;
-  color: #202124;
+  color: var(--text-color);
 }
 
 .search-result-item:hover {
-  background-color: #f1f3f4;
+  background-color: var(--hover-color);
 }
 
 .search-result-icon {
   font-size: 18px;
   width: 20px;
   text-align: center;
+}
+
+[data-theme='dark'] .search-result-icon img {
+  filter: var(--topbar-icon-filter);
 }
 
 .search-result-name {

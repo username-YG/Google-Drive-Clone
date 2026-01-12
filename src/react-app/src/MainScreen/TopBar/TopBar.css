@@ -3,7 +3,8 @@
   align-items: center;
   height: 66px;
   padding-right: 16px;
-  background-color: #f8fafd;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   user-select: none;
 }
 
@@ -36,6 +37,7 @@
   width: 24px;
   height: 24px;
   opacity: 0.7;
+  filter: var(--topbar-icon-filter);
 }
 
 .no-profile-pic {
@@ -63,14 +65,14 @@
   padding-right: 10px;
   padding-left: 8px;
   border-radius: 24px;
-  background-color: #e9eef6;
+  background-color: var(--hover-color);
   position: relative;
 }
 
 .search-bar:focus-within {
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px #00000033;
-  border-color: transparent; 
+  background-color: var(--card-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border-color: transparent;
 }
 
 .search {
@@ -80,10 +82,11 @@
   flex-grow: 1;
   padding-left: 10px;
   font-size: 16px;
+  color: var(--text-color);
 }
 
 .search::placeholder {
-  color: black;
+  color: var(--text-color);
   opacity: 0.8;
 }
 
@@ -96,6 +99,7 @@
   border-radius: 50%;
   opacity: 0.7;
   box-sizing: content-box;
+  filter: var(--topbar-icon-filter);
 }
 
 .search-icon:hover {
@@ -110,11 +114,16 @@
   width: 100%;
   margin-top: 6px;
 
-  background: white;
+  background: var(--card-bg);
+  color: var(--text-color);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
   list-style: none;
   padding: 6px 0;
   z-index: 1000;
+}
+
+.logo img {
+  filter: none !important;
 }

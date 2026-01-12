@@ -8,8 +8,10 @@
   padding-left: 0;
   padding-right: 0;
   border-radius: 5px;
-  background: white;
-  box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  background: var(--card-bg);
+  color: var(--menu-text-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
@@ -22,7 +24,11 @@
   font-size: 14px;
   display: flex;
   align-items: center;
-  color: #484848;
+  color: var(--menu-text-color);
+}
+
+[data-theme='dark'] .new-item-menu-item img {
+  filter: var(--topbar-icon-filter);
 }
 
 .new-item-menu-item img {
@@ -32,5 +38,10 @@
 }
 
 .new-item-menu-item:hover {
-  background-color: #e4e4e4;
+  background-color: var(--hover-color);
+}
+
+.new-item-menu hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
 }

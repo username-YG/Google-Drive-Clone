@@ -9,9 +9,10 @@
   justify-content: center;
   width: 300px;
   padding: 20px;
-  background: #e9eef6;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px #0000001a, 0 1px 3px #00000014;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);  border-radius: 20px;
   cursor: default;
   user-select: none;
   z-index: 1000;
@@ -65,5 +66,5 @@
 }
 
 .switch-account-button:hover {
-  background-color: #d8e2f3;
+  background-color: var(--hover-color);
 }

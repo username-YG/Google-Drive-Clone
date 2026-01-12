@@ -118,9 +118,18 @@
 
 .rename-context-wrapper .input-name-input,
 .edit-context-wrapper .input-name-input {
-    color: black !important;
-    background-color: white !important;
+    color: #e3e3e3 !important;
+    background-color: #1e1f20 !important;
     caret-color: #4285f4 !important;
+    border: 1px solid #0b57d0 !important;
+    border-radius: 4px;
+    padding: 8px;
+    outline: none;
+}
+
+.rename-context-wrapper .input-name-input:focus,
+.edit-context-wrapper .input-name-input:focus {
+    border: 2px solid #4285f4 !important;
 }
 
 .rename-context-wrapper .input-name-input::selection,
@@ -148,10 +157,7 @@
     right: 0;
     top: 0;
     text-align: center;
-}
-
-.rename-context-wrapper .input-name-input::selection {
-    background: rgba(66, 133, 244, 0.3);
+    color: white;
 }
 
 .edit-context-wrapper .input-name-title {
@@ -165,6 +171,7 @@
     position: absolute;
     left: 0; right: 0; top: 0;
     text-align: center;
+    color: white;
 }
 
 .preview-toolbar {

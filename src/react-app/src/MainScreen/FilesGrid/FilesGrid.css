@@ -16,10 +16,11 @@
   cursor: pointer;
   display: inline-block;
   min-width: min-content;
+  color: var(--text-color);
 }
 
 .files-grid-screen-title:hover {
-  background-color: #e3e4e4;
+  background-color: var(--hover-color);
 }
 
 .files-grid {
@@ -43,16 +44,21 @@
 .files-grid-item {
   width: 225px;
   border-radius: 10px;
-  background-color: #f0f4f9;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
   user-select: none;
 }
 
 .files-grid-item:hover {
-  background-color: #e3e4e4;
+  background-color: var(--hover-color);
+  border: 1px solid var(--border-color);
 }
 
 .files-grid-item.selected {
-  background-color: #c2e7ff;
+  background-color: var(--selected-blue) !important;
+  border-color: transparent;
 }
 
 .files-header p,
@@ -87,7 +93,7 @@
   margin-right: 8px;
   margin-left: 8px;
   border-radius: 10px;
-  background-color: white;
+  background-color: var(--preview-bg);
 }
 
 .files-preview img {
@@ -122,7 +128,12 @@
 }
 
 .files-grid-item.selected #dots:hover {
-  background-color: #b8dbf1;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .folder-item img,
+[data-theme='dark'] #dots {
+  filter: var(--topbar-icon-filter);
 }
 
 .actions-popup-div {
@@ -138,6 +149,7 @@
   white-space: nowrap;
   flex-wrap: nowrap;
   user-select: none;
+  color: var(--text-color);
 }
 
 .path-bar img {
@@ -145,6 +157,10 @@
   height: 25px;
   margin-right: 12px;
   opacity: 0.6;
+}
+
+[data-theme='dark'] .path-bar img {
+  filter: var(--topbar-icon-filter);
 }
 
 .path-bar div {
@@ -155,7 +171,7 @@
 .loader {
   width: 20px;
   height: 20px;
-  border: 3px solid #0b57d0; 
+  border: 3px solid #0b57d0;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
