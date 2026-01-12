@@ -8,6 +8,7 @@ import trash from "../../../../assets/trash.png"
 import pencil from "../../../../assets/pencil.png"
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx"
+import SharePopup from "../SharePopup/SharePopup.jsx";
 
 import "./ItemActionsPopup.css"
 
@@ -20,6 +21,10 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
   const [isMovetoOpen, setIsMovetoOpen] = useState(false);
   const popuMovetoRef = useRef(null);
   useOutsideClickListener(isMovetoOpen, setIsMovetoOpen, popuMovetoRef)
+
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const popupShareRef = useRef(null);
+  useOutsideClickListener(isShareOpen, setIsShareOpen, popupShareRef);
 
   const onRenameItem = async (name) => {
     await renameItem(file.id, name);
@@ -59,9 +64,10 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
       { !inTrash && <hr />}
 
       { !inTrash && (
-        <li className={`item-actions-menu-item ${!canShare ? "not-permitted" : ""}`}>
+        <li className={`item-actions-menu-item ${!canShare ? "not-permitted" : ""}`} onClick={() => setIsShareOpen(true)}>
           <img src={people} />
           Share
+          {isShareOpen && <SharePopup file={file} toggle={() => setIsShareOpen(false)} />}
         </li>
       )}
 
@@ -69,7 +75,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
         <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
           <img src={folder} />
           Move to
-          {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} id={file.id} reload={reload} setReload={setReload} />}
+          {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} current={file} reload={reload} setReload={setReload} />}
         </li>
       )}
 

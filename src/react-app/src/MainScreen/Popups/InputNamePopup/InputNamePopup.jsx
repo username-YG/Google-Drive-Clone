@@ -11,8 +11,8 @@ const InputNamePopup = ({ toggle, onDone, doneText, title, currentName, extended
   useOutsideClickListener(true, toggle, popupRef);
 
   return (
-    <div className="input-name-screen">
-      <div className="input-name-popup" onClick={(e) => e.stopPropagation()} ref={popupRef}>
+    <div className="input-name-screen" >
+      <div className="input-name-popup" onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()} ref={popupRef}>
 
         <h2 className="input-name-title">{title}</h2>
         

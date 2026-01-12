@@ -46,7 +46,10 @@ exports.createPermission = (req, res) => {
         }
 
         const requesterID = req.user.ID;
-        const { userID, role } = req.body
+        let { userID, username, role } = req.body
+
+        // If the username field exists we use it instead of userID
+        if (username) userID = User.findByUsername(username)?.ID;
 
         // checking validity of the arguments
         if (!requesterID || !userID || !role || !roles.includes(role)) {
@@ -156,9 +159,12 @@ exports.deletePermission = (req, res) => {
             return res.status(404).json({ error: "Permission not found" })
         }
 
-        // checking if the requester's role is owner
-        if (filePermissions[requesterID] !== "owner") {
-            return res.status(403).json({ error: "Forbidden" })
+        // only the owner and the user itself can delete the user's permissions
+        if (requesterID != permissionId) {
+            // checking if the requester's role is owner
+            if (filePermissions[requesterID] !== "owner") {
+                return res.status(403).json({ error: "Forbidden" })
+            }
         }
 
         // deleting the permission for the user and returning no content

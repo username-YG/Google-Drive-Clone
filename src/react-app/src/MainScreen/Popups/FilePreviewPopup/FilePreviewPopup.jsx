@@ -237,7 +237,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                 <span className="material-symbols-outlined">drive_file_move</span>
                 <span className="tooltip-text">Move to</span>
                 {isMoveToOpen && (
-                    <MoveItemPopup id={file?.id}
+                    <MoveItemPopup current={file}
                         toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
             </button>
 
