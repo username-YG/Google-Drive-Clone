@@ -26,14 +26,17 @@ const icons = {
   "pdf": pdf
 }
 
+// The path of folders you are in
 function PathTitle( {path, title} ) {
 
   const navigate = useNavigate();
 
+  // Clicking the first moves us to my drive
   const onClickTitle = () => {
     navigate("/my-drive", {state: { path:[] } });
   }
 
+  // Clicking a folder moves us to it, we track well using navigation states
   const onClickFolder = (folder, i) => {
     navigate("/folders/" + folder.id, { state: { path: path.slice(0, i + 1) } })
   }
@@ -51,6 +54,7 @@ function PathTitle( {path, title} ) {
   );
 }
 
+// Gets the all files and folders from the server
 async function getFiles(url, filter, navigate, withContent) {
   
   const token = sessionStorage.getItem("token")
@@ -69,18 +73,22 @@ async function getFiles(url, filter, navigate, withContent) {
     return await response.json();
   }
 
+  // If the user's token doesn't exist or invalid, we send to login
   if (response.status === 404 || response.status === 403 || response.status === 401) {
     navigate("/login");
   }
 
 }
 
+// Update the grid of files and folders
 const updateData = async (folderId, setItems, filter, navigate, query) => {
 
+  // The url contains the current folder and a query to filter by
   const url = (folderId) ? ("/" + folderId) : ("");
   const data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate, "false"));
   if (!data) return;
 
+  // Folders return list of item ids inside them, we convert each id to its object
   let finalData;
   if (folderId) {
     finalData = await Promise.all(
@@ -94,24 +102,29 @@ const updateData = async (folderId, setItems, filter, navigate, query) => {
     finalData = data;
   }
 
+  // Update the grid with the new data
+  // By fetching metdata only, without content, we make this function very fast
   setItems(finalData)
 }
 
 function File({ file, selected, onSelect, reload, setReload, setSelectedFile, setIsPreviewOpen }) {
 
+  // The type determines the file's icon
   const type = file.name.split('.').pop();
   const icon = icons[type] || icons["notype"];
   
+  // Double clicking a file displays it
   const openItem = () => {
     setSelectedFile(file);
     setIsPreviewOpen(true);
   };
 
   const onFileClick = (e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // We don't want sub-components to handle the event too
     onSelect();
   }
 
+  // Three dots open action menu
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   useOutsideClickListener(isOpen, setIsOpen, popupRef)
@@ -137,15 +150,17 @@ function File({ file, selected, onSelect, reload, setReload, setSelectedFile, se
 function Folder({ file, selected, onSelect, path, reload, setReload }) {
   
   const onFileClick = (e) => {
-    e.stopPropagation();
+    e.stopPropagation();  // We don't want sub-components to handle the event too
     onSelect();
   }
 
+  // Double clicking a file moves us into it (we update nav state for the path)
   const onFileDoubleClick = () => {
     const newPath = [...path, {id: file.id, name: file.name}];
     navigate("/folders/" + file.id, { state: { path: newPath } });
   }
 
+  // Three dots open action menu
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   useOutsideClickListener(isOpen, setIsOpen, popupRef)
@@ -170,7 +185,7 @@ function Folder({ file, selected, onSelect, path, reload, setReload }) {
 function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   const [items, setItems] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(null); // Track currently selected item
   const [selectedPreviewFile, setSelectedPreviewFile] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -186,13 +201,14 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
   const navigate = useNavigate();
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
+      setLoading(true); // Show loading screen
       await updateData(folderId, setItems, filter, navigate, query);
-      setLoading(false);
+      setLoading(false); // Hide loading screen
     }
     loadData();
   }, [folderId, reload, query]);
 
+  // Pressing 'delete'should trash selected item
   useEffect(() => {
     const handleKeyDown = async (event) => {
       if (event.key === "Delete" && selected !== null) {
@@ -204,6 +220,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
     return () => { document.removeEventListener("keydown", handleKeyDown); };
   }, [selected]);
 
+  // We seperate the files and folders on the screen
   const foldersObjects = items.filter(item => item.isFolder === true);
   const filesObjects = items.filter(item => item.isFolder === false);
 
@@ -234,15 +251,22 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
 
   return (
     <div className="files-grid-screen" onClick={() => setSelected(null)}>
+
       <PathTitle path={path} title={title}/>
-      {
-      loading ? ( <div className="loader"></div> ) : (
-      items.length === 0 ? ( emptyFolder ) : (
+
+      { /* If we are loading, only show loading screen */ }
+      { /* Show emptyFolder screen when there is nothing to display */ }
+
+      { loading ? ( <div className="loader"></div> ) : ( (items.length === 0) ? ( emptyFolder ) : (
+
         <div>
+          { /* Don't show folders grid if it is empty */ }
           { folders.length > 0 &&  <div className="files-grid">{folders}</div> }
           <div className="files-grid">{files}</div>
         </div>
+
       ))}
+
       <FilePreviewPopup
           file={selectedPreviewFile}
           isOpen={isPreviewOpen}
@@ -250,6 +274,7 @@ function FilesGrid({ filter, emptyFolder, title, reload, setReload, query }) {
           onActionComplete={refreshFiles}
       />
     </div>
+
   )
 }
 

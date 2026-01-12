@@ -35,9 +35,11 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
     setReload(!reload);
   };
 
+  // Url tells us if we are in trash screen
   const url = window.location.href;
   const inTrash = url.includes("/trash");
 
+  // Check user permissions
   const userId = sessionStorage.getItem("id");
   const permissions = file?.permissions || {};
   const role = permissions[userId];
@@ -45,6 +47,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
   const canShare = (role === "owner");
   const isStarred = file.starred.includes(userId);
 
+  // In trash screen we only show 'Restore' and 'Delete forever' options
   if (inTrash) {
     return (
       <ul className="item-actions-menu">
@@ -67,6 +70,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
     )
   } else {
 
+    // Actions that are not permitted are whited out and the user can't click them
     return (
       <ul className="item-actions-menu"
         ref={(element) => { popuRenamepRef.current = element; popuMovetoRef.current = element; }}>
@@ -94,6 +98,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
 
         <hr />
 
+        {/* We show either Star or Remove from starred */}
         { !isStarred && (
           <li className="item-actions-menu-item" onClick={async() => { await starItem(file.id, true); toggle(); setReload(!reload); } }>
             <img src={star} />

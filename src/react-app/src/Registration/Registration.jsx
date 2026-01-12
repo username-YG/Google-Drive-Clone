@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import googleLogo from "../../assets/google_logo.png";
 import { useNavigate } from "react-router-dom";
 

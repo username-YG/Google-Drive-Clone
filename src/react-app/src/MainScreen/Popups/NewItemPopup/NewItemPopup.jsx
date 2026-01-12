@@ -10,17 +10,22 @@ import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
 
 import "./NewItemPopup.css"
 
+// Popup to create a new folder or upload something
 function NewItemPopup({ reload, setReload, onUploadFile, onUploadFolder }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const popupRef = useRef(null);
   useOutsideClickListener(isOpen, setIsOpen, popupRef)
+
   const { folderId } = useParams();
   const navigate = useNavigate();
 
+  // Handle creation of a new folder
   const onCreateFolder = async (name) => {
     await createFolder(name, folderId);
     setIsOpen(!isOpen)
+
+    // If we are not in my drive screen, jump to it
     const url = window.location.href;
     if (!url.includes("/folders") && !url.includes("/my-drive")) navigate("/my-drive");
     setReload(!reload);

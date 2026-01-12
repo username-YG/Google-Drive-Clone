@@ -15,6 +15,13 @@ function EmptyFolder() {
   )
 }
 
+/*
+The home screen shows:
+- Files and folders owned by me
+- Files and folders shared with me
+- Files from all levels, not just root
+- Doesn't show items that are in trash 
+*/
 function Home() {
   const { reload, setReload } = useOutletContext();
   return (
