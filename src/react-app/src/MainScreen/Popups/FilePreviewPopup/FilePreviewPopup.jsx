@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { getFile, updateFile, trashItem, renameItem, starItem, useOutsideClickListener } from '../PopupLogic.js';
+import { getFile, updateFile, trashItem, renameItem, starItem, deleteItem, useOutsideClickListener } from '../PopupLogic.js';
 import docsLogo from '../../../../assets/docs.png';
 import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx";
 import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx";
@@ -51,6 +51,14 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     const isTXT = type === 'txt';
     const isImage = ['jpg', 'jpeg', 'png'].includes(type);
 
+    const url = window.location.href;
+    const inTrash = url.includes("/trash");
+    const userId = sessionStorage.getItem("id");
+    const permissions = file?.permissions || {};
+    const role = permissions[userId];
+    const canPatch = (role === "owner" || role === "writer");
+    const canShare = (role === "owner");
+
     const onEditText = async (newText) => {
         try {
             await updateFile(file.id, { content: newText });
@@ -97,6 +105,26 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             setIsOpen(false);
         } catch (error) {
             console.error("Failed to move item to trash:", error);
+        }
+    };
+
+    const handleRestore = async () => {
+        try {
+            await trashItem(file?.id, false);
+            if (onActionComplete) onActionComplete();
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to restore item:", error);
+        }
+    };
+
+    const handleDeleteForever = async () => {
+        try {
+            await deleteItem(file?.id);
+            if (onActionComplete) onActionComplete();
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to delete item forever:", error);
         }
     };
 
@@ -169,12 +197,35 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         }
     };
 
+    if (inTrash) {
+        return (
+            <div className="toolbar-right">
+                <button className="icon-btn-white" onClick={handleRestore}>
+                    <span className="material-symbols-outlined">restore_from_trash</span>
+                    <span className="tooltip-text">Restore</span>
+                </button>
+
+                <button className="icon-btn-white" onClick={handleDeleteForever}>
+                    <span className="material-symbols-outlined">delete_forever</span>
+                    <span className="tooltip-text">Delete forever</span>
+                </button>
+
+                <div className="toolbar-divider"></div>
+
+                <button className="icon-btn-white" onClick={handleDownload}>
+                    <span className="material-symbols-outlined">download</span>
+                    <span className="tooltip-text">Download</span>
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div className="toolbar-right" ref={moveToPopupRef}>
             {(isTXT || isImage) && (
                 <div className="edit-action-wrapper" style={{ display: 'inline-block', position: 'relative' }}>
                     <button
-                        className="icon-btn-white"
+                        className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`}
                         onClick={isTXT ? () => setIsEditOpen(!isEditOpen) : handleSwapImage}
                     >
                     <span className="material-symbols-outlined">
@@ -201,7 +252,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             )}
 
             <div className="rename-container" style={{ display: 'inline-block', position: 'relative' }}>
-                <button className="icon-btn-white" onClick={() => setIsRenameOpen(!isRenameOpen)}>
+                <button className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`} onClick={() => setIsRenameOpen(!isRenameOpen)}>
                     <span className="material-symbols-outlined">drive_file_rename_outline</span>
                     <span className="tooltip-text">Rename</span>
                 </button>
@@ -221,7 +272,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
 
             <div className="toolbar-divider"></div>
 
-            <button className="icon-btn-white" onClick={() => setIsShareOpen(true)}>
+            <button className={`icon-btn-white ${!canShare ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
                 <span className="material-symbols-outlined">people</span>
                 <span className="tooltip-text">Share</span>
                 {isShareOpen && (
@@ -233,7 +284,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                 )}
             </button>
 
-            <button className="icon-btn-white" onClick={() => setIsMoveToOpen(true)}>
+            <button className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
                 <span className="material-symbols-outlined">drive_file_move</span>
                 <span className="tooltip-text">Move to</span>
                 {isMoveToOpen && (

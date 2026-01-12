@@ -218,6 +218,12 @@
     color: white;
 }
 
+.icon-btn-white.not-permitted {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}
+
 .material-symbols-outlined {
     font-variation-settings: 'wght' 300;
     font-size: 24px;
