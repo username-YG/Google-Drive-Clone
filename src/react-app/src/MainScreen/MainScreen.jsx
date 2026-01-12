@@ -6,15 +6,15 @@ import TopBar from "./TopBar/TopBar.jsx"
 
 import "./MainScreen.css"
 
-function MainScreen() {
+function MainScreen({ toggleDarkMode, darkMode }) {
 
   const [reload, setReload] = useState(false)
 
   return (
     <div className="main-screen">
       <SidePanel reload={reload} setReload={setReload} />
-      <TopBar/>
-      <Outlet context={{ reload, setReload }} />
+        <TopBar toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+        <Outlet context={{ reload, setReload }} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 .side-panel {
-  background-color: #f8fafd;
+  background-color: var(--sidebar-bg);
   padding: 16px;
   padding-left: 10px;
   user-select: none;
@@ -11,16 +11,25 @@
   gap: 12px;
   padding-left: 16px;
   font-size: 21px;
-  color: #444746;
+  color: var(--text-color);
   width: 36px;
   cursor: pointer;
+}
+
+[data-theme='dark'] .side-panel img {
+  filter: var(--icon-filter);
+}
+
+.logo img {
+  filter: none !important;
 }
 
 .new-item-button {
   display: flex;
   align-items: center;
   gap: 13px;
-  background: white;
+  background: var(--card-bg);
+  color: var(--text-color);
   border: none;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -37,7 +46,7 @@
 
 .new-item-button:hover {
   box-shadow: 0 4px 6px #00000026;
-  background-color: #edf1fa;
+  background-color: var(--hover-color);
 }
 
 .new-item-button img {
@@ -52,7 +61,7 @@
 .panel-list a {
   display: flex;
   align-items: center;
-  color: #1f1f1f;
+  color: var(--text-color);
   text-decoration: none;
   font-size: 14px;
   gap: 14px;
@@ -69,12 +78,16 @@
 }
 
 .panel-list a.active-link {
-  background-color: #c2e7ff;
-  color: #001d35;
+  background-color: var(--selected-blue);
+  color: var(--text-color);
+}
+
+[data-theme='dark'] .panel-list img {
+  filter: var(--icon-filter);
 }
 
 .panel-list a:hover:not(.active-link) {
-  background-color: #e7e8eb;
+  background-color: var(--hover-color);
 }
 
 .new-item-div {
