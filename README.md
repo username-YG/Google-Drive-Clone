@@ -9,20 +9,24 @@ The application is composed of two primary layers:
 - Frontend (React):
 Component-Based Design: The interface is built using React, where every element (Sidebar, File Grid, Preview Overlay) is an independent component managing its own state.
 Client-Side Routing: We utilized React Router to ensure the app loads once, allowing smooth transitions between Login, Registration, and the Main Dashboard without page refreshes.
-Dynamic Theming: Advanced CSS implementation supports a full Light/Dark Mode toggle using CSS variables for high contrast and readability.
+Dynamic Theming: Advanced CSS implementation supports a full Light/Dark Mode toggle using CSS variables for high contrast and readability and an apealing display similar to the one in Google Drive.
 
-- Backend (Node.js/Express):
-RESTful API: A server-side logic layer that manages all business operations.
-Secure Authentication: User identity is verified via JWT (JSON Web Tokens), ensuring that only authorized users can access their private data.
-Dynamic Fetching: All displayed content (filenames, types, creation dates) is fetched asynchronously from the server; no data is hard-coded.
+- Backend (Node.js/Express and CPP server):
+RESTful API: A web-server-side logic layer that manages all business operations.
+Secure Authentication: User identity is verified via JWT (JSON Web Tokens) format, ensuring that only authorized users can access their private data.
+Dynamic Fetching: All displayed contents (filenames, types, creation dates) are fetched asynchronously from the server; no data is hard-coded.
+MVC arcitecture and connection to the CPP-server: An MVC arcitecture to support certain client requests in the web that require fetches from the CPP server which server as an item (file and folder)
+storage facility.
+HTTP requests format: All the communcation is handled with an HTTP requests as well as responses and status codes.
 
 ### How It Works (User Flow)
 
-Security & Access: Users register with validated credentials and log in to receive a secure Token.
-Content Loading: Upon entering the main screen, the app requests the specific list of files and folders belonging to that authenticated user from the server.
+Security & Access: Users can register (sign up) with validated credentials whose validation is enforced both on the front-end (client-side) and on the back-end (server side), and log in, in case of an already existant user to receive a secure Token and go to the personal main page.
+Additionaly, after havig gone to the main page of the app, users can log/sign out and go back to the registration screen.
+Content Loading: Upon entering the main screen, the app requests the specific list of files and folders belonging to that authenticated user from the back-end server.
 State Management: Using React Hooks like useState and useRef, the UI updates instantly when a user creates, renames, or deletes an item without needing to reload the entire site.
-The system provides a comprehensive suite of file management tools.
-Hierarchical Management: Users can create new folders and organize files within them to maintain a structured workspace.
+The system provides a convenient and handy set of file management tools.
+Hierarchical Management: Users can create new folders and organize files as well as new folders within them to maintain a structured and nested workspace should they want to.
 
 ### Integrated File Viewer (Preview):
 Double-clicking an item opens a professional Preview Overlay.
@@ -30,20 +34,25 @@ Double-clicking an item opens a professional Preview Overlay.
 - Images: High-quality image rendering with dynamic zoom capabilities.
 - PDFs: Built-in support for viewing PDF documents.
 
-- Metadata Editing: Users can rename files and folders through intuitive modals and update text content directly in the viewer.
-- Search & Filtering: A dynamic search bar allows users to locate specific files or folders by name in real-time.
+- Metadata Editing: Users can rename files and folders through intuitive and accessible editing tools and update text content directly in the viewer.
+- Search & Filtering: A dynamic search bar allows users to locate specific files or folders by name and content in real-time and shows the fisrt several files that contain either in their content or name the string searched so far.
 - Advanced UI Interactions:
 - Selection: Visual feedback for selected items to perform quick actions.
 - Action Menus: Context-sensitive menus for file operations (Edit, Delete, Rename).
 - Theme Customization: A dedicated button to switch between Light and Dark themes, adjusting all UI elements from the sidebar to the file grid icons.
 - User Profile Integration: The top bar displays the authenticated user’s display name and profile picture fetched from the server.
 
+#### Important Notes:
+ - When the user types at first the url of the main page while he isn't yet signed in, they will automitically be turned to the log-in page to first onl sign in and then access the main page, as it is in Google Drive.
+ - From the logging in page there is a button to go to the registration (signing up) screen to register as a new user.
+ - In the home page category of the main screen of the app all the files as well as folders are displays non-nestedly, as it is in Google Drive.
+
 ## Running Instructions
-1. Clone the repository and checkout to ex3-main:
+1. Clone the repository and checkout to ex4-main:
 ```
 git clone https://github.com/username-YG/Google-Drive-Project-ASP
 cd Google-Drive-Project-ASP
-git checkout ex3-main
+git checkout ex4-main
 ```
 2. Open Docker Desktop.
 3. Start the cpp server using:
@@ -54,7 +63,7 @@ docker compose up --build server
 ```
 docker compose up --build web-server
 ```
-5. In the wsl, run the various HTTP requests listed above.
+5. (ARE WE DELETING THIS AND REPALCESING WITH THE NEW ONE OR ADDING ONTOP OF IT?)In the wsl, run the various HTTP requests listed above.
 
 Note for the checker #1: you can run the tests using the command "docker-compose run --rm gtests".  
 You can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
