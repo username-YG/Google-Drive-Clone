@@ -8,7 +8,7 @@ import imageLogo from '../../../../assets/image.png';
 import txtLogo from '../../../../assets/txt.png';
 import './FilePreviewPopup.css';
 
-const ToolBarLeft = ({ file, handleClose }) => {
+const ToolBarLeft = ({ handleClose, fileName }) => {
 
     const logoMap = {
         'txt': txtLogo,
@@ -19,7 +19,7 @@ const ToolBarLeft = ({ file, handleClose }) => {
         'png': imageLogo,
         'jpeg': imageLogo
     };
-    const type = file?.name.split('.').pop().toLowerCase();
+    const type = fileName?.split('.').pop().toLowerCase();
     const fileIcon = logoMap[type] || txtLogo;
 
     return (
@@ -28,12 +28,13 @@ const ToolBarLeft = ({ file, handleClose }) => {
                 <span className="material-symbols-outlined">close</span>
             </button>
             <img src={fileIcon} alt="file type" className="file-type-icon" />
-            <span className="file-title-white">{file?.name}</span>
+            <span className="file-title-white">{fileName}</span>
         </div>
     )
 }
 
 const ToolBarRight = ( { file, onActionComplete, setIsOpen,
+                            fileName, setFileName,
                             fileContent, setFileContent,
                             isStarred, setIsStarred,
                             isRenameOpen, setIsRenameOpen,
@@ -43,7 +44,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     const moveToPopupRef = useRef(null);
     useOutsideClickListener(isMoveToOpen, setIsMoveToOpen, moveToPopupRef);
 
-    const type = file?.name.split('.').pop().toLowerCase();
+    const type = fileName?.split('.').pop().toLowerCase();
     const isTXT = type === 'txt';
     const isImage = ['jpg', 'jpeg', 'png'].includes(type);
 
@@ -95,14 +96,16 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             console.error("Failed to move item to trash:", error);
         }
     };
+
     const onRenameItem = async (newName) => {
-        if (!newName || newName === file?.name) {
+        if (!newName || newName === fileName) {
             setIsRenameOpen(false);
             return;
         }
 
         try {
             await renameItem(file?.id, newName);
+            setFileName(newName)
             if (onActionComplete) onActionComplete();
             setIsRenameOpen(false);
         } catch (error) {
@@ -133,7 +136,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', file?.name || 'download');
+            link.setAttribute('download', fileName || 'download');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -150,7 +153,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             const link = document.createElement('a');
             link.href = url;
 
-            link.setAttribute('download', file?.name || 'download');
+            link.setAttribute('download', fileName || 'download');
 
             document.body.appendChild(link);
             link.click();
@@ -207,7 +210,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                             onDone={onRenameItem}
                             doneText="Ok"
                             title="Rename"
-                            currentName={file.name}
+                            currentName={fileName}
                         />
                     </div>
                 )}
@@ -251,7 +254,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     )
 }
 
-const ToolBarCenter = ( { file, fileContent, loading, showUI,
+const ToolBarCenter = ( { fileName, fileContent, loading, showUI,
                             zoomLevel, setZoomLevel,
                             zoomBarRef, contentRef, } ) => {
 
@@ -262,7 +265,7 @@ const ToolBarCenter = ( { file, fileContent, loading, showUI,
         if (type_ === 'reset') setZoomLevel(14);
     };
 
-    const type = file?.name.split('.').pop().toLowerCase();
+    const type = fileName?.split('.').pop().toLowerCase();
     const isPDF = type === 'pdf';
 
     const renderContent = () => {
@@ -275,7 +278,7 @@ const ToolBarCenter = ( { file, fileContent, loading, showUI,
                 <div className="image-viewer-container">
                     <img
                         src={fileContent}
-                        alt={file?.name}
+                        alt={fileName}
                         className="preview-image dynamic-zoom"
                         style={{
                             transform: `scale(${zoomLevel / 14})`,
@@ -294,7 +297,7 @@ const ToolBarCenter = ( { file, fileContent, loading, showUI,
                 <div className="pdf-viewer-container">
                     <iframe
                         src={`${fileContent}#toolbar=0&navpanes=0`}
-                        title={file?.name}
+                        title={fileName}
                         className="pdf-display"
                     />
                 </div>
@@ -356,6 +359,7 @@ const ToolBarCenter = ( { file, fileContent, loading, showUI,
 
 const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     const [fileContent, setFileContent] = useState("");
+    const [fileName, setFileName] = useState(file?.name || "");
     const [loading, setLoading] = useState(false);
     const [isStarred, setIsStarred] = useState(!!file?.starred);
     const [isRenameOpen, setIsRenameOpen] = useState(false);
@@ -407,6 +411,10 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     }, [file?.id, isOpen]);
 
     useEffect(() => {
+        setFileName(file?.name);
+    }, [file?.name]);
+
+    useEffect(() => {
         if (isRenameOpen || isEditOpen) {
             setShowUI(true);
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -414,7 +422,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
             setTimeout(() => {
                 const inputElement = document.querySelector('.rename-context-wrapper .input-name-input, .edit-context-wrapper .input-name-input');
                 if (inputElement) {
-                    inputElement.value = isEditOpen ? fileContent : file?.name;
+                    inputElement.value = isEditOpen ? fileContent : fileName;
 
                     inputElement.dispatchEvent(new Event('input', { bubbles: true }));
                     inputElement.focus();
@@ -424,7 +432,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
         } else {
             resetTimer();
         }
-    }, [isRenameOpen, isEditOpen, file?.name, fileContent]);
+    }, [isRenameOpen, isEditOpen, fileName, fileContent]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -458,7 +466,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
         setIsOpen(false);
     };
 
-    const type = file?.name.split('.').pop().toLowerCase();
+    const type = fileName?.split('.').pop().toLowerCase();
     const isPDF = type === 'pdf';
 
     return (
@@ -474,8 +482,9 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                 onClick={(e) => e.stopPropagation()}
                 style={{ backgroundColor: bgOpacity > 0 ? `rgba(32, 33, 36, ${bgOpacity})` : 'transparent' }} >
 
-                <ToolBarLeft file={file} handleClose={handleClose} />
+                <ToolBarLeft handleClose={handleClose} fileName={fileName} />
                 <ToolBarRight file={file} onActionComplete={onActionComplete} setIsOpen={setIsOpen}
+                            fileName={fileName} setFileName={setFileName}
                             fileContent={fileContent} setFileContent={setFileContent}
                             isStarred={isStarred} setIsStarred={setIsStarred}
                             isRenameOpen={isRenameOpen} setIsRenameOpen={setIsRenameOpen}
@@ -483,7 +492,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                             setIsEditOpen={setIsEditOpen} isEditOpen={isEditOpen} />
             </div>
 
-                <ToolBarCenter file={file} fileContent={fileContent} loading={loading} showUI={showUI}
+                <ToolBarCenter fileName={fileName} fileContent={fileContent} loading={loading} showUI={showUI}
                                 zoomLevel={zoomLevel} setZoomLevel={setZoomLevel}
                                 zoomBarRef={zoomBarRef} contentRef={contentRef} />
 
