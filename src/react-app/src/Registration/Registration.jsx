@@ -192,7 +192,9 @@ const Registration = () => {
      * Submits the final registration payload to the server
      */
     const handleSubmit = async () => {
-        if (!formData.profilePic) return setError("Please upload a profile picture");
+
+        // For now profile pic is optional
+        // if (!formData.profilePic) return setError("Please upload a profile picture");
 
         const displayName = `${formData.firstName} ${formData.lastName}`.trim();
         const userToRegister = {

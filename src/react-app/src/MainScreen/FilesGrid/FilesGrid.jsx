@@ -85,8 +85,13 @@ const updateData = async (folderId, setItems, filter, navigate, query) => {
 
   // The url contains the current folder and a query to filter by
   const url = (folderId) ? ("/" + folderId) : ("");
-  const data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate, "false"));
+  let data = (query) ? (await searchItems(query)) : (await getFiles("/files" + url, filter, navigate, "false"));
   if (!data) return;
+
+  // Manually filter trashed because search doesn't
+  if (query && filter && filter.includes("NOT TRASHED")) {
+    data = data.filter(item => !item.trashed);
+  }
 
   // Folders return list of item ids inside them, we convert each id to its object
   let finalData;

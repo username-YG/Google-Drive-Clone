@@ -56,8 +56,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     const isImage = ['jpg', 'jpeg', 'png'].includes(type);
 
     // Parse url and user permissions
-    const url = window.location.href;
-    const inTrash = url.includes("/trash");
+    const inTrash = file.trashed;
     const userId = sessionStorage.getItem("id");
     const permissions = file?.permissions || {};
     const role = permissions[userId];

@@ -109,7 +109,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
       img: logout,
     },
     {
-      title: "Account",
+      title: user?.displayName || "Account",
       menuItems: <ProfilePopup/>,
       img: profilePic,
     }

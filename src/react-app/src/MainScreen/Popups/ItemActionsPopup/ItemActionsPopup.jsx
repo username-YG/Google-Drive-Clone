@@ -35,9 +35,6 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
     setReload(!reload);
   };
 
-  // Url tells us if we are in trash screen
-  const url = window.location.href;
-  const inTrash = url.includes("/trash");
 
   // Check user permissions
   const userId = sessionStorage.getItem("id");
@@ -45,7 +42,9 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
   const role = permissions[userId];
   const canPatch = (role === "owner" || role === "writer");
   const canShare = (role === "owner");
+
   const isStarred = file.starred.includes(userId);
+  const inTrash = file.trashed;
 
   // In trash screen we only show 'Restore' and 'Delete forever' options
   if (inTrash) {
