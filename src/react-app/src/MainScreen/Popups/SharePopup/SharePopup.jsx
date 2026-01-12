@@ -77,18 +77,18 @@ function SharePopup({ file, toggle }) {
   const popupRef = useRef(null);
   useOutsideClickListener(true, toggle, popupRef);
 
-  const loadUsers = async () => {
-    if (!file?.permissions) return;
+  const loadUsers = async (file_) => {
+    if (!file_?.permissions) return;
     
     const permittedUsers = [];
-    for (const [userId, role] of Object.entries(file.permissions)) {
+    for (const [userId, role] of Object.entries(file_.permissions)) {
       const data = await getUserById(userId);
       if (data) permittedUsers.push({ ...data, role });
     }
     setUsers(permittedUsers);
   };
 
-  useEffect(() => { loadUsers() }, [])
+  useEffect(() => { loadUsers(file) }, [file])
 
   const updateFile = async () => {
     const updatedFile = await getFile(file.id);
@@ -101,7 +101,7 @@ function SharePopup({ file, toggle }) {
         <h2 className="share-title">Share "{file.name}"</h2>
         
         <ul className="share-list">
-          {users.map((user, i) => (<SharedPopupItem key={i} file={file} user={user} reload={updateFile} />))}
+          {users.map((user) => (<SharedPopupItem key={user.ID} file={file} user={user} reload={updateFile} />))}
         </ul>
 
         <SharePopupButtons file={file} reload={updateFile} />
