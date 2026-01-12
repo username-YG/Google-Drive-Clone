@@ -67,7 +67,7 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
         <li className={`item-actions-menu-item ${!canShare ? "not-permitted" : ""}`} onClick={() => setIsShareOpen(true)}>
           <img src={people} />
           Share
-          {isShareOpen && <SharePopup file={file} toggle={() => setIsShareOpen(false)} />}
+          {isShareOpen && <SharePopup file={file} toggle={() => setIsShareOpen(false)} reloadGrid={() => setReload(!reload)} />}
         </li>
       )}
 

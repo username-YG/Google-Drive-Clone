@@ -37,7 +37,7 @@ function SharePopupButtons({file, reload}) {
 
 }
 
-function SharedPopupItem({file, user, reload}) {
+function SharedPopupItem({file, user, reload, toggle, reloadGrid}) {
 
   const roles = ["owner", "writer", "reader", "commenter", "none"];
 
@@ -49,6 +49,10 @@ function SharedPopupItem({file, user, reload}) {
       await updatePermission(file.id, user.ID, role); 
     }
     reload();
+    if (user.ID === sessionStorage.getItem("id")) {
+      toggle();
+      reloadGrid();
+    }
   };
 
   return (
@@ -71,7 +75,7 @@ function SharedPopupItem({file, user, reload}) {
   )
 }
 
-function SharePopup({ file, toggle }) {
+function SharePopup({ file, toggle, reloadGrid }) {
 
   const [users, setUsers] = useState([]);
   const popupRef = useRef(null);
@@ -101,7 +105,7 @@ function SharePopup({ file, toggle }) {
         <h2 className="share-title">Share "{file.name}"</h2>
         
         <ul className="share-list">
-          {users.map((user) => (<SharedPopupItem key={user.ID} file={file} user={user} reload={updateFile} />))}
+          {users.map((user) => (<SharedPopupItem key={user.ID} file={file} user={user} reload={updateFile} toggle={toggle} reloadGrid={reloadGrid} />))}
         </ul>
 
         <SharePopupButtons file={file} reload={updateFile} />
