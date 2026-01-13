@@ -90,3 +90,70 @@ Note for the checker #2: you can run all the servers with one line using the com
 ```
 docker compose up --build react-app server web-server
 ``` 
+
+## Running Examples:
+First of all, entering the site requires you to log inL
+<img width="1875" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
+
+If you don't have an account yet, you can press "Create account" and you will be moved to this Registeration screen:
+<img width="1855" height="810" alt="image" src="https://github.com/user-attachments/assets/d4826053-c3d5-46e2-8244-4ee436418ea2" />
+
+After finishing Registration, you'll return to the Login screen and now sign in with the new account you created.
+Now, after signing in, this is the Main App page:
+<img width="1900" height="831" alt="image" src="https://github.com/user-attachments/assets/6d259a69-c5af-4d42-834a-0586d728424f" />
+
+To upload new files/folders (or create folders) you can press the button "+ New" from the side bar and you'll see this:
+<img width="492" height="325" alt="image" src="https://github.com/user-attachments/assets/b0d7eb2a-7734-43e6-a175-423faa7664de" />
+
+For uploading files/folders, pressing on the button will open your local files browser and you can choose from it:
+<img width="1049" height="707" alt="image" src="https://github.com/user-attachments/assets/b90ea47f-e101-4782-817a-8d54bbcbb6c6" />
+
+After adding some files and create a folder for example, the screen looks like that:
+<img width="1870" height="815" alt="image" src="https://github.com/user-attachments/assets/bc4d7ea1-2efa-4a2c-941a-f90c9148e927" />
+
+You can press each of the files to open a preview of it:
+<img width="1850" height="828" alt="image" src="https://github.com/user-attachments/assets/329af12a-4db4-469e-b3fa-0890b408b6ee" />
+You can see the bar with all of the options mentioned above at the top, and the zoom bar at the bottom. 
+For example, this is what pressing on the Edit text button looks like:
+<img width="1690" height="832" alt="image" src="https://github.com/user-attachments/assets/9e1f63c5-91ce-427a-bd09-f81c0f2c0c0a" />
+<img width="1813" height="823" alt="image" src="https://github.com/user-attachments/assets/511f0b02-b7ad-49e6-abdb-6dfc8dea65ae" />
+
+To exit preview mode, you can press on the close button (X) on the left-top edge, or just press the dark background outside the file itself.
+
+You can also click the 3 dots button on each file to open it's menu with similar options but without entering preview mode:
+<img width="1554" height="695" alt="image" src="https://github.com/user-attachments/assets/e3e3ccf4-8210-4fe5-bde7-9866d42ff424" />
+
+You also have at the side bar several pages with unique attributes:
+Home: The home page of the app, you can see there all the files you have access to:
+<img width="1554" height="695" alt="image" src="https://github.com/user-attachments/assets/71b97c9c-a3b2-4755-a0c8-3423338efd64" />
+
+My drive: Presents only the files you are the owner of.
+Shared with me: Presents all the files that another users gave you permissions of:
+<img width="1885" height="799" alt="image" src="https://github.com/user-attachments/assets/fa7e273b-c1f2-4448-a2f9-6925c26a6854" />
+
+Recent: Presents the files you opened recently.
+Starred: pressing the "Add to starred" button for a file will allow you to see it on the Starred page:
+<img width="1646" height="821" alt="image" src="https://github.com/user-attachments/assets/7ed1202a-ca83-4f4f-8802-454cd8909b9d" />
+
+Trash: Presents all the files you sent to trash. only from there you delete files permanently:
+<img width="1134" height="659" alt="image" src="https://github.com/user-attachments/assets/5cae807a-6fdf-4607-939d-fe5453f0271d" />
+<img width="772" height="566" alt="image" src="https://github.com/user-attachments/assets/69c2d9c7-f846-4c1b-a96c-00404009bb1a" />
+<img width="739" height="543" alt="image" src="https://github.com/user-attachments/assets/7cb0e3bf-cf72-4f44-9acb-ac5253b2d888" />
+<img width="1828" height="677" alt="image" src="https://github.com/user-attachments/assets/41dd8543-7be4-4d52-a23d-54feae6b2a47" />
+
+You think we're done? We have even more abilities!
+Search bar: You can search files by their names (or even text files by their content):
+<img width="1889" height="763" alt="image" src="https://github.com/user-attachments/assets/a2bdbd4c-437e-4b22-9110-f9cdc39cedb9" />
+
+You can sign out and add other accounts:
+<img width="622" height="485" alt="image" src="https://github.com/user-attachments/assets/96bf3503-9543-4770-8a7c-6ff3b6d7d626" />
+<img width="472" height="241" alt="image" src="https://github.com/user-attachments/assets/2a78fad7-29fc-4207-b122-12a99461cb4c" />
+
+And for dessert, you can even switch the entire app to dark mode! click the settings button and then choose the toggle:
+<img width="393" height="167" alt="image" src="https://github.com/user-attachments/assets/6d323726-e81c-4c81-a387-b6a866a2d8be" />
+And now everything will be in dark mode!
+<img width="1895" height="785" alt="image" src="https://github.com/user-attachments/assets/ee2d843a-5e64-450c-bcd5-c246c7a00e9a" />
+<img width="1829" height="808" alt="image" src="https://github.com/user-attachments/assets/1bf030a2-43e5-46c6-abe4-4508281f7158" />
+<img width="1891" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
+
+Feel free to discover our app and enjoy!
