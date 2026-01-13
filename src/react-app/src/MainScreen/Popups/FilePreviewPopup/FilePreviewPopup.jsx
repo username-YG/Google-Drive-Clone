@@ -467,7 +467,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     const resetTimer = () => {
         setShowUI(true);
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        if (isRenameOpen || isEditOpen) return;
+        if (isRenameOpen || isEditOpen || isMoveToOpen || isShareOpen) return;
         timeoutRef.current = setTimeout(() => {
             setShowUI(false);
         }, 2500);
