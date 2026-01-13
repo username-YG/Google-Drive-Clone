@@ -7,10 +7,13 @@ import SharePopup from "../SharePopup/SharePopup.jsx";
 import pdfLogo from '../../../../assets/pdf.png';
 import imageLogo from '../../../../assets/image.png';
 import txtLogo from '../../../../assets/txt.png';
+import notype from '../../../../assets/notype.png';
 import './FilePreviewPopup.css';
 
+// The left part of the toolbar shows file name, icon and close button
 const ToolBarLeft = ({ handleClose, fileName }) => {
 
+    // Supported types
     const logoMap = {
         'txt': txtLogo,
         'doc': docsLogo,
@@ -21,7 +24,7 @@ const ToolBarLeft = ({ handleClose, fileName }) => {
         'jpeg': imageLogo
     };
     const type = fileName?.split('.').pop().toLowerCase();
-    const fileIcon = logoMap[type] || txtLogo;
+    const fileIcon = logoMap[type] || notype;
 
     return (
         <div className="toolbar-left">
@@ -34,6 +37,7 @@ const ToolBarLeft = ({ handleClose, fileName }) => {
     )
 }
 
+// The right part of the toolbar shows all possible actions
 const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                             fileName, setFileName,
                             fileContent, setFileContent,
@@ -51,14 +55,15 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     const isTXT = type === 'txt';
     const isImage = ['jpg', 'jpeg', 'png'].includes(type);
 
-    const url = window.location.href;
-    const inTrash = url.includes("/trash");
+    // Parse url and user permissions
+    const inTrash = file.trashed;
     const userId = sessionStorage.getItem("id");
     const permissions = file?.permissions || {};
     const role = permissions[userId];
     const canPatch = (role === "owner" || role === "writer");
-    const canShare = (role === "owner");
+    const doesOwn = (role === "owner");
 
+    // Handle text editing and immediate reload
     const onEditText = async (newText) => {
         try {
             await updateFile(file.id, { content: newText });
@@ -70,6 +75,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         }
     };
 
+    // Handle changing the image with a different image
     const handleSwapImage = () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
@@ -78,6 +84,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         fileInput.onchange = async (e) => {
             const selectedFile = e.target.files[0];
             if (selectedFile) {
+                // Load image with base64 reader
                 const reader = new FileReader();
                 reader.onload = async (event) => {
                     const base64Image = event.target?.result;
@@ -91,7 +98,8 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                             console.error("Error swapping image:", error);
                         }
                     }
-                };
+                };  
+                // Now treat as URL
                 reader.readAsDataURL(selectedFile);
             }
         };
@@ -162,6 +170,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             return;
         }
 
+        // Handle download of txt items
         if (type === 'txt') {
             const blob = new Blob([fileContent], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
@@ -175,9 +184,10 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             return;
         }
 
+        // Handle download of other types
         try {
             const response = await fetch(fileContent);
-            const blob = await response.blob();
+            const blob = await response.blob(); // Blob = binary large object
 
             const url = window.URL.createObjectURL(blob);
 
@@ -197,15 +207,16 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         }
     };
 
+    // If we are in trash screen we only show Restore and Delete forever actions
     if (inTrash) {
         return (
             <div className="toolbar-right">
-                <button className="icon-btn-white" onClick={handleRestore}>
-                    <span className="material-symbols-outlined">restore_from_trash</span>
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleRestore}>
+                    <span className="material-symbols-outlined">restore</span>
                     <span className="tooltip-text">Restore</span>
                 </button>
 
-                <button className="icon-btn-white" onClick={handleDeleteForever}>
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleDeleteForever}>
                     <span className="material-symbols-outlined">delete_forever</span>
                     <span className="tooltip-text">Delete forever</span>
                 </button>
@@ -220,6 +231,8 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
         );
     }
 
+    // Choose which actions to show based on url, type ect
+    // Action the user isn't permitted to do are whited out
     return (
         <div className="toolbar-right" ref={moveToPopupRef}>
             {(isTXT || isImage) && (
@@ -272,25 +285,27 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
 
             <div className="toolbar-divider"></div>
 
-            <button className={`icon-btn-white ${!canShare ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
                 <span className="material-symbols-outlined">people</span>
                 <span className="tooltip-text">Share</span>
-                {isShareOpen && (
-                    <SharePopup 
-                        file={file} 
-                        toggle={() => setIsShareOpen(false)} 
-                        reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
-                    />
-                )}
             </button>
 
-            <button className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
+            {isShareOpen && (
+                <SharePopup 
+                    file={file} 
+                    toggle={() => setIsShareOpen(false)} 
+                    reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
+                />
+            )}
+
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
                 <span className="material-symbols-outlined">drive_file_move</span>
                 <span className="tooltip-text">Move to</span>
-                {isMoveToOpen && (
-                    <MoveItemPopup current={file}
-                        toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
             </button>
+
+            {isMoveToOpen && (
+                <MoveItemPopup current={file}
+                    toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
 
             <button className="icon-btn-white" onClick={handleStar}>
             <span
@@ -322,10 +337,12 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     )
 }
 
+// The center of the toolbar shows zoom options
 const ToolBarCenter = ( { fileName, fileContent, loading, showUI,
                             zoomLevel, setZoomLevel,
                             zoomBarRef, contentRef, } ) => {
 
+    // Handle different zoom options
     const handleZoom = (e, type_) => {
         e.stopPropagation();
         if (type_ === 'in') setZoomLevel(prev => Math.min(prev + 5, 50));
@@ -336,6 +353,7 @@ const ToolBarCenter = ( { fileName, fileContent, loading, showUI,
     const type = fileName?.split('.').pop().toLowerCase();
     const isPDF = type === 'pdf';
 
+    // Render content with the new zoom level
     const renderContent = () => {
         if (loading) return <div className="unsupported-msg">Loading...</div>;
         if (!fileContent) return <div className="unsupported-msg">No content found</div>;
@@ -383,6 +401,7 @@ const ToolBarCenter = ( { fileName, fileContent, loading, showUI,
         return <div className="unsupported-msg">No preview available</div>;
     };
 
+    // We have the option to zoom in, out, and revert to normal
     return (
         <div className="protected-center-column">
             <div className="preview-content-container">
@@ -444,6 +463,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
     const [zoomLevel, setZoomLevel] = useState(14);
     const [bgOpacity, setBgOpacity] = useState(0);
 
+    // Hide toolbar after 2.5 seconds of inactivity
     const resetTimer = () => {
         setShowUI(true);
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -455,8 +475,9 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
 
     useEffect(() => {
         const fetchContent = async () => {
+            // Fetch the file content from the server
             if (isOpen && file?.id) {
-                setLoading(true);
+                setLoading(true); // Show loading screen
                 try {
                     const data = await getFile(file?.id);
                     setFileContent(String(data.content));
@@ -472,7 +493,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
                 } catch (error) {
                     console.error("Failed to fetch file:", error);
                 } finally {
-                    setLoading(false);
+                    setLoading(false); // Hide loading screen
                 }
             }
         };
@@ -483,6 +504,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
         setFileName(file?.name);
     }, [file?.name]);
 
+    // Handles UI behaviour when renaming or editing
     useEffect(() => {
         if (isRenameOpen || isEditOpen) {
             setShowUI(true);
@@ -503,6 +525,7 @@ const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
         }
     }, [isRenameOpen, isEditOpen, fileName, fileContent]);
 
+    // Handles outside clicks in the case of multiple popups
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!isOpen) return;

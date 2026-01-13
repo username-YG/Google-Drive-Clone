@@ -3,6 +3,7 @@ import { useOutsideClickListener } from "../PopupLogic.js"
 
 import "./InputNamePopup.css"
 
+// The popup where the user can input new text like when they rename or create a new folder
 const InputNamePopup = ({ toggle, onDone, doneText, title, currentName, extended }) => {
 
   const [name, setName] = useState((currentName) ? (currentName) : ("Untitled folder"));
@@ -10,6 +11,8 @@ const InputNamePopup = ({ toggle, onDone, doneText, title, currentName, extended
   const popupRef = useRef(null);
   useOutsideClickListener(true, toggle, popupRef);
 
+  // CurrentName is the value the placeholder in the text box
+  // Extended means the text box is big and allows easy edit for large texts (like file content)
   return (
     <div className="input-name-screen" >
       <div className="input-name-popup" onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()} ref={popupRef}>

@@ -13,7 +13,18 @@ import Trash from "./MainScreen/Pages/Trash/Trash.jsx";
 import MainScreen from "./MainScreen/MainScreen.jsx"
 import SearchScreen from "./MainScreen/Pages/SearchScreen/SearchScreen.jsx";
 
+function NotFoundScreen() {
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h2>404 - Page Not Found</h2>
+      <p>Try "/home"</p>
+    </div>
+  );
+}
+
 function App() {
+
+  // Handle light mode dark mode
   const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
   useEffect(() => {
     if (darkMode) {
@@ -34,6 +45,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Registration />} />
 
+          {/* All pages under the main screen */}
           <Route element={<MainScreen toggleDarkMode={toggleDarkMode} darkMode={darkMode}/>}>
 
             <Route path="/" element={<Navigate to="/home" replace />} />
@@ -52,7 +64,10 @@ function App() {
 
           </Route>
         </Route>
-        
+
+        {/* Any other path goes no 404 not found */}
+        <Route path="*" element={<NotFoundScreen />} />
+
       </Routes>
     </BrowserRouter>
   );

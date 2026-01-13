@@ -9,6 +9,7 @@
   height: 100%;
   background-color: #00000066;
   z-index: 2000;
+  cursor: default;
 }
 
 .move-popup {

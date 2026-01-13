@@ -307,9 +307,10 @@ const translations = {
 
   const isRTL = language === "he";
 
+  // When the user clicks next, validate fields and then move or submit
   const handleNext = async () => {
     if (step === "username") {
-      if (!username.trim()) {
+      if (!username.trim()) { // Error when username empty 
         setError(true)
         return
       }
@@ -317,7 +318,7 @@ const translations = {
       setUsername(username.trim())
       setStep("password")
     } else {
-      if (!password.trim()) {
+      if (!password.trim()) { // Error when password empty 
         setError(true)
         return
       }
@@ -325,7 +326,9 @@ const translations = {
       setError(false)
 
       try {
-        const response = await fetch("http://localhost:3000/api/tokens", {
+        // Send details to server
+        const port = import.meta.env.VITE_WEB_PORT || 3000;
+        const response = await fetch(`http://localhost:${port}/api/tokens`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -334,6 +337,8 @@ const translations = {
           }),
         });
 
+        // On success, save id and token to stoage and go to home screen
+        // sessionStorage means data holds only for this tab, so another user can login in another 
         if (response.status === 201 || response.status === 200) {
             const data = await response.json();
             sessionStorage.setItem("token", data.token)
@@ -341,12 +346,13 @@ const translations = {
             sessionStorage.setItem("id", locationHeader.split('/').pop())
             navigate('/home');
         } else {
-            setUserNotExistFlag(true);
+            setUserNotExistFlag(true); // Wrong password error (same error if user doesn't exist)
         }
       } catch (err) {}
     };
   }
 
+  // When the user click on going back
   const handleBack = () => {
     setPassword("")
     setStep("username")

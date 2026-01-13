@@ -15,6 +15,12 @@ function EmptyFolder() {
   )
 }
 
+/*
+My drive screen shows:
+- Files and folders owned by me
+- Only files and folders on root level
+- Doesn't show items that are in trash
+*/
 function MyDrive() {
   const { reload, setReload } = useOutletContext();
   return (

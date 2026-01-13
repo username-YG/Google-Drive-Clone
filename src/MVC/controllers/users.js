@@ -11,8 +11,17 @@ exports.createUser = (req, res) => {
         const { username, password, displayName, profilePic } = req.body;
 
         // Check if all required fields are present
-        if (!username || !password || !displayName || !profilePic) {
+        if (!username || !password || !displayName || profilePic === undefined) {
             return res.status(400).json({ error: "Missing args" });
+        }
+
+        // Return 404 if the username or password formats are invalid
+        const usernameRegex = /^[a-z0-9.]+$/i;
+        if (!usernameRegex.test(username)) {
+            return res.status(404).json({ error: "Invalid username" });
+        }
+        if (password.length < 8) {
+            return res.status(404).json({ error: "Invalid password" });
         }
 
         // Check if the username (email) already exists

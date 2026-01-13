@@ -1,5 +1,11 @@
 import {useEffect} from 'react';
 
+function getBaseUrl() {
+  const port = import.meta.env.VITE_WEB_PORT || 3000;
+  return `http://localhost:${port}/api/`;
+}
+
+// This listener closes a popup when the user clicks outside it 
 export function useOutsideClickListener(isOpen, setIsOpen, ref) {
 
   const closePopup = (event) => {
@@ -21,7 +27,7 @@ export async function createFolder(name, parentId) {
   if (!parentId) parentId = null;
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files", {
+  const response = await fetch(getBaseUrl() + "files", {
     'method': 'POST',
     'headers': {
       'Content-Type': 'application/json',
@@ -40,7 +46,7 @@ export async function getUser(setUser) {
   const token = sessionStorage.getItem("token")
   const id = sessionStorage.getItem("id");
 
-  const response = await fetch("http://localhost:3000/api/users/" + id, {
+  const response = await fetch(getBaseUrl() + "users/" + id, {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
@@ -57,7 +63,7 @@ export async function getUser(setUser) {
 export async function trashItem(id, toTrash) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'PATCH',
     'headers': {
       'Content-Type': 'application/json',
@@ -78,7 +84,7 @@ export async function trashItem(id, toTrash) {
 export async function unshareWithUser(fileId, pid) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + fileId + "/permissions/" + pid, {
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${pid}`, {
     'method': 'DELETE',
     'headers': {
       'Content-Type': 'application/json',
@@ -91,7 +97,7 @@ export async function unshareWithUser(fileId, pid) {
 export async function renameItem(id, name) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'PATCH',
     'headers': {
       'Content-Type': 'application/json',
@@ -107,7 +113,7 @@ export async function renameItem(id, name) {
 export async function starItem(id, toStar) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'PATCH',
     'headers': {
       'Content-Type': 'application/json',
@@ -123,7 +129,7 @@ export async function starItem(id, toStar) {
 export async function deleteItem(id) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'DELETE',
     'headers': {
       'Content-Type': 'application/json',
@@ -136,7 +142,7 @@ export async function deleteItem(id) {
 export async function searchItems(query) {
 
   const token = sessionStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/search/${query}`, {
+  const response = await fetch(getBaseUrl() + "search/" + query, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -156,7 +162,7 @@ export async function searchItems(query) {
 export async function moveItem(id, newParentId) {
 
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'PATCH',
     'headers': {
       'Content-Type': 'application/json',
@@ -172,7 +178,7 @@ export async function moveItem(id, newParentId) {
 export async function getAllFolders() {
   
   const token = sessionStorage.getItem("token")
-  const response = await fetch("http://localhost:3000/api/files", {
+  const response = await fetch(getBaseUrl() + "files", {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
@@ -189,15 +195,16 @@ export async function getAllFolders() {
 
 }
 
-export async function getFile(id) {
+export async function getFile(id, withcontent) {
 
   const token = sessionStorage.getItem("token")
 
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
-      'authorization': 'bearer ' + token
+      'authorization': 'bearer ' + token,
+      'withcontent': withcontent
     },
   });
 
@@ -210,7 +217,7 @@ export async function getFile(id) {
 export async function updateFile(id, updateData) {
   const token = sessionStorage.getItem("token");
 
-  const response = await fetch("http://localhost:3000/api/files/" + id, {
+  const response = await fetch(getBaseUrl() + "files/" + id, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -229,7 +236,7 @@ export async function updateFile(id, updateData) {
 
 export async function getUserById(id) {
   const token = sessionStorage.getItem("token");
-  const response = await fetch("http://localhost:3000/api/users/" + id, {
+  const response = await fetch(getBaseUrl() + "users/" + id, {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
@@ -246,7 +253,7 @@ export async function getUserById(id) {
 export async function updatePermission(fileId, userId, role) {
 
   const token = sessionStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/files/${fileId}/permissions/${userId}`, {
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${userId}`, {
     'method': 'PATCH',
     'headers': {
       'Content-Type': 'application/json',
@@ -262,7 +269,7 @@ export async function updatePermission(fileId, userId, role) {
 export async function shareWithUser(fileId, username) {
 
   const token = sessionStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/files/${fileId}/permissions`, {
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions`, {
     'method': 'POST',
     'headers': {
       'Content-Type': 'application/json',

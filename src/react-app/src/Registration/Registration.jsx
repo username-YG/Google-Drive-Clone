@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import googleLogo from "../../assets/google_logo.png";
 import { useNavigate } from "react-router-dom";
 
@@ -192,7 +192,9 @@ const Registration = () => {
      * Submits the final registration payload to the server
      */
     const handleSubmit = async () => {
-        if (!formData.profilePic) return setError("Please upload a profile picture");
+
+        // For now profile pic is optional
+        // if (!formData.profilePic) return setError("Please upload a profile picture");
 
         const displayName = `${formData.firstName} ${formData.lastName}`.trim();
         const userToRegister = {
@@ -203,7 +205,8 @@ const Registration = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/api/users", {
+            const port = import.meta.env.VITE_WEB_PORT || 3000;
+            const response = await fetch(`http://localhost:${port}/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userToRegister)
@@ -251,9 +254,13 @@ const Registration = () => {
                     </form>
 
                     <div className="card-navigation">
-                        {step > 1 && (
+                        
+                        {step === 1 ? (
+                            <button type="button" className="secondary-action" onClick={() => navigate('/login')}>Sign in instead</button>
+                        ) : (
                             <button type="button" className="secondary-action" onClick={() => setStep(step - 1)}>Back</button>
                         )}
+                        
                         <div className="flex-grow"></div>
                         <button
                             type="button"

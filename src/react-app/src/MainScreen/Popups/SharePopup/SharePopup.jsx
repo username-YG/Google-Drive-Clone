@@ -9,6 +9,12 @@ function SharePopupButtons({file, reload}) {
   
   const [isAddOpen, setIsAddOpen] = useState(false);
 
+  /*
+  Handles sharing the item with a user
+  If the item is already shared with the user we alert
+  If the asked user doesn't exist we alert
+  Sharing a file means adding read permissions to that user
+  */
   const handleSharing = async (newUsername) => {
     const msg = await shareWithUser(file.id, newUsername);
     if (msg) {
@@ -41,6 +47,10 @@ function SharedPopupItem({file, user, reload, toggle, reloadGrid}) {
 
   const roles = ["owner", "writer", "reader", "commenter", "none"];
 
+  /*
+  The owner can edit other users permissions
+  'none' means removing this user's permissions completely
+  */
   const handleEdit = async (e) => {
     const role = e.target.value;
     if (role === "none") {
@@ -49,6 +59,8 @@ function SharedPopupItem({file, user, reload, toggle, reloadGrid}) {
       await updatePermission(file.id, user.ID, role); 
     }
     reload();
+
+    // Reload if the user edited their own permissions
     if (user.ID === sessionStorage.getItem("id")) {
       toggle();
       reloadGrid();
@@ -81,6 +93,7 @@ function SharePopup({ file, toggle, reloadGrid }) {
   const popupRef = useRef(null);
   useOutsideClickListener(true, toggle, popupRef);
 
+  // Load list of users tat have access to this item
   const loadUsers = async (file_) => {
     if (!file_?.permissions) return;
     
@@ -94,8 +107,9 @@ function SharePopup({ file, toggle, reloadGrid }) {
 
   useEffect(() => { loadUsers(file) }, [file])
 
+  // Update the file and users list after the permission edit
   const updateFile = async () => {
-    const updatedFile = await getFile(file.id);
+    const updatedFile = await getFile(file.id, "false");
     await loadUsers(updatedFile);
   }
 

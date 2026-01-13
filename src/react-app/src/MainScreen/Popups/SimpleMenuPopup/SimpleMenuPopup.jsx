@@ -1,5 +1,6 @@
 import "./SimpleMenuPopup.css"
 
+// Popup with a simple menu of clickable items
 export function SimpleMenuPopup({items}) {
   return (
     <ul className="item-menu">

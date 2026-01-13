@@ -15,6 +15,12 @@ function EmptyFolder() {
   )
 }
 
+/*
+Shared screen shows:
+- Files and folders shared with me
+- Items from all levels, not just root level
+- Doesn't show items that are in trash 
+*/
 function SharedWithMe() {
   const { reload, setReload } = useOutletContext();
   return (

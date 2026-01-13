@@ -51,7 +51,7 @@ const listButtons = [
 ]
 
 function Logo() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Clicking the navigates home screen
   return (
     <div className="logo" onClick={() => navigate("/home")}>
       <img title="Drive" src={logo} />
@@ -80,6 +80,7 @@ function NewItemButton({ reload, setReload, onUploadFile, onUploadFolder }) {
   );
 }
 
+// Each item in the side panel (we track current using isActive)
 function PanelListItem({ title, link, img }) {
   return (
     <li>
@@ -93,6 +94,7 @@ function PanelListItem({ title, link, img }) {
   );
 }
 
+// The list of items in the side panel
 function PanelList() {
   return (
     <nav className="panel-list">
@@ -120,6 +122,7 @@ function SidePanel( { reload, setReload } ) {
       />
   )};
 
+  // The side panel includes the components: Logo, New button and list of pages
   return (
     <div className="side-panel">
       <Logo/>
