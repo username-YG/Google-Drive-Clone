@@ -1,0 +1,211 @@
+.registration-page {
+    background-color: var(--auth-outer-bg);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.google-rectangular-card {
+    background: var(--auth-card-bg);
+    border-radius: 24px;
+    width: 900px;
+    min-height: 340px;
+    display: flex;
+    padding: 40px;
+    color: var(--text-color);
+}
+
+.card-branding {
+    flex: 1;
+    padding-right: 40px;
+    border-right: 1px solid transparent;
+    text-align: left;
+}
+
+.google-custom-logo {
+    height: 40px;
+    margin-bottom: 24px;
+}
+
+.display-title {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-color);
+    margin-bottom: 12px;
+}
+
+.display-subtitle {
+    font-size: 16px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.card-inputs {
+    flex: 1;
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-container { flex-grow: 1; }
+
+.step-label {
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 24px;
+    color: var(--text-color);
+}
+
+.google-input-field {
+    width: 100%;
+    padding: 13px 15px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-color);
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.google-input-field:focus {
+    outline: none;
+    border: 2px solid #0b57d0;
+    padding: 12px 14px;
+}
+
+.field-hint {
+    font-size: 12px;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    margin-left: 0;
+    text-align: left;
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    color: #d93025;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.error-icon-circle {
+    background-color: #d93025;
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    margin-right: 8px;
+}
+
+.show-password-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.profile-upload-circle {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed var(--border-color);
+    border-radius: 50%;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-plus {
+    font-size: 24px;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.profile-center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-navigation {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.primary-action {
+    background-color: #0b57d0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 9px 24px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.primary-action:hover {
+    background-color: #0842c0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.secondary-action {
+    background-color: transparent;
+    color: #0b57d0;
+    border: none;
+    padding: 10px 24px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.2s ease;
+}
+
+.secondary-action:hover {
+    background-color: rgba(11, 87, 208, 0.08);
+}
+
+[data-theme='dark'] .secondary-action {
+    color: #8ab4f8;
+}
+
+[data-theme='dark'] .secondary-action:hover {
+    background-color: rgba(138, 180, 248, 0.08);
+    color: #d2e3fc;
+}
+
+.flex-grow { flex: 1; }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}

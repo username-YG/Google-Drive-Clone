@@ -2,15 +2,53 @@ const Files = require('../models/files')
 const Perms = require('../models/permissions')
 const Users = require('../models/users')
 
+function doesOwn(item, userId) {
+    const permissions = Perms.getPermissions(item.id);
+    return (permissions && permissions[userId] == "owner");
+}
+
+function isToday(timestamp) {
+    if (!timestamp) return false;
+    
+    const date = new Date(timestamp);
+    const today = new Date();
+
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
+}
+
+function filterFiles(files, filterType, userId) {
+
+    // Possible filters
+    const Filters = {
+        "OWNS": (item) => { return doesOwn(item, userId) },
+        "SHARES": (item) => { return !doesOwn(item, userId) },
+        "STARRED": (item) => { return (item.starred.includes(userId)) },
+        "TRASHED": (item) => { return item.trashed },
+        "NOT TRASHED": (item) => { return !(item.trashed) },
+        "FOLDER": (item) => { return item.isFolder },
+        "NOT FOLDER": (item) => { return !(item.isFolder) },
+        "RECENT": (item) => { return isToday(item.timestamp); }
+    }
+
+    // Get the function to filter with
+    const filterFunc = Filters[filterType];
+    if (typeof filterFunc !== 'function') return files;
+
+    // Return filtered items
+    let filteredFiles = files.filter(filterFunc);
+    return filteredFiles;
+}
+
 exports.createFile = async (req, res) => {
     try {
 
         // Return 400 when no body or header of userid is sent
-        if (!req.body || !req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing body or header or authentication user id" })
+        if (!req.body) {
+            return res.status(400).json({ error: "Missing body" })
         }
-        const usrId = req.headers['x-user-id'];
-
+        const usrId = req.user.ID
         const { name, content, isFolder, parentId } = req.body;
 
         // Return 400 when a field is missing
@@ -54,28 +92,40 @@ exports.createFile = async (req, res) => {
 
 exports.getAllFiles = async (req, res) => {
     try {
-
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
+        const withContent = req.headers["withcontent"] !== "false";
 
         // Return 404 if the user doesn't exist
         if (!Users.findByID(usrId)) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
+        // This special filter allows us to fetch items from all levels and not just root
+        let allFiles = Files.getAllFiles();
+        if (req.headers && req.headers.filter && req.headers.filter.includes("ALL LEVELS")) {
+            allFiles = Files.getAllIDs();
+        }
+
         // Filter only items the user is allowed to read
         const permittedFiles = [];
-        for (const fileId of Files.getAllFiles()) {
+        for (const fileId of allFiles) {
             const perm = Perms.getPermissions(fileId);
             if (perm && perm[usrId]) {
-                const fileObj = await Files.getFile(fileId);
+                const fileObj = await Files.getFile(fileId, withContent);
                 permittedFiles.push(fileObj);
             }
         }
-        res.json(permittedFiles);
+
+        // If a filter has been specified in request, apply it
+        let filteredFiles = permittedFiles;
+        if (req.headers && req.headers.filter) {
+            const filters = req.headers.filter.split(',').map(f => f.trim());
+            for (const filterType of filters) {
+                filteredFiles = filterFiles(filteredFiles, filterType, usrId);
+            }
+        }
+
+        res.json(filteredFiles);
 
     } catch(err) {
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -83,14 +133,8 @@ exports.getAllFiles = async (req, res) => {
 }
 
 exports.getFile = async (req, res) => {
-
     try {
-
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         // Return 404 if the file doesn't exist
         if (!Files.getMetadata(req.params.id)) {
@@ -107,7 +151,25 @@ exports.getFile = async (req, res) => {
             return res.status(403).json({ error: "Forbidden" })
         }
 
-        const file = await Files.getFile(req.params.id);
+        const withContent = req.headers["withcontent"] !== "false";
+        let file = await Files.getFile(req.params.id, withContent);
+        
+        // If a filter has been specified for folder content, apply it
+        if (file.isFolder && req.headers && req.headers.filter) {
+
+            // Replace id's with actual files
+            let filteredContent = await Promise.all(file.content.map(async (item) => { return await Files.getFile(item); }));
+
+            // Filter
+            const filters = req.headers.filter.split(',').map(f => f.trim());
+            for (const filterType of filters) {
+                filteredContent = filterFiles(filteredContent, filterType, usrId);
+            }
+
+            // Replace actual file with id
+            file.content = filteredContent.map(item => item.id);
+        }
+
         res.json(file);
 
     } catch(err) {
@@ -116,22 +178,19 @@ exports.getFile = async (req, res) => {
 }
 
 exports.updateFile = async (req, res) => {
-
     try {
-
-        // Return 400 when no body or header of userid is sent
-        if (!req.body || !req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing body or header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         /*
         The fields that can be changed using patch are only:
         - name
         - parentId
         - content (if it is a file)
+        - trashed (is the file in trash)
+        - starred (is starred for this user)
+        - timestamp
         */
-        let { name, content, parentId } = req.body
+        let { name, content, parentId, starred, trashed, timestamp } = req.body
 
         // Ensure the file and user exists
         const item = Files.getMetadata(req.params.id);
@@ -147,7 +206,12 @@ exports.updateFile = async (req, res) => {
 
         // Return 400 when all fields are missing
         // Return 400 when new name is empty
-        if (!name && content === undefined && parentId === undefined) {
+        if (!name
+            && content === undefined
+            && parentId === undefined
+            && starred == undefined
+            && trashed == undefined
+            && timestamp == undefined) {
             return res.status(400).json({ error: "Missing args" })
         }
 
@@ -162,11 +226,25 @@ exports.updateFile = async (req, res) => {
             }
         }
 
+        // Return 403 if the user doesn't have permissions to read the file
+        const perm = Perms.getPermissions(req.params.id);
+        if (!perm || !perm[usrId]) {
+            return res.status(403).json({ error: "Forbidden" })
+        }
+
+        // Return 403 if the user doesn't have owner permissions
+        if (trashed !== undefined) {
+            if (perm[usrId] != "owner") {
+                return res.status(403).json({ error: "Forbidden" })
+            }
+        }
+
         // Return 403 if the user doesn't have permissions to write to the file
         // Everyone is allowed to write to the root so we don't check that
-        const perm = Perms.getPermissions(req.params.id);
-        if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
-            return res.status(403).json({ error: "Forbidden" })
+        if (name || content !== undefined || parentId !== undefined) {
+            if (perm[usrId] != "owner" && perm[usrId] != "writer") {
+                return res.status(403).json({ error: "Forbidden" })
+            }
         }
 
         // Return 403 if the user doesn't have permissions to write to the folder
@@ -178,7 +256,8 @@ exports.updateFile = async (req, res) => {
             }
         }
 
-        const updatedFile = await Files.updateFile(req.params.id, name, content, parentId);
+        const updatedFile = await Files.updateFile(req.params.id,name, content, parentId, 
+                                                    usrId, trashed, starred, timestamp);
         res.status(204).end()
 
     } catch(err) {
@@ -188,14 +267,8 @@ exports.updateFile = async (req, res) => {
 }
 
 exports.deleteFile = async (req, res) => {
-
     try {
-        
-        // Return 400 when no header of userid is sent
-        if (!req.headers || !req.headers['x-user-id']) {
-            return res.status(400).json({ error: "Missing header or authentication user id" })
-        }
-        const usrId = req.headers['x-user-id'];
+        const usrId = req.user.ID;
 
         // Return 404 if the user doesn't exist
         if (!Users.findByID(usrId)) {

@@ -4,5 +4,7 @@ COPY src/MVC /usr/googledrive/app
 WORKDIR /usr/googledrive/app
 
 RUN npm install express
+RUN npm install jsonwebtoken
+RUN npm install cors
 
 CMD node app.js server $APP_PORT $WEB_PORT

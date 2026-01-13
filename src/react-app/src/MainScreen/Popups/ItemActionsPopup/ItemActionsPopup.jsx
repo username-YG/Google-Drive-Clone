@@ -1,0 +1,134 @@
+import { renameItem, trashItem, starItem, deleteItem, useOutsideClickListener, getFile } from "../PopupLogic.js";
+import { useState , useRef, useEffect } from 'react';
+
+import people from "../../../../assets/people.png"
+import star from "../../../../assets/star.png"
+import folder from "../../../../assets/folder.png"
+import trash from "../../../../assets/trash.png"
+import restore from "../../../../assets/restore.png"
+import delete_forever from "../../../../assets/delete_forever.png"
+import pencil from "../../../../assets/pencil.png"
+import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx"
+import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx"
+import SharePopup from "../SharePopup/SharePopup.jsx";
+
+import "./ItemActionsPopup.css"
+
+function ItemActionsPopup( { origFile, reload, setReload, toggle } ) {
+
+  const [isRenameOpen, setIsRenameOpen] = useState(false);
+  const popuRenamepRef = useRef(null);
+  useOutsideClickListener(isRenameOpen, setIsRenameOpen, popuRenamepRef)
+
+  const [isMovetoOpen, setIsMovetoOpen] = useState(false);
+  const popuMovetoRef = useRef(null);
+  useOutsideClickListener(isMovetoOpen, setIsMovetoOpen, popuMovetoRef)
+
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const popupShareRef = useRef(null);
+  useOutsideClickListener(isShareOpen, setIsShareOpen, popupShareRef);
+
+  const onRenameItem = async (name) => {
+    await renameItem(file.id, name);
+    toggle();
+    setIsRenameOpen(!isRenameOpen);
+    setReload(!reload);
+  };
+
+  // Get the latest metadata for this item (in case permissions has changed)
+  const [file, setFile] = useState(origFile);
+  useEffect(() => {
+    const fetchLatest = async () => {
+      const updatedFile = await getFile(origFile.id, "false");
+      if (updatedFile) setFile(updatedFile);
+    };
+    fetchLatest();
+  }, [origFile.id]);
+
+  // Check user permissions
+  const userId = sessionStorage.getItem("id");
+  const permissions = file?.permissions || {};
+  const role = permissions[userId];
+  const canPatch = (role === "owner" || role === "writer");
+  const doesOwn = (role === "owner");
+
+  const isStarred = file.starred.includes(userId);
+  const inTrash = file.trashed;
+
+  // In trash screen we only show 'Restore' and 'Delete forever' options
+  if (inTrash) {
+    return (
+      <ul className="item-actions-menu">
+
+        { inTrash && (
+          <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={async() => { await trashItem(file.id, false); toggle(); setReload(!reload); }} >
+            <img src={restore} />
+            Restore
+          </li>
+        )}
+
+        { inTrash && (
+          <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={async () => { await deleteItem(file.id); toggle(); setReload(!reload); }} >
+            <img src={delete_forever} />
+            Delete forever
+          </li>
+        )}
+
+      </ul>
+    )
+  } else {
+
+    // Actions that are not permitted are whited out and the user can't click them
+    return (
+      <ul className="item-actions-menu"
+        ref={(element) => { popuRenamepRef.current = element; popuMovetoRef.current = element; }}>
+
+        <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsRenameOpen(!isRenameOpen) } >
+          <img src={pencil} />
+          Rename
+          {isRenameOpen && <InputNamePopup toggle={() => setIsRenameOpen(!isRenameOpen)}
+                              onDone={onRenameItem} doneText="Ok" title="Rename" currentName={file.name} />}
+        </li>
+
+        <hr />
+
+        <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={() => setIsShareOpen(true)}>
+          <img src={people} />
+          Share
+          {isShareOpen && <SharePopup file={file} toggle={() => setIsShareOpen(false)} reloadGrid={() => setReload(!reload)} />}
+        </li>
+
+        <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
+          <img src={folder} />
+          Move to
+          {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} current={file} reload={reload} setReload={setReload} />}
+        </li>
+
+        <hr />
+
+        {/* We show either Star or Remove from starred */}
+        { !isStarred && (
+          <li className="item-actions-menu-item" onClick={async() => { await starItem(file.id, true); toggle(); setReload(!reload); } }>
+            <img src={star} />
+            Star
+          </li>
+        )}
+
+        { isStarred && (
+          <li className="item-actions-menu-item" onClick={async() => { await starItem(file.id, false); toggle(); setReload(!reload); } }>
+          <img src={star} />
+            Remove from starred
+          </li>
+        )}
+
+        <li className="item-actions-menu-item" onClick={async() => { await trashItem(file.id, true); toggle(); setReload(!reload); }} >
+          <img src={trash} />
+          Move to trash
+        </li>
+
+      </ul>
+    )
+
+  }
+}
+export default ItemActionsPopup

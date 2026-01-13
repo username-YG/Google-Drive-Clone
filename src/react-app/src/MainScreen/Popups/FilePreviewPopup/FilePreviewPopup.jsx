@@ -1,0 +1,596 @@
+import React, {useEffect, useRef, useState} from 'react';
+import { getFile, updateFile, trashItem, renameItem, starItem, deleteItem, useOutsideClickListener } from '../PopupLogic.js';
+import docsLogo from '../../../../assets/docs.png';
+import InputNamePopup from "../InputNamePopup/InputNamePopup.jsx";
+import MoveItemPopup from "../MoveItemPopup/MoveItemPopup.jsx";
+import SharePopup from "../SharePopup/SharePopup.jsx";
+import pdfLogo from '../../../../assets/pdf.png';
+import imageLogo from '../../../../assets/image.png';
+import txtLogo from '../../../../assets/txt.png';
+import notype from '../../../../assets/notype.png';
+import './FilePreviewPopup.css';
+
+// The left part of the toolbar shows file name, icon and close button
+const ToolBarLeft = ({ handleClose, fileName }) => {
+
+    // Supported types
+    const logoMap = {
+        'txt': txtLogo,
+        'doc': docsLogo,
+        'docx': docsLogo,
+        'pdf': pdfLogo,
+        'jpg': imageLogo,
+        'png': imageLogo,
+        'jpeg': imageLogo
+    };
+    const type = fileName?.split('.').pop().toLowerCase();
+    const fileIcon = logoMap[type] || notype;
+
+    return (
+        <div className="toolbar-left">
+            <button className="close-circle-btn" onClick={handleClose}>
+                <span className="material-symbols-outlined">close</span>
+            </button>
+            <img src={fileIcon} alt="file type" className="file-type-icon" />
+            <span className="file-title-white">{fileName}</span>
+        </div>
+    )
+}
+
+// The right part of the toolbar shows all possible actions
+const ToolBarRight = ( { file, onActionComplete, setIsOpen,
+                            fileName, setFileName,
+                            fileContent, setFileContent,
+                            isStarred, setIsStarred,
+                            isRenameOpen, setIsRenameOpen,
+                            isMoveToOpen, setIsMoveToOpen,
+                            isShareOpen, setIsShareOpen,
+                            setIsEditOpen, isEditOpen } ) => {
+
+    const moveToPopupRef = useRef(null);
+    useOutsideClickListener(isMoveToOpen, setIsMoveToOpen, moveToPopupRef);
+    useOutsideClickListener(isShareOpen, setIsShareOpen, moveToPopupRef);
+
+    const type = fileName?.split('.').pop().toLowerCase();
+    const isTXT = type === 'txt';
+    const isImage = ['jpg', 'jpeg', 'png'].includes(type);
+
+    // Parse url and user permissions
+    const inTrash = file.trashed;
+    const userId = sessionStorage.getItem("id");
+    const permissions = file?.permissions || {};
+    const role = permissions[userId];
+    const canPatch = (role === "owner" || role === "writer");
+    const doesOwn = (role === "owner");
+
+    // Handle text editing and immediate reload
+    const onEditText = async (newText) => {
+        try {
+            await updateFile(file.id, { content: newText });
+            setFileContent(newText);
+            if (onActionComplete) onActionComplete();
+            setIsEditOpen(false);
+        } catch (error) {
+            console.error("Failed to edit text:", error);
+        }
+    };
+
+    // Handle changing the image with a different image
+    const handleSwapImage = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+
+        fileInput.onchange = async (e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+                // Load image with base64 reader
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const base64Image = event.target?.result;
+                    if (typeof base64Image === 'string') {
+                        try {
+                            await updateFile(file.id, { content: base64Image });
+
+                            setFileContent(base64Image);
+                            if (onActionComplete) onActionComplete();
+                        } catch (error) {
+                            console.error("Error swapping image:", error);
+                        }
+                    }
+                };  
+                // Now treat as URL
+                reader.readAsDataURL(selectedFile);
+            }
+        };
+        fileInput.click();
+    };
+
+    const handleTrash = async () => {
+        try {
+            await trashItem(file?.id, true);
+            if (onActionComplete) onActionComplete();
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to move item to trash:", error);
+        }
+    };
+
+    const handleRestore = async () => {
+        try {
+            await trashItem(file?.id, false);
+            if (onActionComplete) onActionComplete();
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to restore item:", error);
+        }
+    };
+
+    const handleDeleteForever = async () => {
+        try {
+            await deleteItem(file?.id);
+            if (onActionComplete) onActionComplete();
+            setIsOpen(false);
+        } catch (error) {
+            console.error("Failed to delete item forever:", error);
+        }
+    };
+
+    const onRenameItem = async (newName) => {
+        if (!newName || newName === fileName) {
+            setIsRenameOpen(false);
+            return;
+        }
+
+        try {
+            await renameItem(file?.id, newName);
+            setFileName(newName)
+            if (onActionComplete) onActionComplete();
+            setIsRenameOpen(false);
+        } catch (error) {
+            console.error("Rename failed", error);
+        }
+    };
+
+    const handleStar = async () => {
+        const nextState = !isStarred;
+
+        try {
+            await starItem(file?.id, nextState);
+            setIsStarred(nextState);
+            if (onActionComplete) onActionComplete();
+        } catch (error) {
+            console.error("Failed to toggle star:", error);
+        }
+    };
+
+    const handleDownload = async () => {
+        if (!fileContent) {
+            alert("File content is not loaded yet.");
+            return;
+        }
+
+        // Handle download of txt items
+        if (type === 'txt') {
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName || 'download');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            return;
+        }
+
+        // Handle download of other types
+        try {
+            const response = await fetch(fileContent);
+            const blob = await response.blob(); // Blob = binary large object
+
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+
+            link.setAttribute('download', fileName || 'download');
+
+            document.body.appendChild(link);
+            link.click();
+
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download failed:", error);
+            window.open(fileContent, '_blank');
+        }
+    };
+
+    // If we are in trash screen we only show Restore and Delete forever actions
+    if (inTrash) {
+        return (
+            <div className="toolbar-right">
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleRestore}>
+                    <span className="material-symbols-outlined">restore</span>
+                    <span className="tooltip-text">Restore</span>
+                </button>
+
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleDeleteForever}>
+                    <span className="material-symbols-outlined">delete_forever</span>
+                    <span className="tooltip-text">Delete forever</span>
+                </button>
+
+                <div className="toolbar-divider"></div>
+
+                <button className="icon-btn-white" onClick={handleDownload}>
+                    <span className="material-symbols-outlined">download</span>
+                    <span className="tooltip-text">Download</span>
+                </button>
+            </div>
+        );
+    }
+
+    // Choose which actions to show based on url, type ect
+    // Action the user isn't permitted to do are whited out
+    return (
+        <div className="toolbar-right" ref={moveToPopupRef}>
+            {(isTXT || isImage) && (
+                <div className="edit-action-wrapper" style={{ display: 'inline-block', position: 'relative' }}>
+                    <button
+                        className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`}
+                        onClick={isTXT ? () => setIsEditOpen(!isEditOpen) : handleSwapImage}
+                    >
+                    <span className="material-symbols-outlined">
+                        {isTXT ? 'edit' : 'published_with_changes'}
+                    </span>
+                        <span className="tooltip-text">
+                        {isTXT ? 'Edit text' : 'Swap content'}
+                    </span>
+                    </button>
+
+                    {isEditOpen && (
+                        <div className="edit-context-wrapper">
+                            <InputNamePopup
+                                toggle={() => setIsEditOpen(false)}
+                                onDone={onEditText}
+                                doneText="Save"
+                                title="Edit Text"
+                                currentName={fileContent}
+                                extended={true}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="rename-container" style={{ display: 'inline-block', position: 'relative' }}>
+                <button className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`} onClick={() => setIsRenameOpen(!isRenameOpen)}>
+                    <span className="material-symbols-outlined">drive_file_rename_outline</span>
+                    <span className="tooltip-text">Rename</span>
+                </button>
+
+                {isRenameOpen && (
+                    <div className="rename-context-wrapper">
+                        <InputNamePopup
+                            toggle={() => setIsRenameOpen(false)}
+                            onDone={onRenameItem}
+                            doneText="Ok"
+                            title="Rename"
+                            currentName={fileName}
+                        />
+                    </div>
+                )}
+            </div>
+
+            <div className="toolbar-divider"></div>
+
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
+                <span className="material-symbols-outlined">people</span>
+                <span className="tooltip-text">Share</span>
+            </button>
+
+            {isShareOpen && (
+                <SharePopup 
+                    file={file} 
+                    toggle={() => setIsShareOpen(false)} 
+                    reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
+                />
+            )}
+
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
+                <span className="material-symbols-outlined">drive_file_move</span>
+                <span className="tooltip-text">Move to</span>
+            </button>
+
+            {isMoveToOpen && (
+                <MoveItemPopup current={file}
+                    toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
+
+            <button className="icon-btn-white" onClick={handleStar}>
+            <span
+                className="material-symbols-outlined"
+                style={{
+                    fontVariationSettings: isStarred ? "'FILL' 1" : "'FILL' 0",
+                    transition: 'font-variation-settings 0.2s ease'
+                }}
+            >
+                star
+            </span>
+                <span className="tooltip-text">
+                {isStarred ? 'Remove from starred' : 'Add to starred'}
+            </span>
+            </button>
+
+            <button className="icon-btn-white" onClick={handleTrash}>
+                <span className="material-symbols-outlined">delete</span>
+                <span className="tooltip-text">Move to trash</span>
+            </button>
+
+            <div className="toolbar-divider"></div>
+
+            <button className="icon-btn-white" onClick={handleDownload}>
+                <span className="material-symbols-outlined">download</span>
+                <span className="tooltip-text">Download</span>
+            </button>
+        </div>
+    )
+}
+
+// The center of the toolbar shows zoom options
+const ToolBarCenter = ( { fileName, fileContent, loading, showUI,
+                            zoomLevel, setZoomLevel,
+                            zoomBarRef, contentRef, } ) => {
+
+    // Handle different zoom options
+    const handleZoom = (e, type_) => {
+        e.stopPropagation();
+        if (type_ === 'in') setZoomLevel(prev => Math.min(prev + 5, 50));
+        if (type_ === 'out') setZoomLevel(prev => Math.max(prev - 5, 10));
+        if (type_ === 'reset') setZoomLevel(14);
+    };
+
+    const type = fileName?.split('.').pop().toLowerCase();
+    const isPDF = type === 'pdf';
+
+    // Render content with the new zoom level
+    const renderContent = () => {
+        if (loading) return <div className="unsupported-msg">Loading...</div>;
+        if (!fileContent) return <div className="unsupported-msg">No content found</div>;
+
+        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(type);
+        if (isImage) {
+            return (
+                <div className="image-viewer-container">
+                    <img
+                        src={fileContent}
+                        alt={fileName}
+                        className="preview-image dynamic-zoom"
+                        style={{
+                            transform: `scale(${zoomLevel / 14})`,
+                            transition: 'transform 0.2s ease-out'
+                        }}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'path/to/fallback-image.png';
+                        }}
+                    />
+                </div>
+            );
+        }
+        if (type === 'pdf') {
+            return (
+                <div className="pdf-viewer-container">
+                    <iframe
+                        src={`${fileContent}#toolbar=0&navpanes=0`}
+                        title={fileName}
+                        className="pdf-display"
+                    />
+                </div>
+            );
+        }
+        if (type === 'txt') {
+            return (
+                <div className="google-text-viewer">
+                    <pre className="text-body" style={{ fontSize: `${zoomLevel}px` }}>
+                        {fileContent || ""}
+                    </pre>
+                </div>
+            );
+        }
+        return <div className="unsupported-msg">No preview available</div>;
+    };
+
+    // We have the option to zoom in, out, and revert to normal
+    return (
+        <div className="protected-center-column">
+            <div className="preview-content-container">
+                {isPDF ? (
+                    <div className="pdf-fixed-container" ref={contentRef}>
+                        {renderContent()}
+                    </div>
+                ) : (
+                    <div className="scroll-content-wrapper">
+                        <div ref={contentRef}
+                                style={{
+                                    width: isPDF ? '90vw' : (type === 'txt' ? '1050px' : 'fit-content'),
+                                    maxWidth: '1000px',
+                                    margin: '0 auto'
+                                }}
+                        >
+                            {renderContent()}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div
+                ref={zoomBarRef}
+                className={`zoom-floating-bar-wrapper ${!showUI ? 'ui-hidden' : ''}`}
+            >
+                {!isPDF && (
+                    <div className="zoom-floating-bar" onClick={(e) => e.stopPropagation()}>
+                        <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'in')}>+</button>
+                        <div className="zoom-divider"></div>
+                        <button className="zoom-icon-btn reset-text" onClick={(e) => handleZoom(e, 'reset')}>
+                            <span className="material-symbols-outlined reset-icon">search_check</span>
+                        </button>
+                        <div className="zoom-divider"></div>
+                        <button className="zoom-icon-btn" onClick={(e) => handleZoom(e, 'out')}>−</button>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}
+
+const FilePreviewPopup =  ({ file, isOpen, setIsOpen, onActionComplete }) => {
+    const [fileContent, setFileContent] = useState("");
+    const [fileName, setFileName] = useState(file?.name || "");
+    const [loading, setLoading] = useState(false);
+    const [isStarred, setIsStarred] = useState(!!file?.starred);
+    const [isRenameOpen, setIsRenameOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isMoveToOpen, setIsMoveToOpen] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
+
+    const toolbarRef = useRef(null);
+    const contentRef = useRef(null);
+    const zoomBarRef = useRef(null);
+    const overlayRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const [showUI, setShowUI] = useState(true);
+    const [zoomLevel, setZoomLevel] = useState(14);
+    const [bgOpacity, setBgOpacity] = useState(0);
+
+    // Hide toolbar after 2.5 seconds of inactivity
+    const resetTimer = () => {
+        setShowUI(true);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (isRenameOpen || isEditOpen || isMoveToOpen || isShareOpen) return;
+        timeoutRef.current = setTimeout(() => {
+            setShowUI(false);
+        }, 2500);
+    };
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            // Fetch the file content from the server
+            if (isOpen && file?.id) {
+                setLoading(true); // Show loading screen
+                try {
+                    const data = await getFile(file?.id);
+                    setFileContent(String(data.content));
+
+                    const currentUserId = sessionStorage.getItem("id");
+
+                    const isUserStarred = Array.isArray(data.starred)
+                        ? data.starred.includes(currentUserId)
+                        : !!data.starred;
+
+                    setIsStarred(isUserStarred);
+
+                } catch (error) {
+                    console.error("Failed to fetch file:", error);
+                } finally {
+                    setLoading(false); // Hide loading screen
+                }
+            }
+        };
+        void fetchContent();
+    }, [file?.id, isOpen]);
+
+    useEffect(() => {
+        setFileName(file?.name);
+    }, [file?.name]);
+
+    // Handles UI behaviour when renaming or editing
+    useEffect(() => {
+        if (isRenameOpen || isEditOpen) {
+            setShowUI(true);
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+            setTimeout(() => {
+                const inputElement = document.querySelector('.rename-context-wrapper .input-name-input, .edit-context-wrapper .input-name-input');
+                if (inputElement) {
+                    inputElement.value = isEditOpen ? fileContent : fileName;
+
+                    inputElement.dispatchEvent(new Event('input', { bubbles: true }));
+                    inputElement.focus();
+                    inputElement.select();
+                }
+            }, 50);
+        } else {
+            resetTimer();
+        }
+    }, [isRenameOpen, isEditOpen, fileName, fileContent]);
+
+    // Handles outside clicks in the case of multiple popups
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!isOpen) return;
+
+            const clickedInToolbar = toolbarRef.current?.contains(event.target);
+            const clickedInContent = contentRef.current?.contains(event.target);
+            const clickedInZoomBar = zoomBarRef.current?.contains(event.target);
+
+            if (!clickedInToolbar && !clickedInContent && !clickedInZoomBar) {
+                handleClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOpen, file]);
+
+    const handleScroll = (e) => {
+        resetTimer();
+        const scrollTop = e.target.scrollTop;
+        setBgOpacity(scrollTop > 0 ? 1 : 0);
+    };
+
+    if (!isOpen || !file) return null;
+
+    const handleClose = () => {
+        setZoomLevel(14);
+        setIsOpen(false);
+    };
+
+    const type = fileName?.split('.').pop().toLowerCase();
+    const isPDF = type === 'pdf';
+
+    return (
+        <div
+            className={`google-preview-overlay ${isPDF ? 'no-scroll' : ''}`}
+            ref={overlayRef}
+            onScroll={handleScroll}
+            onMouseMove={resetTimer} >
+        
+            <div
+                ref={toolbarRef}
+                className={`preview-toolbar ${!showUI ? 'ui-hidden' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+                style={{ backgroundColor: bgOpacity > 0 ? `rgba(32, 33, 36, ${bgOpacity})` : 'transparent' }} >
+
+                <ToolBarLeft handleClose={handleClose} fileName={fileName} />
+                <ToolBarRight file={file} onActionComplete={onActionComplete} setIsOpen={setIsOpen}
+                            fileName={fileName} setFileName={setFileName}
+                            fileContent={fileContent} setFileContent={setFileContent}
+                            isStarred={isStarred} setIsStarred={setIsStarred}
+                            isRenameOpen={isRenameOpen} setIsRenameOpen={setIsRenameOpen}
+                            isMoveToOpen={isMoveToOpen} setIsMoveToOpen={setIsMoveToOpen}
+                            isShareOpen={isShareOpen} setIsShareOpen={setIsShareOpen}
+                            setIsEditOpen={setIsEditOpen} isEditOpen={isEditOpen} />
+            </div>
+
+                <ToolBarCenter fileName={fileName} fileContent={fileContent} loading={loading} showUI={showUI}
+                                zoomLevel={zoomLevel} setZoomLevel={setZoomLevel}
+                                zoomBarRef={zoomBarRef} contentRef={contentRef} />
+
+        </div>
+    );
+};
+
+export default FilePreviewPopup;

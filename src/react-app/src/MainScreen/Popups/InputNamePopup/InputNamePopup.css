@@ -1,0 +1,89 @@
+.input-name-screen {
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  z-index: 99999 !important;
+}
+
+div.input-name-popup {
+  width: 350px;
+  padding: 30px;
+  border-radius: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  background-color: var(--input-card-bg) !important;
+  color: var(--text-color) !important;
+  z-index: 100000 !important;
+  cursor: default;
+}
+
+.input-name-screen .input-name-popup h2.input-name-title {
+  color: var(--text-color) !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 25px 0 !important;
+  position: relative !important;
+  font-size: 24px !important;
+  font-weight: 500 !important;
+}
+
+.input-name-screen .input-name-popup h2.input-name-title::before,
+.input-name-screen .input-name-popup h2.input-name-title::after {
+  content: none !important;
+  display: none !important;
+}
+
+.input-name-popup input.input-name-input,
+.input-name-popup textarea.input-name-input {
+  width: 100% !important;
+  height: 55px;
+  padding: 10px 16px !important;
+  margin-bottom: 24px !important;
+  font-size: 16px !important;
+  border-radius: 4px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+
+  background-color: var(--input-bg-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--input-border-color) !important;
+}
+
+.input-name-popup input.input-name-input:focus,
+.input-name-popup textarea.input-name-input:focus {
+  border: 2px solid #1a73e8 !important;
+  padding: 9px 15px !important;
+}
+
+.input-name-buttons button {
+  background: none !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  padding: 10px 24px !important;
+  border-radius: 20px !important;
+  cursor: pointer !important;
+  color: #1a73e8 !important;
+}
+
+.input-name-buttons button:hover {
+  background-color: var(--hover-color) !important;
+}
+
+.input-name-popup input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-color) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+}
+
+.input-name-popup textarea.input-name-input {
+  height: 300px !important;
+}

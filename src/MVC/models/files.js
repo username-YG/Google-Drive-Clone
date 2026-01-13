@@ -2,7 +2,7 @@ import net from "net";
 import { getPermissions, deleteAllPermissions } from './permissions.js'
 
 const rootId = crypto.randomUUID();
-const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {} } ];
+const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() } ];
 
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
@@ -11,7 +11,7 @@ const sendToServer = (msg) => {
         const ip = process.argv[2];
         const port = +process.argv[3];
         const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
-        sock.setTimeout(2000); // 2 sec before we give up
+        sock.setTimeout(20000); // 20 sec before we give up
 
         // Get response from server
         let res = Buffer.alloc(0), len = null; // Buffer handles raw bytes
@@ -60,7 +60,7 @@ async function createFile(name, content, isFolder, parentId) {
 
     // Add new item to array
     if (parentId === null) parentId = rootId;
-    const newItem = { id, name, isFolder, parentId, content: [], permissions: {} };
+    const newItem = { id, name, isFolder, parentId, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() };
     filesystem.push(newItem);
 
     // If it is a folder, update parent
@@ -84,26 +84,43 @@ function getAllIDs() {
     return allIds;
 }
 
-async function getFile(id) {
+async function getFile(id, withContent) {
+    if (withContent) getMetadata(id).timestamp = new Date();
     // We use a copy so we don't store the content or permissions on the server
     const copy = JSON.parse(JSON.stringify(getMetadata(id)));
     copy.permissions = getPermissions(id);
-    if (copy.isFolder === false) copy.content = await sendToServer(`GET ${id}`);
+    if (copy.isFolder === false && withContent !== false) copy.content = await sendToServer(`GET ${id}`);
     return copy;
 }
 
-async function updateFile(id, name, content, parentId) {
+async function updateFile(id, name, content, parentId, userId, trashed, starred, timestamp) {
 
     const item = getMetadata(id);
 
-    // Update name is asked to
+    // Update name if asked to
     if (name) {
         item.name = name;
     }
 
+    // Update trashed if asked to
+    if (trashed !== undefined) {
+        item.trashed = trashed;
+    }
+
+    // Update starred if asked to
+    if (starred !== undefined) {
+        if (starred) {
+            if (!item.starred.includes(userId)) {
+                item.starred.push(userId);
+            }
+        } else {
+            item.starred = item.starred.filter(id => id !== userId);
+        }
+    }
+
     // Update content if asked to
     // Attempting to change folder content is invalid and ignored
-    if (content && !item.isFolder) {
+    if (content !== undefined && !item.isFolder) {
         await sendToServer(`DELETE ${id}`);
         await sendToServer(`POST ${id} ${content}`);
     }
@@ -116,6 +133,13 @@ async function updateFile(id, name, content, parentId) {
         const newParent = getMetadata(parentId);
         newParent.content.push(id);
         item.parentId = parentId;
+    }
+
+    // Update the timestamp
+    if (timestamp !== undefined) {
+        item.timestamp = timestamp;
+    } else {
+        item.timestamp = new Date();
     }
 
     // We also want to return content and permissions

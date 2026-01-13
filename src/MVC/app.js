@@ -4,8 +4,11 @@ const filesRoutes = require('./routes/files')
 const searchRoutes = require('./routes/search')
 const usersRoutes = require('./routes/users')
 const tokensRoutes = require('./routes/tokens')
+const cors = require('cors');
 
-app.use(express.json())
+app.use(cors({ exposedHeaders: ['Location'] })); // Enables Cross-Origin Resource Sharing
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 app.use('/api/files', filesRoutes)
 app.use('/api/search', searchRoutes)
 app.use('/api/users', usersRoutes)
