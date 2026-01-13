@@ -138,7 +138,7 @@ docker compose up --build react-app server web-server
 ``` 
 
 ## Running Examples:
-First of all, entering the site requires you to log inL
+First of all, entering the site requires you to log in:
 <img width="1875" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
 
 If you don't have an account yet, you can press "Create account" and you will be moved to this Registeration screen:
@@ -146,40 +146,57 @@ If you don't have an account yet, you can press "Create account" and you will be
 
 After finishing Registration, you'll return to the Login screen and now sign in with the new account you created.
 Now, after signing in, this is the Main App page:
-<img width="1900" height="831" alt="image" src="https://github.com/user-attachments/assets/6d259a69-c5af-4d42-834a-0586d728424f" />
+<img width="1905" height="832" alt="image" src="https://github.com/user-attachments/assets/5e9644eb-7c28-4d89-ab9e-5afff4ea4bcf" />
 
 To upload new files/folders (or create folders) you can press the button "+ New" from the side bar and you'll see this:
-<img width="492" height="325" alt="image" src="https://github.com/user-attachments/assets/b0d7eb2a-7734-43e6-a175-423faa7664de" />
+<img width="609" height="352" alt="image" src="https://github.com/user-attachments/assets/1caf5610-b40c-4b44-a1dc-239013c9732d" />
 
 For uploading files/folders, pressing on the button will open your local files browser and you can choose from it:
 <img width="1049" height="707" alt="image" src="https://github.com/user-attachments/assets/b90ea47f-e101-4782-817a-8d54bbcbb6c6" />
 
 After adding some files and create a folder for example, the screen looks like that:
-<img width="1870" height="815" alt="image" src="https://github.com/user-attachments/assets/bc4d7ea1-2efa-4a2c-941a-f90c9148e927" />
+<img width="1116" height="603" alt="image" src="https://github.com/user-attachments/assets/6fca5e22-e25e-474c-a3b5-c937f832788b" />
+<img width="1890" height="834" alt="image" src="https://github.com/user-attachments/assets/a86b3ae6-d3ee-4fc9-a642-163980b60bf4" />
+
 
 You can press each of the files to open a preview of it:
-<img width="1850" height="828" alt="image" src="https://github.com/user-attachments/assets/329af12a-4db4-469e-b3fa-0890b408b6ee" />
-You can see the bar with all of the options mentioned above at the top, and the zoom bar at the bottom. 
+<img width="1862" height="831" alt="image" src="https://github.com/user-attachments/assets/a83e2f30-b035-4f91-b5a9-5440fa231f02" />
+
+You can see the bar with all of the options mentioned above at the top, and the zoom bar at the bottom:
+<img width="1835" height="825" alt="image" src="https://github.com/user-attachments/assets/0fa8dd6f-2424-4c34-b1a0-21ab070ec531" />
+
 For example, this is what pressing on the Edit text button looks like:
-<img width="1690" height="832" alt="image" src="https://github.com/user-attachments/assets/9e1f63c5-91ce-427a-bd09-f81c0f2c0c0a" />
-<img width="1813" height="823" alt="image" src="https://github.com/user-attachments/assets/511f0b02-b7ad-49e6-abdb-6dfc8dea65ae" />
+<img width="1863" height="819" alt="image" src="https://github.com/user-attachments/assets/ab5c4d12-e3bb-45b9-93fa-7662837ddcea" />
+<img width="1849" height="832" alt="image" src="https://github.com/user-attachments/assets/7dfa170d-cd3f-4fb9-9c10-b9a5f1f31836" />
+
+You can also move files to different folders:
+<img width="1845" height="831" alt="image" src="https://github.com/user-attachments/assets/ec551403-1dc1-459b-bac9-49affa45c864" />
+<img width="1891" height="812" alt="image" src="https://github.com/user-attachments/assets/0ea5b327-4dd9-43c6-801a-16540d19b19e" />
+
+And even share files with other users! :
+<img width="1860" height="830" alt="image" src="https://github.com/user-attachments/assets/7a0de9f6-46b4-4f8b-babf-ab58165b626e" />
+<img width="1869" height="823" alt="image" src="https://github.com/user-attachments/assets/f74dd75b-dfa0-4b89-984d-623b9bd80676" />
 
 To exit preview mode, you can press on the close button (X) on the left-top edge, or just press the dark background outside the file itself.
 
 You can also click the 3 dots button on each file to open it's menu with similar options but without entering preview mode:
-<img width="1554" height="695" alt="image" src="https://github.com/user-attachments/assets/e3e3ccf4-8210-4fe5-bde7-9866d42ff424" />
+<img width="1667" height="723" alt="image" src="https://github.com/user-attachments/assets/b4d0cad9-c98a-49f2-8b44-62b1037793a7" />
 
 You also have at the side bar several pages with unique attributes:
+
 Home: The home page of the app, you can see there all the files you have access to:
 <img width="1554" height="695" alt="image" src="https://github.com/user-attachments/assets/71b97c9c-a3b2-4755-a0c8-3423338efd64" />
 
 My drive: Presents only the files you are the owner of.
-Shared with me: Presents all the files that another users gave you permissions of:
-<img width="1885" height="799" alt="image" src="https://github.com/user-attachments/assets/fa7e273b-c1f2-4448-a2f9-6925c26a6854" />
+
+Shared with me: Presents all the files that other users gave you permission to:
+<img width="1900" height="824" alt="image" src="https://github.com/user-attachments/assets/ee2ede19-4d47-4e08-85e4-273fb48a579f" />
 
 Recent: Presents the files you opened recently.
+
 Starred: pressing the "Add to starred" button for a file will allow you to see it on the Starred page:
-<img width="1646" height="821" alt="image" src="https://github.com/user-attachments/assets/7ed1202a-ca83-4f4f-8802-454cd8909b9d" />
+<img width="400" height="441" alt="image" src="https://github.com/user-attachments/assets/51f9ec7e-4ce9-4514-88de-6154403bf5d3" />
+<img width="1880" height="799" alt="image" src="https://github.com/user-attachments/assets/27fd5522-e717-43a1-8ef5-fb3ad49be95d" />
 
 Trash: Presents all the files you sent to trash. only from there you delete files permanently:
 <img width="1134" height="659" alt="image" src="https://github.com/user-attachments/assets/5cae807a-6fdf-4607-939d-fe5453f0271d" />
@@ -187,9 +204,10 @@ Trash: Presents all the files you sent to trash. only from there you delete file
 <img width="739" height="543" alt="image" src="https://github.com/user-attachments/assets/7cb0e3bf-cf72-4f44-9acb-ac5253b2d888" />
 <img width="1828" height="677" alt="image" src="https://github.com/user-attachments/assets/41dd8543-7be4-4d52-a23d-54feae6b2a47" />
 
-You think we're done? We have even more abilities!
+Oh you think we're done? We have even more abilities!
+
 Search bar: You can search files by their names (or even text files by their content):
-<img width="1889" height="763" alt="image" src="https://github.com/user-attachments/assets/a2bdbd4c-437e-4b22-9110-f9cdc39cedb9" />
+<img width="1893" height="757" alt="image" src="https://github.com/user-attachments/assets/33e87b43-3843-429d-965c-40c2b0f44a30" />
 
 You can sign out and add other accounts:
 <img width="622" height="485" alt="image" src="https://github.com/user-attachments/assets/96bf3503-9543-4770-8a7c-6ff3b6d7d626" />
