@@ -7,68 +7,83 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #00000066;
-  z-index: 3000;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  z-index: 99999 !important;
 }
 
-.input-name-popup textarea.input-name-input {
-  height: 300px;
-  resize: none;
-}
-
-.input-name-popup {
+div.input-name-popup {
   width: 350px;
   padding: 30px;
   border-radius: 28px;
-  box-shadow: 0 4px 12px #00000026;
-  background-color: var(--card-bg);
-  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  z-index: 100000 !important;
   cursor: default;
 }
 
-.input-name-title {
-  color: var(--text-color);
-  margin-top: 0;
-  font-size: 24px;
-  font-weight: normal;
+.input-name-screen .input-name-popup h2.input-name-title {
+  color: var(--text-color) !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 25px 0 !important;
+  position: relative !important;
+  font-size: 24px !important;
+  font-weight: 500 !important;
 }
 
-.input-name-input {
-  width: 100%;
+.input-name-screen .input-name-popup h2.input-name-title::before,
+.input-name-screen .input-name-popup h2.input-name-title::after {
+  content: none !important;
+  display: none !important;
+}
+
+.input-name-popup input.input-name-input,
+.input-name-popup textarea.input-name-input {
+  width: 100% !important;
   height: 55px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-bottom: 24px;
-  font-size: 16px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border-radius: 4px;
-  outline: none;
-  box-sizing: border-box;
+  padding: 10px 16px !important;
+  margin-bottom: 24px !important;
+  font-size: 16px !important;
+  border-radius: 4px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
-.input-name-buttons {
-  display: flex;
-  justify-content: flex-end;
+.input-name-popup input.input-name-input:focus,
+.input-name-popup textarea.input-name-input:focus {
+  border: 2px solid #1a73e8 !important;
+  padding: 9px 15px !important;
 }
 
 .input-name-buttons button {
-  background: none;
-  border: none;
-  font-size: 14px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 24px;
-  padding-right: 24px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.1s;
-  color: #0b57d0;
+  background: none !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 10px 24px !important;
+  border-radius: 20px !important;
+  cursor: pointer !important;
+  color: #1a73e8 !important;
 }
 
 .input-name-buttons button:hover {
-  background-color: var(--hover-color);
+  background-color: var(--hover-color) !important;
+}
+
+.input-name-popup input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-color) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+}
+
+.input-name-popup textarea.input-name-input {
+  height: 300px !important;
 }

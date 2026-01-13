@@ -106,11 +106,23 @@
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color);
+  outline: none;
+}
+
+.share-user-role option {
+  background-color: var(--card-bg);
   color: var(--text-color);
 }
 
 .share-user-role:hover {
-  background-color: var(--hover-color);
+  background-color: var(--hover-color) !important;
+}
+
+[data-theme='dark'] .share-user-role {
+  color-scheme: dark;
 }
 
 .share-buttons {

@@ -1,5 +1,5 @@
 .registration-page {
-    background-color: var(--bg-color);
+    background-color: var(--auth-outer-bg);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -8,8 +8,7 @@
 }
 
 .google-rectangular-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
+    background: var(--auth-card-bg);
     border-radius: 24px;
     width: 900px;
     min-height: 340px;
@@ -178,7 +177,7 @@
 
 .secondary-action {
     background-color: transparent;
-    color: #8ab4f8;
+    color: #0b57d0;
     border: none;
     padding: 10px 24px;
     font-weight: 500;
@@ -188,12 +187,25 @@
 }
 
 .secondary-action:hover {
-    background-color: var(--hover-color);
+    background-color: rgba(11, 87, 208, 0.08);
+}
+
+[data-theme='dark'] .secondary-action {
+    color: #8ab4f8;
+}
+
+[data-theme='dark'] .secondary-action:hover {
+    background-color: rgba(138, 180, 248, 0.08);
     color: #d2e3fc;
 }
 
-.secondary-action:active {
-    background-color: rgba(66, 133, 244, 0.15);
-}
-
 .flex-grow { flex: 1; }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
