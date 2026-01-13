@@ -121,19 +121,27 @@
   border-radius: 18px;
   padding: 9px;
   margin: 4px;
+  filter: var(--topbar-icon-filter) !important;
+  transition: background-color 0.2s ease;
 }
 
 #dots:hover {
-  background-color: #d6d8d7;
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  filter: var(--topbar-icon-filter) !important;
 }
 
 .files-grid-item.selected #dots:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 [data-theme='dark'] .folder-item img,
 [data-theme='dark'] #dots {
-  filter: var(--topbar-icon-filter);
+  filter: brightness(0) invert(1) !important;
+}
+
+[data-theme='dark'] #dots:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  filter: brightness(0) invert(1) !important;
 }
 
 .actions-popup-div {

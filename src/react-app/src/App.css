@@ -11,21 +11,25 @@
   --menu-text-color: #484848;
   --topbar-icon-filter: brightness(0);
   --icon-filter: none;
+  --auth-outer-bg: #f7f9fc;
+  --auth-card-bg: #ffffff;
 }
 
 [data-theme='dark'] {
-  --bg-color: #131314;
+  --bg-color: #161617;
   --text-color: #e3e3e3;
   --card-bg: #1e1f20;
-  --sidebar-bg: #131314;
+  --sidebar-bg: #161617;
   --hover-color: #2d2e30;
   --preview-bg: #18191a;
-  --main-content-bg: #131314;
+  --main-content-bg: #0f0f0f;
   --border-color: #444746;
   --selected-blue: #004a77;
   --icon-filter: brightness(0) invert(1);
   --topbar-icon-filter: brightness(0) invert(1);
   --menu-text-color: #e3e3e3;
+  --auth-outer-bg: #1d1e20;
+  --auth-card-bg: #131314;
 }
 
 body {

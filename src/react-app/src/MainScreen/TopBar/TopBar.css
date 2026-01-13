@@ -36,7 +36,7 @@
 #reguler-icon {
   width: 24px;
   height: 24px;
-  opacity: 0.7;
+  opacity: 0.8;
   filter: var(--topbar-icon-filter);
 }
 
@@ -97,7 +97,7 @@
   cursor: pointer;
   fill: #444746;
   border-radius: 50%;
-  opacity: 0.7;
+  opacity: 0.8;
   box-sizing: content-box;
   filter: var(--topbar-icon-filter);
 }
