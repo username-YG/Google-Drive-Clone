@@ -98,7 +98,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                             console.error("Error swapping image:", error);
                         }
                     }
-                };
+                };  
                 // Now treat as URL
                 reader.readAsDataURL(selectedFile);
             }
@@ -288,22 +288,24 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
             <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
                 <span className="material-symbols-outlined">people</span>
                 <span className="tooltip-text">Share</span>
-                {isShareOpen && (
-                    <SharePopup 
-                        file={file} 
-                        toggle={() => setIsShareOpen(false)} 
-                        reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
-                    />
-                )}
             </button>
+
+            {isShareOpen && (
+                <SharePopup 
+                    file={file} 
+                    toggle={() => setIsShareOpen(false)} 
+                    reloadGrid={() => {if (onActionComplete) onActionComplete(); setIsOpen(false); }} 
+                />
+            )}
 
             <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
                 <span className="material-symbols-outlined">drive_file_move</span>
                 <span className="tooltip-text">Move to</span>
-                {isMoveToOpen && (
-                    <MoveItemPopup current={file}
-                        toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
             </button>
+
+            {isMoveToOpen && (
+                <MoveItemPopup current={file}
+                    toggle={() => {setIsMoveToOpen(false); if (onActionComplete) onActionComplete();} } />)}
 
             <button className="icon-btn-white" onClick={handleStar}>
             <span

@@ -16,7 +16,7 @@ div.input-name-popup {
   padding: 30px;
   border-radius: 28px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-  background-color: var(--card-bg) !important;
+  background-color: var(--input-card-bg) !important;
   color: var(--text-color) !important;
   z-index: 100000 !important;
   cursor: default;
@@ -53,9 +53,9 @@ div.input-name-popup {
   outline: none !important;
   box-sizing: border-box !important;
 
-  background-color: var(--bg-color) !important;
+  background-color: var(--input-bg-color) !important;
   color: var(--text-color) !important;
-  border: 1px solid var(--border-color) !important;
+  border: 1px solid var(--input-border-color) !important;
 }
 
 .input-name-popup input.input-name-input:focus,
@@ -68,7 +68,7 @@ div.input-name-popup {
   background: none !important;
   border: none !important;
   font-size: 14px !important;
-  font-weight: 600 !important;
+  font-weight: 400 !important;
   padding: 10px 24px !important;
   border-radius: 20px !important;
   cursor: pointer !important;

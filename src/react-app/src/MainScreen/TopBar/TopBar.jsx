@@ -112,6 +112,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
       title: user?.displayName || "Account",
       menuItems: <ProfilePopup/>,
       img: profilePic,
+      isProfile: true
     }
   ]
 
@@ -119,7 +120,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
     <nav className="bar-list">
       <ul>
         {barButtons.map((item, i) => (
-            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img} isProfile={item.title === "Account"} />
+            <BarListItem key={i} title={item.title} menuItems={item.menuItems} img={item.img} isProfile={item.isProfile} />
         ))}
       </ul>
     </nav>
