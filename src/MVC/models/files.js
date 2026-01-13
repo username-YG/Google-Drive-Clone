@@ -85,6 +85,7 @@ function getAllIDs() {
 }
 
 async function getFile(id, withContent) {
+    if (withContent) getMetadata(id).timestamp = new Date();
     // We use a copy so we don't store the content or permissions on the server
     const copy = JSON.parse(JSON.stringify(getMetadata(id)));
     copy.permissions = getPermissions(id);

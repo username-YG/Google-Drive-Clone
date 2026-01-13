@@ -109,7 +109,7 @@ const updateData = async (folderId, setItems, filter, navigate, query) => {
 
   // Update the grid with the new data
   // By fetching metdata only, without content, we make this function very fast
-  finalData.sort((a, b) => b.timestamp - a.timestamp); // sort by timestamp decreasing
+  finalData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort by timestamp decreasing
   setItems(finalData)
 }
 
