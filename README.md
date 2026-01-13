@@ -42,10 +42,10 @@ Double-clicking an item opens a professional Preview Overlay.
 - Theme Customization: A dedicated button to switch between Light and Dark themes, adjusting all UI elements from the sidebar to the file grid icons.
 - User Profile Integration: The top bar displays the authenticated user’s display name and profile picture fetched from the server.
 
-#### Important Notes:
- - When the user types at first the url of the main page while he isn't yet signed in, they will automitically be turned to the log-in page to first onl sign in and then access the main page, as it is in Google Drive.
- - From the logging in page there is a button to go to the registration (signing up) screen to register as a new user.
- - In the home page category of the main screen of the app all the files as well as folders are displays non-nestedly, as it is in Google Drive.
+#### Notes:
+- If you are not signed in, the first page you see is the login page.
+- Once you login you stay logged-in in this tab until you close it or click "sign out".
+- If you want to login to another user just open the app a second tab.
 
 ## Running Instructions
 1. Clone the repository and checkout to ex4-main:
@@ -71,10 +71,9 @@ docker compose up --build react-app
 ```
 http://localhost:5173/
 ```
-7. You will then be directed to the home page if you are already signed in and otherwise directed to the log in page in which you will have to log in into an existing user or create a new one and then log in with the new account.
-8. After having signed in you will reach the home page of the app.
+7. You will start at the login page. Go to "create account", register, and then login to get enter home page.
 
-Note for the checker #1: you can modify some of the variables in each run, those that are defined as environment variables in the docker compose file, by writing before the command:
+Note: you can modify environment variables by writing before the command:
 - APP_PORT=[new_port] - The port the CPP server listens to 
 - APP_PATH=[new_path] - The path the files are saved to
 - WEB_PORT=[new_port] - The port the Web server listens to
@@ -86,7 +85,7 @@ For example:
 - PORT=8080 APP_PATH=/mypath docker compose up server
 - REACT_PORT=4000 docker compose up --build react-app
 
-Note for the checker #2: you can run all the servers with one line using the command:
+Note: you can run all the servers with one line using the command:
 ```
 docker compose up --build react-app server web-server
 ``` 
