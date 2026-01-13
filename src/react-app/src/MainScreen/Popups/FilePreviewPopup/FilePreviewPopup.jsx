@@ -61,7 +61,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     const permissions = file?.permissions || {};
     const role = permissions[userId];
     const canPatch = (role === "owner" || role === "writer");
-    const canShare = (role === "owner");
+    const doesOwn = (role === "owner");
 
     // Handle text editing and immediate reload
     const onEditText = async (newText) => {
@@ -211,12 +211,12 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
     if (inTrash) {
         return (
             <div className="toolbar-right">
-                <button className="icon-btn-white" onClick={handleRestore}>
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleRestore}>
                     <span className="material-symbols-outlined">restore</span>
                     <span className="tooltip-text">Restore</span>
                 </button>
 
-                <button className="icon-btn-white" onClick={handleDeleteForever}>
+                <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={handleDeleteForever}>
                     <span className="material-symbols-outlined">delete_forever</span>
                     <span className="tooltip-text">Delete forever</span>
                 </button>
@@ -285,7 +285,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
 
             <div className="toolbar-divider"></div>
 
-            <button className={`icon-btn-white ${!canShare ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsShareOpen(true)}>
                 <span className="material-symbols-outlined">people</span>
                 <span className="tooltip-text">Share</span>
                 {isShareOpen && (
@@ -297,7 +297,7 @@ const ToolBarRight = ( { file, onActionComplete, setIsOpen,
                 )}
             </button>
 
-            <button className={`icon-btn-white ${!canPatch ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
+            <button className={`icon-btn-white ${!doesOwn ? 'not-permitted' : ''}`} onClick={() => setIsMoveToOpen(true)}>
                 <span className="material-symbols-outlined">drive_file_move</span>
                 <span className="tooltip-text">Move to</span>
                 {isMoveToOpen && (

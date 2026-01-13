@@ -10,11 +10,21 @@ const MoveItemPopup = ({ current, toggle, reload, setReload }) => {
 
   const [folders, setFolders] = useState([]);
 
+  // Do you own this item
+  const userId = sessionStorage.getItem("id");
+  const doesOwn = (item) => {
+    const permissions = item?.permissions || {};
+    const role = permissions[userId];
+    return (role === "owner");
+  }
+
   // Update the list of folders available
   useEffect(() => {
     const updateFolders = async () => {
       const allFolders = await getAllFolders();
-      setFolders(allFolders.filter(fold => fold.id !== current.id)); // Exculed current item
+      setFolders(allFolders.filter(fold => 
+        (fold.id !== current.id) && doesOwn(fold)
+      )); // Exculed current and unowned item
     }
     updateFolders();
   }, [current]);

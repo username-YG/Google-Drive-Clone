@@ -109,7 +109,7 @@ function SharePopup({ file, toggle, reloadGrid }) {
 
   // Update the file and users list after the permission edit
   const updateFile = async () => {
-    const updatedFile = await getFile(file.id);
+    const updatedFile = await getFile(file.id, "false");
     await loadUsers(updatedFile);
   }
 

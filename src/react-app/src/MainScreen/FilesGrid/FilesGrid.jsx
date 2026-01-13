@@ -109,6 +109,7 @@ const updateData = async (folderId, setItems, filter, navigate, query) => {
 
   // Update the grid with the new data
   // By fetching metdata only, without content, we make this function very fast
+  finalData.sort((a, b) => b.timestamp - a.timestamp); // sort by timestamp decreasing
   setItems(finalData)
 }
 
@@ -142,7 +143,7 @@ function File({ file, selected, onSelect, reload, setReload, setSelectedFile, se
         <p>{file.name}</p>
         <div className="actions-popup-div">
           <img id="dots" src={dots} title="More actions" onClick={() => setIsOpen(!isOpen)} />
-          {isOpen && <ItemActionsPopup file={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+          {isOpen && <ItemActionsPopup origFile={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
         </div>
       </div>
       <div className="files-preview">
@@ -179,7 +180,7 @@ function Folder({ file, selected, onSelect, path, reload, setReload }) {
         <p>{file.name}</p>
         <div className="actions-popup-div">
           <img id="dots" src={dots} title="More actions"  onClick={() => setIsOpen(!isOpen)} />
-          {isOpen && <ItemActionsPopup file={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
+          {isOpen && <ItemActionsPopup origFile={file} reload={reload} setReload={setReload} toggle={() => setIsOpen(false)} />}
         </div>
       </div>
     </div>

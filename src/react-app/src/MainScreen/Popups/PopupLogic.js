@@ -195,7 +195,7 @@ export async function getAllFolders() {
 
 }
 
-export async function getFile(id) {
+export async function getFile(id, withcontent) {
 
   const token = sessionStorage.getItem("token")
 
@@ -203,7 +203,8 @@ export async function getFile(id) {
     'method': 'GET',
     'headers': {
       'Content-Type': 'application/json',
-      'authorization': 'bearer ' + token
+      'authorization': 'bearer ' + token,
+      'withcontent': withcontent
     },
   });
 

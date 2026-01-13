@@ -1,5 +1,5 @@
-import { renameItem, trashItem, starItem, deleteItem, useOutsideClickListener } from "../PopupLogic.js";
-import { useState , useRef } from 'react';
+import { renameItem, trashItem, starItem, deleteItem, useOutsideClickListener, getFile } from "../PopupLogic.js";
+import { useState , useRef, useEffect } from 'react';
 
 import people from "../../../../assets/people.png"
 import star from "../../../../assets/star.png"
@@ -14,7 +14,7 @@ import SharePopup from "../SharePopup/SharePopup.jsx";
 
 import "./ItemActionsPopup.css"
 
-function ItemActionsPopup( { file, reload, setReload, toggle } ) {
+function ItemActionsPopup( { origFile, reload, setReload, toggle } ) {
 
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const popuRenamepRef = useRef(null);
@@ -35,13 +35,22 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
     setReload(!reload);
   };
 
+  // Get the latest metadata for this item (in case permissions has changed)
+  const [file, setFile] = useState(origFile);
+  useEffect(() => {
+    const fetchLatest = async () => {
+      const updatedFile = await getFile(origFile.id, "false");
+      if (updatedFile) setFile(updatedFile);
+    };
+    fetchLatest();
+  }, [origFile.id]);
 
   // Check user permissions
   const userId = sessionStorage.getItem("id");
   const permissions = file?.permissions || {};
   const role = permissions[userId];
   const canPatch = (role === "owner" || role === "writer");
-  const canShare = (role === "owner");
+  const doesOwn = (role === "owner");
 
   const isStarred = file.starred.includes(userId);
   const inTrash = file.trashed;
@@ -52,14 +61,14 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
       <ul className="item-actions-menu">
 
         { inTrash && (
-          <li className="item-actions-menu-item" onClick={async() => { await trashItem(file.id, false); toggle(); setReload(!reload); }} >
+          <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={async() => { await trashItem(file.id, false); toggle(); setReload(!reload); }} >
             <img src={restore} />
             Restore
           </li>
         )}
 
         { inTrash && (
-          <li className="item-actions-menu-item" onClick={async () => { await deleteItem(file.id); toggle(); setReload(!reload); }} >
+          <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={async () => { await deleteItem(file.id); toggle(); setReload(!reload); }} >
             <img src={delete_forever} />
             Delete forever
           </li>
@@ -83,13 +92,13 @@ function ItemActionsPopup( { file, reload, setReload, toggle } ) {
 
         <hr />
 
-        <li className={`item-actions-menu-item ${!canShare ? "not-permitted" : ""}`} onClick={() => setIsShareOpen(true)}>
+        <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={() => setIsShareOpen(true)}>
           <img src={people} />
           Share
           {isShareOpen && <SharePopup file={file} toggle={() => setIsShareOpen(false)} reloadGrid={() => setReload(!reload)} />}
         </li>
 
-        <li className={`item-actions-menu-item ${!canPatch ? "not-permitted" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
+        <li className={`item-actions-menu-item ${!doesOwn ? "not-permitted" : ""}`} onClick={() => setIsMovetoOpen(!isMovetoOpen) } >
           <img src={folder} />
           Move to
           {isMovetoOpen && <MoveItemPopup toggle={() => setIsMovetoOpen(!isMovetoOpen)} current={file} reload={reload} setReload={setReload} />}
