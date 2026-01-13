@@ -210,6 +210,7 @@ Search bar: You can search files by their names (or even text files by their con
 <img width="1893" height="757" alt="image" src="https://github.com/user-attachments/assets/33e87b43-3843-429d-965c-40c2b0f44a30" />
 
 You can sign out and add other accounts:
+
 <img width="622" height="485" alt="image" src="https://github.com/user-attachments/assets/96bf3503-9543-4770-8a7c-6ff3b6d7d626" />
 <img width="472" height="241" alt="image" src="https://github.com/user-attachments/assets/2a78fad7-29fc-4207-b122-12a99461cb4c" />
 
