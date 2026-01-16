@@ -1,15 +1,15 @@
 #include <gtest/gtest.h>
 #include <thread>
 
-#include "../src/servers/TCPServer.h"
-#include "../src/clientHandlers/naiveClientHandler.h"
-#include "../src/clientHandlers/threadPoolClientHandler.h"
-#include "../src/clients/TCPClient.h"
-#include "../src/commands/addCommand.h"
-#include "../src/commands/getCommand.h"
-#include "../src/commands/searchCommand.h"
-#include "../src/commands/deleteCommand.h"
-#include "../src/compressions/RLE.h"
+#include "../src/storage-server/servers/TCPServer.h"
+#include "../src/storage-server/clientHandlers/naiveClientHandler.h"
+#include "../src/storage-server/clientHandlers/threadPoolClientHandler.h"
+#include "../src/storage-server/clients/TCPClient.h"
+#include "../src/storage-server/commands/addCommand.h"
+#include "../src/storage-server/commands/getCommand.h"
+#include "../src/storage-server/commands/searchCommand.h"
+#include "../src/storage-server/commands/deleteCommand.h"
+#include "../src/storage-server/compressions/RLE.h"
 
 #define MIN_PORT 49152
 #define MAX_PORT 65535

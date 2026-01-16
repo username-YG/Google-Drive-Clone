@@ -8,4 +8,4 @@ WORKDIR /usr/googledrive/app/build
 
 RUN g++ $(find .. -name "*.cpp" ! -name "server.cpp") -o client -pthread
 
-CMD ./client server $APP_PORT
+CMD ./client storage-server $APP_PORT
