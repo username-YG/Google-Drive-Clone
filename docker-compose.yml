@@ -48,7 +48,7 @@ services:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/MVC/dockerfile
+      dockerfile: src/web-server/dockerfile
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     networks:
