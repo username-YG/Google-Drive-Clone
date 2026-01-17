@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../storage-server/InputOutputs/StreamInputOutput.h"
+#include "../src/storage-server/InputOutputs/StreamInputOutput.h"
 #include "../src/storage-server/InputOutputs/SocketInputOutput.h"
 #include <map>
 #include <sys/socket.h>
