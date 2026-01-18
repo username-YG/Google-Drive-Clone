@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/commands/deleteCommand.h"
+#include "../src/storage-server/commands/deleteCommand.h"
 #include <stdexcept>
 #include <string>
 #include <fstream>

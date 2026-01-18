@@ -8,12 +8,12 @@ x-env: &shared_env
     REACT_PORT: ${REACT_PORT:-5173} # The port the react app runs on
 
 services:
-  server:
+  storage-server:
     environment:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/servers/dockerfile
+      dockerfile: src/storage-server/servers/dockerfile
     volumes:
       - appfiles:${APP_PATH:-/app_path}
     networks:
@@ -27,7 +27,7 @@ services:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/clients/dockerfile-cpp
+      dockerfile: src/storage-server/clients/dockerfile-cpp
     networks:
       - app_net
 
@@ -39,7 +39,7 @@ services:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/clients/dockerfile-py
+      dockerfile: src/storage-server/clients/dockerfile-py
     networks:
       - app_net
 
@@ -48,7 +48,7 @@ services:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/MVC/dockerfile
+      dockerfile: src/web-server/dockerfile
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     networks:

@@ -106,7 +106,7 @@ git checkout ex4-main
 2. Open Docker Desktop.
 3. Start the cpp server using:
 ```
-docker compose up --build server
+docker compose up --build storage-server
 ```
 4. In another terminal, run the web server:
 ```

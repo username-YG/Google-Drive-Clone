@@ -15,18 +15,18 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(tests
-                ../src/commands/addCommand.cpp
-                ../src/commands/getCommand.cpp
-                ../src/commands/searchCommand.cpp
-                ../src/commands/deleteCommand.cpp
-                ../src/compressions/RLE.cpp
-                ../src/InputOutputs/StreamInputOutput.cpp
-                ../src/InputOutputs/SocketInputOutput.cpp
-                ../src/App.cpp
-                ../src/clientHandlers/naiveClientHandler.cpp
-                ../src/clientHandlers/threadPoolClientHandler.cpp
-                ../src/servers/TCPServer.cpp
-                ../src/clients/TCPClient.cpp
+                ../src/storage-server/commands/addCommand.cpp
+                ../src/storage-server/commands/getCommand.cpp
+                ../src/storage-server/commands/searchCommand.cpp
+                ../src/storage-server/commands/deleteCommand.cpp
+                ../src/storage-server/compressions/RLE.cpp
+                ../src/storage-server/InputOutputs/StreamInputOutput.cpp
+                ../src/storage-server/InputOutputs/SocketInputOutput.cpp
+                ../src/storage-server/App.cpp
+                ../src/storage-server/clientHandlers/naiveClientHandler.cpp
+                ../src/storage-server/clientHandlers/threadPoolClientHandler.cpp
+                ../src/storage-server/servers/TCPServer.cpp
+                ../src/storage-server/clients/TCPClient.cpp
                 addCommandTests.cpp
                 getCommandTests.cpp
                 searchCommandTests.cpp

@@ -6,6 +6,6 @@ WORKDIR /usr/googledrive/app
 RUN mkdir build
 WORKDIR /usr/googledrive/app/build
 
-RUN g++ $(find .. -name "*.cpp" ! -name "client.cpp") -o server
+RUN g++ $(find .. -name "*.cpp" ! -name "client.cpp") -o storage-server
 
-CMD ./server $APP_PORT
+CMD ./storage-server $APP_PORT
