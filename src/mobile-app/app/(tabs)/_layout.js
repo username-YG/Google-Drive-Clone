@@ -6,23 +6,23 @@ import { COLORS } from '../../styles/Theme';
 const baseUrl = "../../assets/icons/"
 const ICONS = {
     home: {
-        default: require(baseUrl + 'home.png'),
-        selected: require(baseUrl + 'selected/home.png'),
+        default: require(baseUrl + "home.png"),
+        selected: require(baseUrl + "selected/home.png"),
         label: 'Home'
     },
     starred: {
-        default: require(baseUrl + 'star.png'),
-        selected: require(baseUrl + 'selected/star.png'),
+        default: require(baseUrl + "star.png"),
+        selected: require(baseUrl + "selected/star.png"),
         label: 'Starred'
     },
     shared: {
-        default: require(baseUrl + '/people.png'),
-        selected: require(baseUrl + 'selected/people.png'),
+        default: require(baseUrl + "people.png"),
+        selected: require(baseUrl + "selected/people.png"),
         label: 'Shared'
     },
     files: {
-        default: require(baseUrl + 'files.png'),
-        selected: require(baseUrl + 'selected/files.png'),
+        default: require(baseUrl + "files.png"),
+        selected: require(baseUrl + "selected/files.png"),
         label: 'Files'
     },
 };
@@ -30,7 +30,7 @@ const ICONS = {
 function styleIcon({ focused, color, size, route }) {
     if (!ICONS[route.name]) return null;
     return (
-        <View style={[ styles.iconBackground, { backgroundColor: focused ? (COLORS.selected) : ('transparent') }]}>
+        <View style={[ styles.iconBackground, { backgroundColor: focused ? (COLORS.light_selected) : ('transparent') }]}>
             <Image
                 source={focused ? (ICONS[route.name].selected) : (ICONS[route.name].default)}
                 style={{ width: size, height: size, tintColor: color }}
@@ -44,7 +44,7 @@ export default function TabsLayout() {
         <Tabs
             screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarActiveTintColor: 'black',
+                tabBarActiveTintColor: "black",
                 tabBarStyle: styles.bottomBar,
                 tabBarLabelStyle: styles.bottomBarLabel,
                 tabBarIcon: ({focused, color, size}) => styleIcon({focused, color, size, route}),
