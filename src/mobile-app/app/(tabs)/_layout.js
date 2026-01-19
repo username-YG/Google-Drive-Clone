@@ -30,7 +30,7 @@ const ICONS = {
 function styleIcon({ focused, color, size, route }) {
     if (!ICONS[route.name]) return null;
     return (
-        <View style={[ styles.iconBackground, { backgroundColor: focused ? (COLORS.light_selected) : ('transparent') }]}>
+        <View style={[ styles.iconBackground, { backgroundColor: focused ? (COLORS.light_selected) : (COLORS.bottomBar) }]}>
             <Image
                 source={focused ? (ICONS[route.name].selected) : (ICONS[route.name].default)}
                 style={{ width: size, height: size, tintColor: color }}
