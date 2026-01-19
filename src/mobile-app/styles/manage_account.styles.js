@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         color: 'white',
         fontSize: 50,
         textAlign: 'center',
-        lineHeight: 90, 
+        lineHeight: 90,
     },
     displayName: {
         marginTop: 15,

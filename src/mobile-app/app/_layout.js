@@ -8,28 +8,29 @@ import TopBarButton from '../components/TopBarButton';
 import Logo from '../components/Logo';
 import CloseSearchBar from '../components/CloseSearchBar';
 import OpenSearchBar from '../components/OpenSearchBar';
+import ProfileButton from '../components/ProfileButton';
 
 export default function RootLayout() {
 
   const router = useRouter();
-
   return (
     <GestureHandlerRootView>
       <Drawer
-      initialRouteName="login"
-      drawerContent={(props) => <Logo {...props} />}
-      screenOptions={{
-        headerShown: true,
-        drawerActiveTintColor: COLORS.hard_selected,
-        headerStyle: { backgroundColor: COLORS.topBar },
-        headerShadowVisible: false,
-        drawerLabelStyle: styles.navBarLabel
-      }}>
+        initialRouteName="login"
+        drawerContent={(props) => <Logo {...props} />}
+        screenOptions={{
+          headerShown: true,
+          drawerActiveTintColor: COLORS.hard_selected,
+          headerStyle: { backgroundColor: COLORS.topBar },
+          headerShadowVisible: false,
+          drawerLabelStyle: styles.navBarLabel
+        }}
+      >
 
         { /* Main app screens (all except 'tabs' appear in sidebar) */ }
         <Drawer.Screen name="(tabs)" options={{
           headerTitle: () => <CloseSearchBar />,
-          headerRight: () => <TopBarButton router={router} img={require("../assets/icons/search.png")} target="/manage_account" />,
+          headerRight: () => <ProfileButton router={router} />,
           drawerItemStyle: { display: 'none' }
         }} />
 
