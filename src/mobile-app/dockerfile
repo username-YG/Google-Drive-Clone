@@ -2,8 +2,10 @@ FROM node:lts-slim
 
 WORKDIR /usr/googledrive/app
 
-COPY src/mobile-app .
+COPY src/mobile-app/package.json src/mobile-app/package-lock.json ./
 
 RUN npm install
+
+COPY src/mobile-app .
 
 CMD ["npx", "expo", "start"]
