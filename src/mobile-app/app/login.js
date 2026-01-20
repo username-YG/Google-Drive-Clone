@@ -8,6 +8,9 @@ export default function Login() {
             <TouchableOpacity onPress={() => router.replace('/home')}>
                 <Text>Enter</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/registration/name')}>
+                <Text>Register</Text>
+            </TouchableOpacity>
         </View>
     );
 }
