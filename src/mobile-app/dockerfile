@@ -5,8 +5,5 @@ WORKDIR /usr/googledrive/app
 COPY src/mobile-app .
 
 RUN npm install
-RUN npm install @expo/ngrok
 
-EXPOSE 8081
-
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npx", "expo", "start"]
