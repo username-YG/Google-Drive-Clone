@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { ProfilePicStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import useRegistration from './RegistrationContext';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -18,6 +18,19 @@ export default function ProfilePic() {
   const handleSubmit = async () => {
     const displayName = `${firstName} ${lastName}`.trim();
 
+    console.log(hostIp);
+    const response = await fetch(`http://${hostIp}:${port}/api/users`, {
+      'method': 'POST',
+      'headers': { 'Content-Type': 'application/json' },
+      'body': JSON.stringify({
+        username,
+        password,
+        displayName,
+        profilePic
+      })
+    });
+
+    /*
     try {
       const hostIp = Constants.expoConfig.hostUri?.split(':')[0];
       const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000; 
@@ -43,6 +56,7 @@ export default function ProfilePic() {
       console.log(err)
       setStepError('profilePic', 'Cannot connect to server');
     }
+    */
   };
 
   return (

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { PasswordStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import useRegistration from './RegistrationContext';
 
 export default function Password() {
   const router = useRouter();

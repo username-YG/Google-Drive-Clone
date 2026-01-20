@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { UserNameStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import useRegistration from './RegistrationContext';
 
 export default function Username() {
   const router = useRouter();
