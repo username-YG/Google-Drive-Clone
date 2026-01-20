@@ -66,6 +66,19 @@ services:
     networks:
       - app_net
 
+  mobile-app:
+    environment:
+    - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    ports:
+      - "8081:8081"
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: src/mobile-app/dockerfile
+    networks:
+      - app_net
+
   gtests:
     environment:
       <<: *shared_env

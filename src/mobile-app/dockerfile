@@ -1,0 +1,12 @@
+FROM node:lts-alpine
+
+COPY src/mobile-app /usr/googledrive/app
+WORKDIR /usr/googledrive/app
+
+#RUN npm install -g expo-cli
+
+RUN npm install
+
+EXPOSE 8081
+
+CMD ["npx", "expo", "start", "--tunnel"]
