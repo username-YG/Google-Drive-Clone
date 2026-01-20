@@ -1,11 +1,11 @@
-FROM node:lts-alpine
+FROM node:lts-slim
 
-COPY src/mobile-app /usr/googledrive/app
 WORKDIR /usr/googledrive/app
 
-#RUN npm install -g expo-cli
+COPY src/mobile-app .
 
 RUN npm install
+RUN npm install @expo/ngrok
 
 EXPOSE 8081
 
