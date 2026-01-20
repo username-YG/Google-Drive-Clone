@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { ProfilePicStep } from  '../../components/Steps.js';
 import { useRegistration } from './RegistrationContext';
+import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfilePic() {
@@ -18,8 +19,10 @@ export default function ProfilePic() {
     const displayName = `${firstName} ${lastName}`.trim();
 
     try {
-      const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000;
-      const response = await fetch(`http://localhost:${port}/api/users`, {
+      const hostIp = Constants.expoConfig.hostUri?.split(':')[0];
+      const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000; 
+
+      const response = await fetch(`http://${hostIp}:${port}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -30,15 +33,14 @@ export default function ProfilePic() {
         })
       });
 
-      console.log("hello");
-
       if (response.status == 201) {
         router.replace('/login');
       } else {
         const data = await response.json();
         setStepError('profilePic', data.error || 'Registration failed');
       }
-    } catch {
+    } catch (err) {
+      console.log(err)
       setStepError('profilePic', 'Cannot connect to server');
     }
   };
