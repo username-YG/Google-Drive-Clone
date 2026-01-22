@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 
 export default function Shared() {
-    return(
+    return (
         <View>
             <Text>Shared screen</Text>
         </View>

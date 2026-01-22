@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 
 export default function Recent() {
-    return(
+    return (
         <View>
             <Text>Recent screen</Text>
         </View>
