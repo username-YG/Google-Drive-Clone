@@ -1,9 +1,10 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { FilesList } from '../../components/FilesList';
 
 export default function Home() {
-    return (
+    return(
         <View>
-            <Text>Home screen</Text>
+            <FilesList title="Home"></FilesList>
         </View>
     );
 }
