@@ -10,7 +10,9 @@ import { BackButton } from '../components/BackButton.js';
 import { styles } from '../styles/registration.styles.js';
 
 
-export function NameStep({ firstName, setFirstName, lastName, setLastName, onNext, error, inputRef }) {
+export function NameStep({ buttonTitle, firstName, setFirstName, lastName, setLastName, onBack, onNext, error, inputRef }) {
+  const surnameRef = useRef(null);
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -34,11 +36,15 @@ export function NameStep({ firstName, setFirstName, lastName, setLastName, onNex
                 placeholder="Surname (optional)"
                 value={lastName}
                 onChangeText={setLastName}
+                ref={surnameRef}
               />
             </View>
           </View>
 
-          <View style={styles.footer}>
+          <View style={{ flex: 1 }} />
+
+          <View style={styles.footerRow}>
+            <BackButton title={buttonTitle} onPress={onBack} />
             <NextButton title="Next" onPress={onNext} />
           </View>
         </KeyboardAvoidingView>
@@ -47,7 +53,7 @@ export function NameStep({ firstName, setFirstName, lastName, setLastName, onNex
   );
 }
 
-export function UserNameStep({ username, setUsername, onNext, onBack, error, inputRef }) {
+export function UserNameStep({ title, subtitle, buttonTitle, username, setUsername, onNext, onBack, error, inputRef }) {
   return (
     <SafeAreaView style={styles.wrapper}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -57,8 +63,8 @@ export function UserNameStep({ username, setUsername, onNext, onBack, error, inp
         >
           <View style={styles.upperContent}>
             <Logo
-              title="How you'll sign in"
-              subtitle="Create a Gmail address for signing in to your Google Account"
+              title={title}
+              subtitle={subtitle}
             />
 
             <View style={styles.input}>
@@ -73,7 +79,7 @@ export function UserNameStep({ username, setUsername, onNext, onBack, error, inp
           </View>
 
           <View style={styles.footerRow}>
-            <BackButton title="Back" onPress={onBack} />
+            <BackButton title={buttonTitle} onPress={onBack} />
             <NextButton title="Next" onPress={onNext} />
           </View>
         </KeyboardAvoidingView>
@@ -82,7 +88,7 @@ export function UserNameStep({ username, setUsername, onNext, onBack, error, inp
   );
 }
 
-export function PasswordStep({ password, setPassword, onNext, onBack, error, inputRef }) {
+export function PasswordStep({ title, subtitle, password, setPassword, onNext, onBack, error, inputRef }) {
   const [showPassword, setShowPassword] = useState(true);
 
   return (
@@ -94,8 +100,8 @@ export function PasswordStep({ password, setPassword, onNext, onBack, error, inp
         >
           <View style={styles.upperContent}>
             <Logo
-              title="Create a strong password"
-              subtitle="Create a strong password with a mixture of letters, numbers and symbols"
+              title={title}
+              subtitle={subtitle}
             />
 
             <View style={styles.inputAndCheckbox}>

@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { RegistrationProvider } from './RegistrationContext';
+import { RegistrationProvider } from '../../components/RegistrationContext.js';
 
 export default function RegistrationLayout() {
   return (

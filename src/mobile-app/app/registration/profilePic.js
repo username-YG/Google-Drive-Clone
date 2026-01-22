@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { ProfilePicStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import { useRegistration } from '../../components/RegistrationContext.js';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -8,7 +8,10 @@ export default function ProfilePic() {
   const router = useRouter();
   const {
     firstName, lastName,
+    setFirstName, setLastName,
     username, password,
+    setUsername,
+    setPassword,
     profilePic, setProfilePic,
     errors, setStepError, clearStepError,
   } = useRegistration();
@@ -34,6 +37,15 @@ export default function ProfilePic() {
       });
 
       if (response.status == 201) {
+        setFirstName('');
+        setLastName('');
+        setUsername('');
+        setPassword('');
+        setProfilePic(null);
+        clearStepError('name');
+        clearStepError('username');
+        clearStepError('password');
+        clearStepError('profilePic');
         router.replace('/login');
       } else {
         const data = await response.json();

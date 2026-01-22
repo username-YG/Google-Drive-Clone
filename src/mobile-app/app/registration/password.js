@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { PasswordStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import { useRegistration } from '../../components/RegistrationContext.js';
 
 export default function Password() {
   const router = useRouter();
@@ -24,6 +24,8 @@ export default function Password() {
 
   return (
     <PasswordStep
+      title="Create a strong password"
+      subtitle="Create a strong password with a mixture of letters, numbers and symbols"
       password={password}
       setPassword={setPassword}
       onNext={onNext}

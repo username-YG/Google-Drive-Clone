@@ -3,13 +3,26 @@ import { StyleSheet, Platform } from 'react-native';
 export const styles = StyleSheet.create({
   input: {
     width: '100%',
-    marginBottom: 16,
-    backgroundColor: '#fff',
+    marginBottom: 8,
+    marginTop: 3,
+  },
+  label: {
+    paddingHorizontal: 4,
+    zIndex: 1,
+  },
+  inputWrapper: {
+    height: 60,
+    borderRadius: 4,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   textInput: {
     fontSize: 16,
-    backgroundColor: '#fff',
-    height: 56,
+    backgroundColor: 'transparent',
+    height: '100%',
+    width: '100%',
   },
   errorRow: {
     flexDirection: 'row',

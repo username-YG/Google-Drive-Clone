@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { UserNameStep } from  '../../components/Steps.js';
-import { useRegistration } from './RegistrationContext';
+import { useRegistration } from '../../components/RegistrationContext.js';
 
 export default function Username() {
   const router = useRouter();
@@ -32,6 +32,9 @@ export default function Username() {
 
   return (
     <UserNameStep
+      title="How you'll sign in"
+      subtitle="Create a Gmail address for your new account"
+      buttonTitle="Back"
       username={username}
       setUsername={setUsername}
       onNext={onNext}
