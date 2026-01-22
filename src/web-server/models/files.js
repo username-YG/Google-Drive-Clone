@@ -1,15 +1,15 @@
-import net from "net";
-import { getPermissions, deleteAllPermissions } from './permissions.js'
-
-const rootId = crypto.randomUUID();
-const filesystem = [ { id: rootId, name: "/", isFolder: true, parentId: null, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() } ];
+const net = require('net');
+const crypto = require('crypto');
+const { FileModel } = require('../database');
+const { getPermissions, deleteAllPermissions } = require('./permissions');
 
 const sendToServer = (msg) => {
     return new Promise((resolve, reject) => {
 
         // Send message to server
-        const ip = process.argv[2];
-        const port = +process.argv[3];
+        // Use environment variables for Docker networking, fallback to process args
+        const ip = process.env.STORAGE_HOST || process.argv[2];
+        const port = +(process.env.APP_PORT || process.argv[3]);
         const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
         sock.setTimeout(20000); // 20 sec before we give up
 
@@ -50,52 +50,80 @@ const sendToServer = (msg) => {
     });
 }
 
-const getMetadata = (id) => filesystem.find(a => a.id === id);
+async function getMetadata(id) {
+    return await FileModel.findOne({ id });
+}
 
 async function createFile(name, content, isFolder, parentId) {
 
     // Generate a unique ID
     let id;
-    while (getMetadata(id = crypto.randomUUID()));
+    while (true) {
+        id = crypto.randomUUID();
+        const exists = await getMetadata(id);
+        if (!exists) break;
+    }
 
     // Add new item to array
-    if (parentId === null) parentId = rootId;
-    const newItem = { id, name, isFolder, parentId, content: [], permissions: {}, trashed: false, starred: [], timestamp: new Date() };
-    filesystem.push(newItem);
+    if (parentId === null) {
+        const root = await FileModel.findOne({ parentId: null });
+        parentId = root ? root.id : null;
+    }
+
+    const newItem = new FileModel({
+        id,
+        name,
+        isFolder,
+        parentId,
+        content: [],
+        trashed: false,
+        starred: [],
+        timestamp: new Date()
+    });
+    await newItem.save();
 
     // If it is a folder, update parent
-    const parent = getMetadata(parentId);
-    if (parent.isFolder) parent.content.push(id);
-    
+    const parent = await getMetadata(parentId);
+    if (parent && parent.isFolder) {
+        await FileModel.findOneAndUpdate(
+            { id: parentId },
+            { $push: { content: id } }
+        );
+    }
+
     // If it is a file, save the content on the server
     if (isFolder === false) await sendToServer(`POST ${id} ${content}`);
     return newItem;
 }
 
-function getAllFiles() {
-    return getMetadata(rootId).content;
+async function getAllFiles() {
+    const root = await FileModel.findOne({ parentId: null });
+    return root ? root.content : [];
 }
 
-function getAllIDs() {
-    const allIds = [];
-    for (const file of filesystem) {
-        allIds.push(file.id);
-    }
-    return allIds;
+async function getAllIDs() {
+    const files = await FileModel.find({}, 'id');
+    return files.map(file => file.id);
 }
 
 async function getFile(id, withContent) {
-    if (withContent) getMetadata(id).timestamp = new Date();
+    if (withContent) {
+        await FileModel.findOneAndUpdate({ id }, { timestamp: new Date() });
+    }
     // We use a copy so we don't store the content or permissions on the server
-    const copy = JSON.parse(JSON.stringify(getMetadata(id)));
-    copy.permissions = getPermissions(id);
+    const item = await getMetadata(id);
+    if (!item) return null;
+
+    const copy = item.toObject();
+    copy.permissions = await getPermissions(id);
     if (copy.isFolder === false && withContent !== false) copy.content = await sendToServer(`GET ${id}`);
     return copy;
 }
 
 async function updateFile(id, name, content, parentId, userId, trashed, starred, timestamp) {
 
-    const item = getMetadata(id);
+    const item = await getMetadata(id);
+    if (!item) return null;
 
     // Update name if asked to
     if (name) {
@@ -126,12 +154,26 @@ async function updateFile(id, name, content, parentId, userId, trashed, starred,
     }
 
     // Update parents if asked to
-    if (parentId === null) parentId = rootId;
-    if (parentId) {
-        const oldParent = getMetadata(item.parentId);
-        oldParent.content.splice(oldParent.content.indexOf(id), 1);
-        const newParent = getMetadata(parentId);
-        newParent.content.push(id);
+    if (parentId === null) {
+        const root = await FileModel.findOne({ parentId: null });
+        parentId = root ? root.id : null;
+    }
+
+    if (parentId && item.parentId !== parentId) {
+        const oldParent = await getMetadata(item.parentId);
+        if (oldParent) {
+            await FileModel.findOneAndUpdate(
+                { id: item.parentId },
+                { $pull: { content: id } }
+            );
+        }
+        const newParent = await getMetadata(parentId);
+        if (newParent) {
+            await FileModel.findOneAndUpdate(
+                { id: parentId },
+                { $push: { content: id } }
+            );
+        }
         item.parentId = parentId;
     }
 
@@ -142,18 +184,23 @@ async function updateFile(id, name, content, parentId, userId, trashed, starred,
         item.timestamp = new Date();
     }
 
+    await item.save();
+
     // We also want to return content and permissions
-    return getFile(id);
+    return await getFile(id);
 }
 
 async function deleteFile(id) {
-    
-    const item = getMetadata(id);
-    
+
+    const item = await getMetadata(id);
+    if (!item) return;
+
     // Update parent
     if (item.parentId) {
-        const parent = getMetadata(item.parentId);
-        if (parent) parent.content.splice(parent.content.indexOf(id), 1);
+        await FileModel.findOneAndUpdate(
+            { id: item.parentId },
+            { $pull: { content: id } }
+        );
     }
 
     // Recursively delete subdir
@@ -166,12 +213,12 @@ async function deleteFile(id) {
     }
 
     // Remove item's metdata, permissions and content
-    filesystem.splice(filesystem.findIndex(a => a.id === id), 1);
-    deleteAllPermissions(id);
+    await FileModel.deleteOne({ id });
+    await deleteAllPermissions(id);
     if (item.isFolder === false) await sendToServer(`DELETE ${id}`);
 }
 
-export {
+module.exports = {
     getMetadata,
     getAllFiles,
     getFile,
@@ -180,4 +227,4 @@ export {
     deleteFile,
     sendToServer,
     getAllIDs
-}
+};

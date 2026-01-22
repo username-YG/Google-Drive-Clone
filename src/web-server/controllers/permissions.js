@@ -5,13 +5,13 @@ const User = require('../models/users');
 const roles = ["owner", "writer", "commenter", "reader"]
 
 // controller method to get permissions for a file or directory
-exports.getPermissions = (req, res) => {
+exports.getPermissions = async (req, res) => {
     try {
         const fileOrDirId = req.params.id;
 
         const requesterID = req.user.ID;
-        
-        const filePermissions = Permission.getPermissions(fileOrDirId)
+
+        const filePermissions = await Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists
         if (!filePermissions) {
@@ -19,7 +19,7 @@ exports.getPermissions = (req, res) => {
         }
 
         // Return 404 if the user doesn't exist
-        if (!User.findByID(requesterID)) {
+        if (!(await User.findByID(requesterID))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
@@ -36,7 +36,7 @@ exports.getPermissions = (req, res) => {
 }
 
 // controller method to create a permission for a file or directory
-exports.createPermission = (req, res) => {
+exports.createPermission = async (req, res) => {
     try {
         const fileOrDirId = req.params.id;
 
@@ -49,7 +49,10 @@ exports.createPermission = (req, res) => {
         let { userID, username, role } = req.body
 
         // If the username field exists we use it instead of userID
-        if (username) userID = User.findByUsername(username)?.ID;
+        if (username) {
+            const user = await User.findByUsername(username);
+            userID = user?.id; // Assuming lower case 'id' as per your Model update
+        }
 
         // checking validity of the arguments
         if (!requesterID || !userID || !role || !roles.includes(role)) {
@@ -57,14 +60,14 @@ exports.createPermission = (req, res) => {
         }
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID)) {
+        if (!(await User.findByID(requesterID))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
-        if (!User.findByID(userID)) {
+        if (!(await User.findByID(userID))) {
             return res.status(404).json({ error: 'User in body not found' });
         }
 
-        const filePermissions = Permission.getPermissions(fileOrDirId)
+        const filePermissions = await Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists
         if (!filePermissions) {
@@ -82,15 +85,15 @@ exports.createPermission = (req, res) => {
         }
 
         // creating the permission for the user and returning the location header
-        const permission = Permission.addPermission(fileOrDirId, userID, role)
-        res.status(201).location(`/api/files/${fileOrDirId}/permissions/${permission.userID}`).end()
+        const permission = await Permission.addPermission(fileOrDirId, userID, role)
+        res.status(201).location(`/api/files/${fileOrDirId}/permissions/${userID}`).end()
     } catch(err) {
         return res.status(500).json({ error : "Internal Server Error" })
     }
 }
 
 // controller method to update a permission for a file or directory
-exports.updatePermission = (req, res) => {
+exports.updatePermission = async (req, res) => {
     try {
         const fileOrDirId = req.params.id
         const permissionId = req.params.pId
@@ -109,14 +112,14 @@ exports.updatePermission = (req, res) => {
         }
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID)) {
+        if (!(await User.findByID(requesterID))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
-        if (!User.findByID(permissionId)) {
+        if (!(await User.findByID(permissionId))) {
             return res.status(404).json({ error: 'User in body not found' });
         }
 
-        const filePermissions = Permission.getPermissions(fileOrDirId)
+        const filePermissions = await Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists and the permission exists
         if (!filePermissions || !filePermissions[permissionId]) {
@@ -129,7 +132,7 @@ exports.updatePermission = (req, res) => {
         }
 
         // updating the permission for the user and returning no content
-        Permission.updatePermission(fileOrDirId, permissionId, role)
+        await Permission.updatePermission(fileOrDirId, permissionId, role)
         res.status(204).send()
     } catch(err) {
         return res.status(500).json({ error : "Internal Server Error" })
@@ -137,7 +140,7 @@ exports.updatePermission = (req, res) => {
 }
 
 // controller method to delete a permission for a file or directory
-exports.deletePermission = (req, res) => {
+exports.deletePermission = async (req, res) => {
     try {
         const fileOrDirId = req.params.id
         const permissionId = req.params.pId
@@ -145,14 +148,14 @@ exports.deletePermission = (req, res) => {
         const requesterID = req.user.ID;
 
         // Return 404 if one of the users doesn't exist
-        if (!User.findByID(requesterID)) {
+        if (!(await User.findByID(requesterID))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
-        if (!User.findByID(permissionId)) {
+        if (!(await User.findByID(permissionId))) {
             return res.status(404).json({ error: 'User in body not found' });
         }
 
-        const filePermissions = Permission.getPermissions(fileOrDirId)
+        const filePermissions = await Permission.getPermissions(fileOrDirId)
 
         // checking if file or directory exists and the permission exists
         if (!filePermissions || !filePermissions[permissionId]) {
@@ -168,7 +171,7 @@ exports.deletePermission = (req, res) => {
         }
 
         // deleting the permission for the user and returning no content
-        Permission.deletePermission(fileOrDirId, permissionId)
+        await Permission.deletePermission(fileOrDirId, permissionId)
         res.status(204).send()
     } catch(err) {
         return res.status(500).json({ error : "Internal Server Error" })
