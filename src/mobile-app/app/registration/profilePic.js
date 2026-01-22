@@ -21,9 +21,11 @@ export default function ProfilePic() {
   const handleSubmit = async () => {
     const displayName = `${firstName} ${lastName}`.trim();
 
+
     try {
-      const hostIp = Constants.expoConfig.hostUri?.split(':')[0];
-      const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000; 
+      
+      const hostIp = Constants.expoConfig?.hostUri?.split(':')[0] || 'localhost';
+      const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000;
 
       const response = await fetch(`http://${hostIp}:${port}/api/users`, {
         method: 'POST',

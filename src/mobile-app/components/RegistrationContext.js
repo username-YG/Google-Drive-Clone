@@ -48,4 +48,6 @@ export function RegistrationProvider({ children }) {
   );
 }
 
-export const useRegistration = () => useContext(RegistrationContext);
+export default function useRegistration() {
+  return useContext(RegistrationContext);
+}

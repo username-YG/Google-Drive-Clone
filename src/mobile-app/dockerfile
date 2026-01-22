@@ -2,11 +2,10 @@ FROM node:lts-slim
 
 WORKDIR /usr/googledrive/app
 
-COPY src/mobile-app .
+COPY src/mobile-app/package.json src/mobile-app/package-lock.json ./
 
 RUN npm install
-RUN npm install @expo/ngrok
 
-EXPOSE 8081
+COPY src/mobile-app .
 
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npx", "expo", "start"]
