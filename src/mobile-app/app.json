@@ -28,6 +28,9 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "VITE_WEB_PORT": 3000
+    }
   }
 }
