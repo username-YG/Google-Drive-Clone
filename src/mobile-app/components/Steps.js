@@ -141,7 +141,7 @@ export function PasswordStep({ title, subtitle, password, setPassword, onNext, o
   );
 }
 
-export function ProfilePicStep({ profilePic, pickImage, onBack, onFinish }) {
+export function ProfilePicStep({ profilePic, pickImage, onBack, onFinish, error }) {
   return (
     <SafeAreaView style={styles.wrapper}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -164,6 +164,13 @@ export function ProfilePicStep({ profilePic, pickImage, onBack, onFinish }) {
                 )}
               </TouchableOpacity>
             </View>
+            
+            {!!error && (
+              <View style={styles.errorRow}>
+                  <MaterialIcons name="error" size={16} color='#d93025' />
+                  <Text style={styles.errorText}>{error}</Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.footerRow}>

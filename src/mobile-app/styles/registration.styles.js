@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 export const styles = StyleSheet.create({
     wrapper: {
@@ -64,5 +64,18 @@ export const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
+    },
+    errorRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 40,
+        paddingLeft: 6,
+    },
+    errorText: {
+        color: '#d93025',
+        fontSize: 15,
+        marginLeft: 5,
+        fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
     },
 });

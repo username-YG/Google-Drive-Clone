@@ -22,7 +22,6 @@ export default function ProfilePic() {
     const displayName = `${firstName} ${lastName}`.trim();
 
     try {
-      
       const hostIp = Constants.expoConfig?.hostUri?.split(':')[0] || 'localhost';
       const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000;
 
@@ -75,6 +74,7 @@ export default function ProfilePic() {
       profilePic={profilePic}
       onBack={() => router.back()}
       onFinish={handleSubmit}
+      error={error}
     />
   );
 }
