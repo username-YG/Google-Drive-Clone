@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { ProfilePicStep } from  '../../components/Steps.js';
-import { useRegistration } from '../../components/RegistrationContext.js';
+import useRegistration from '../../components/RegistrationContext.js';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -20,7 +20,6 @@ export default function ProfilePic() {
 
   const handleSubmit = async () => {
     const displayName = `${firstName} ${lastName}`.trim();
-
 
     try {
       
