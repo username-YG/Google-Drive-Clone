@@ -4,18 +4,19 @@ import { COLORS } from './Theme';
 export const styles = StyleSheet.create({
   container: {
     height: 55,
-    backgroundColor: COLORS.searchBar,
+    backgroundColor: COLORS.closedSearchBar,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  input: {
+  bar: {
     fontSize: 18,
     padding: 5,
     paddingHorizontal: 60,
     color: '#1F1F1F',
     width: '100%',
     textAlign: 'center',
+    opacity: 0.7
   },
 });
