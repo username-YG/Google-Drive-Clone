@@ -1,10 +1,11 @@
-FROM node:latest
+FROM node:lts-alpine
 
-COPY src/web-server /usr/googledrive/app
 WORKDIR /usr/googledrive/app
 
-RUN npm install express
-RUN npm install jsonwebtoken
-RUN npm install cors
+COPY src/web-server/package*.json ./
+
+RUN npm install
+
+COPY src/web-server .
 
 CMD node app.js storage-server $APP_PORT $WEB_PORT
