@@ -54,3 +54,22 @@ export async function getFiles(url, filter, router, withContent) {
   }
 
 }
+
+export async function getUser(setUser) {
+
+  const token = SecureStore.getItem("token")
+  const id = SecureStore.getItem("id");
+
+  const response = await fetch(getBaseUrl() + "users/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+  });
+
+  if (response.status === 200) {
+    const data = await response.json();
+    setUser(data);
+  }
+}
