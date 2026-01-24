@@ -1,8 +1,8 @@
 import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
 import { searchItems, getFiles } from "../app/serverLogic.js"
-import {useEffect, useState} from 'react';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname} from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
 import txt from "../assets/mimetypes/txt.png"
@@ -28,7 +28,7 @@ const icons = {
 }
 
 // Update the grid of files and folders
-const updateData = async (folderId, setItems, filter, router, query) => {
+const updateData = async (folderId, setItems, filter, router, query, setParent) => {
 
   // The url contains the current folder and a query to filter by
   const url = (folderId) ? ("/" + folderId) : ("");
@@ -43,6 +43,7 @@ const updateData = async (folderId, setItems, filter, router, query) => {
   // Folders return list of item ids inside them, we convert each id to its object
   let finalData;
   if (folderId) {
+    setParent(data.parentId || null);
     finalData = await Promise.all(
       data.content.map(async (id) => {
         const item = await getFiles("/files/" + id, filter, router, "false");
@@ -52,6 +53,7 @@ const updateData = async (folderId, setItems, filter, router, query) => {
     );
   } else {
     finalData = data;
+    setParent(null);
   }
 
   // Update the grid with the new data
@@ -94,8 +96,18 @@ const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
     const type = file.name.split('.').pop();
     const icon = (file.isFolder) ? (folder) : (icons[type] || icons["notype"]);
 
+    const router = useRouter();
+    const onFolderPress = () => {
+        if (file.isFolder) {
+            router.push({
+                pathname: '/folderContent',   
+                params: { folderId: file.id, folderName: file.name }
+            });
+        }
+    }
+    
     return (
-        <TouchableOpacity style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={onFolderPress}>
             <View style={styles.iconBox}>
                 <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
             </View>
@@ -108,7 +120,7 @@ const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
     )
 }
 
-export const FilesList = ({ filter, emptyFolder, title, query }) => {
+export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
 
     //////////////
     const reload = undefined;
@@ -118,18 +130,20 @@ export const FilesList = ({ filter, emptyFolder, title, query }) => {
     const [items, setItems] = useState([]);
     const [selected, setSelected] = useState(null); // Track currently selected item
     const [loading, setLoading] = useState(false);
+    const [parent, setParent] = useState(null);
 
     const router = useRouter();
-    const { folderId } = useLocalSearchParams();
+
+    // Reload files when one of those change
     useEffect(() => {
         const loadData = async () => {
             setLoading(true); // Show loading screen
-            await updateData(folderId, setItems, filter, router, query);
+            await updateData(folderId, setItems, filter, router, query, setParent);
             setLoading(false); // Hide loading screen
         }
         loadData();
-    }, [folderId, reload, query]);
-
+    }, [folderId, reload, query, setParent]);
+    
     // We seperate the files and folders on the screen
     const foldersObjects = items.filter(item => item.isFolder === true);
     const filesObjects = items.filter(item => item.isFolder === false);
@@ -156,13 +170,29 @@ export const FilesList = ({ filter, emptyFolder, title, query }) => {
         />
     );
 
+    // When the user goes back, navigate to the parent folder
+    const goBack = async () => {
+        setLoading(true); // Show loading screen
+        const data = await getFiles("/files/" + parent, filter, router, "false");
+        setLoading(false); // Show loading screen
+        if (data) {
+            router.push({
+                pathname: "/folderContent",
+                params: { folderId: parent, folderName: data.name }
+            });
+        } else {
+            router.navigate("/home"); // When navigating to root folder
+        }
+    }
+
     return (
         <ScrollView>
 
-            { !(items.length === 0) &&
-                <View style={styles.titleBox}>
+            { (!(items.length === 0) || (folderId)) &&
+                <TouchableOpacity onPress={goBack} disabled={!folderId} style={styles.titleBox}>
+                    {folderId && ( <Image source={require("../assets/icons/back.png")} style={styles.goBack} />)}
                     <Text style={styles.titleText}>{title}</Text>
-                </View>
+                </TouchableOpacity>
             }
 
             { loading ? ( <Text style={styles.loader}>Loading...</Text> ) : ( (items.length === 0) ? ( emptyFolder ) : (

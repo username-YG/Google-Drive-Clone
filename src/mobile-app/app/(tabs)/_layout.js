@@ -55,6 +55,7 @@ export default function TabsLayout() {
             <Tabs.Screen name="starred" />
             <Tabs.Screen name="shared" />
             <Tabs.Screen name="files" />
+            <Tabs.Screen name="folderContent" options={{ href: null }} />
         </Tabs>
     );
 }
