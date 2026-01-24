@@ -3,10 +3,11 @@ import { COLORS } from "./Theme";
 
 export const styles = StyleSheet.create({
   profileImage: {
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
     borderRadius: 45,
     resizeMode: 'cover',
+    marginRight: 15
   },
   noProfileImage: {
     width: 45,

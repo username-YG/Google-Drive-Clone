@@ -16,7 +16,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <Drawer
-        initialRouteName="login"
+        initialRouteName="(tabs)"
         drawerContent={(props) => <Logo {...props} />}
         screenOptions={{
           headerShown: true,
