@@ -5,13 +5,6 @@ const { UserModel } = require('../database');
 // const users = [];
 
 class User {
-    // constructor(username, password, displayName, profilePic, ID) {
-    //     this.username = username; // e.g., "tom@gmail.com"
-    //     this.password = password;
-    //     this.displayName = displayName;
-    //     this.profilePic = profilePic;
-    //     this.ID = ID; // The unique generated ID
-    // }
 
     // Static method to find a user by ID
     static async findByID(id) {
