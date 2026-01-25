@@ -89,3 +89,50 @@ export async function starItem(fileId, toStar) {
   });
 
 }
+
+export async function trashItem(id, toTrash) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + id, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "trashed": toTrash
+    })
+  });
+
+  if (response.status === 403) {
+    const pid = SecureStore.getItem("id")
+    await unshareWithUser(id, pid);
+  }
+
+}
+
+export async function unshareWithUser(fileId, pid) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${pid}`, {
+    'method': 'DELETE',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    }
+  });
+  
+}
+
+export async function deleteItem(id) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + id, {
+    'method': 'DELETE',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    }
+  });
+
+}

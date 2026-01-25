@@ -2,7 +2,7 @@ import { View, Text, Image } from 'react-native';
 import { styles } from '../styles/ActionMenu.styles.js';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { starItem } from "../app/serverLogic.js";
+import { starItem, trashItem, deleteItem } from "../app/serverLogic.js";
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -73,13 +73,27 @@ export const ActionMenu = ({ file, close }) => {
             { inTrash ? (
 
                 <View>
-                    <MenuItem icon={restore} text="Restore" whenDisabled={!doesOwn} />
-                    <MenuItem icon={delete_forever} text="Delete forever" whenDisabled={!doesOwn} />
+
+                    <MenuItem
+                        icon={restore}
+                        text="Restore"
+                        whenDisabled={!doesOwn}
+                        onPress={async() => {await trashItem(file.id, false); close(); }}
+                    />
+
+                    <MenuItem
+                        icon={delete_forever}
+                        text="Delete forever"
+                        whenDisabled={!doesOwn}
+                        onPress={async() => {await deleteItem(file.id); close(); }}
+                    />
+
                 </View>
 
             ) : (
 
                 <View>
+
                     <MenuItem icon={pencil} text="Rename" whenDisabled={!canPatch} />
                     <View style={styles.divider}/>
                     <MenuItem icon={people} text="Share" whenDisabled={!doesOwn} />
@@ -102,7 +116,13 @@ export const ActionMenu = ({ file, close }) => {
                         />
                     }
                     
-                    <MenuItem icon={trash} text="Move to trash" whenDisabled={false} />
+                    <MenuItem
+                        icon={trash}
+                        text="Move to trash"
+                        whenDisabled={false}
+                        onPress={async() => {await trashItem(file.id, true); close(); }}
+                    />
+
                 </View>
 
             )}
