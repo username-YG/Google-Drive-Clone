@@ -24,7 +24,10 @@ connectDB();
                 name: '/',
                 isFolder: true,
                 parentId: null,
-                content: []
+                content: [],
+                trashed: false,
+                starred: [],
+                timestamp: new Date()
             }).save();
             console.log(`Root directory initialized with ID: ${rootId}`);
         }
