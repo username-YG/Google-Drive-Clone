@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState, useRef } from 'react';
 import { PasswordStep } from  '../../components/Steps.js';
 import Constants from 'expo-constants';
-
+import * as SecureStore from 'expo-secure-store';
 
 export default function Password() {
   const router = useRouter();
@@ -37,9 +37,9 @@ export default function Password() {
         // sessionStorage means data holds only for this tab, so another user can login in another 
         if (response.status === 201 || response.status === 200) {
             const data = await response.json();
-            //sessionStorage.setItem("token", data.token)
-            const locationHeader = response.headers.get('Location'); 
-            //sessionStorage.setItem("id", locationHeader.split('/').pop())
+            SecureStore.setItem("token", data.token);
+            const locationHeader = response.headers.get('Location');
+            SecureStore.setItem("id", locationHeader.split('/').pop());
             router.replace('/home');
         } else {
             setError('User does not exist'); // Wrong password error (same error if user doesn't exist)

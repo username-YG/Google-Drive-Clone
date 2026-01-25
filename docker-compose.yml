@@ -7,10 +7,8 @@ x-env: &shared_env
   JWT_SECRET: ${JWT_SECRET:-0c65905c90fc5bf2fa1bcef939b851c7} # Secret key for JWT authentication
   REACT_PORT: ${REACT_PORT:-5173} # The port the react app runs on
   HOST_IP: ${HOST_IP:-'localhost'} # Host computer IP
-  # Updated to use the service name 'mongodb' for internal container networking
-  MONGO_URI: mongodb://mongodb:27017/google_drive_db
-  # Added to tell the Node.js server where the C++ storage server is
-  STORAGE_HOST: storage-server
+  MONGO_URI: mongodb://mongodb:27017/google_drive_db # Updated to use the service name 'mongodb' for internal container networking
+  STORAGE_HOST: storage-server # Added to tell the Node.js server where the C++ storage server is
 
 services:
   mongodb:
@@ -108,8 +106,6 @@ services:
     build:
       context: .
       dockerfile: tests/dockerfile
-    networks:
-      - app_net
 
 volumes:
   appfiles:

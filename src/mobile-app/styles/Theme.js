@@ -6,5 +6,7 @@ export const COLORS = {
     hard_selected: '#0B57D0',
     border: '#ccc',
     noProfile: '#512da8',
-    logoutText: '#346ac1'
+    logoutText: '#346ac1',
+    filesListItem: '#FFFFFF',
+    fileIconBox: '#F3F5F7',
 };
