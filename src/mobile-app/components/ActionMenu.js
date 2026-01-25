@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { starItem, trashItem, deleteItem, renameItem } from "../app/serverLogic.js";
 import { TextInsertBox } from "./TextInsertBox.js"
+import { MoveItemWindow } from "../components/MoveItemWindow.js"
 import { useState } from 'react';
 
 import txt from "../assets/mimetypes/txt.png"
@@ -66,6 +67,7 @@ export const ActionMenu = ({ file, close }) => {
 
     // Tracking which popups are opened
     const [renameOpened, setRenameOpened] = useState(false);
+    const [moveItemOpened, setMoveItemOpened] = useState(false);
 
     return (
         <View style={styles.menu}>
@@ -108,8 +110,16 @@ export const ActionMenu = ({ file, close }) => {
                     />
 
                     <View style={styles.divider}/>
+
                     <MenuItem icon={people} text="Share" whenDisabled={!doesOwn} />
-                    <MenuItem icon={folder} text="Move to" whenDisabled={!doesOwn} />
+
+                    <MenuItem
+                        icon={folder}
+                        text="Move to"
+                        whenDisabled={!doesOwn}
+                        onPress={() => setMoveItemOpened(true)}
+                    />
+
                     <View style={styles.divider}/>
 
                     { isStarred ?
@@ -140,12 +150,20 @@ export const ActionMenu = ({ file, close }) => {
             )}
 
             { /* Popups */ }
+
             <TextInsertBox
                 title={"Rename " + (file.isFolder ? "folder" : "file")}
                 doneTitle={"Rename"}
                 isOpen={renameOpened}
                 setIsOpen={setRenameOpened}
                 onDone={async(newName) => { await renameItem(file.id, newName); setRenameOpened(false); close(); }}
+            />
+
+            <MoveItemWindow
+                isOpen={moveItemOpened}
+                setIsOpen={setMoveItemOpened}
+                file={file}
+                closeParent={close}
             />
 
         </View>

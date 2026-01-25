@@ -152,3 +152,39 @@ export async function renameItem(fileId, name) {
   });
 
 }
+
+export async function moveItem(fileId, newParentId) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + fileId, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "parentId": newParentId
+    })
+  });
+
+}
+
+export async function getAllFolders() {
+  
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files", {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token,
+      'filter': "ALL LEVELS, NOT TRASHED, FOLDER"
+    },
+  });
+
+  if (response.status === 200) {
+    const data = await response.json();
+    return data;
+  }
+  return [];
+
+}
