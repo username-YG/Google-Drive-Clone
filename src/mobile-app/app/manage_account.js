@@ -1,14 +1,21 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/manage_account.styles';
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from "react"
+import { getUser } from "./serverLogic.js"
 
 export default function ManageAccount() {
 
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        getUser(setUser)
+    }, []);
+
     // User details
-    const user = undefined;
-    const username = user?.username || "";
-    const displayName = user?.displayName || "";
+    const username = user?.username;
+    const displayName = user?.displayName;
     const profilePic = user?.profilePic || "";
+    if (!username && !displayName) { return (<></>) }
 
     const router = useRouter();
     return (
