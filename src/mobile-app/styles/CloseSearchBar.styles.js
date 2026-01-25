@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     padding: 5,
     paddingHorizontal: 50,
-    width: '100%',
     textAlign: 'center',
     opacity: 0.7
   },

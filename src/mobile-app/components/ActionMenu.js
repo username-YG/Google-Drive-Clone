@@ -1,11 +1,12 @@
 import { View, Text, Image } from 'react-native';
+import { useState } from 'react';
 import { styles } from '../styles/ActionMenu.styles.js';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { starItem, trashItem, deleteItem, renameItem } from "../app/serverLogic.js";
 import { TextInsertBox } from "./TextInsertBox.js"
 import { MoveItemWindow } from "../components/MoveItemWindow.js"
-import { useState } from 'react';
+import { ShareItemWindow } from "../components/ShareItemWindow.js"
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -68,6 +69,7 @@ export const ActionMenu = ({ file, close }) => {
     // Tracking which popups are opened
     const [renameOpened, setRenameOpened] = useState(false);
     const [moveItemOpened, setMoveItemOpened] = useState(false);
+    const [shareItemOpened, setshareItemOpened] = useState(false);
 
     return (
         <View style={styles.menu}>
@@ -111,7 +113,12 @@ export const ActionMenu = ({ file, close }) => {
 
                     <View style={styles.divider}/>
 
-                    <MenuItem icon={people} text="Share" whenDisabled={!doesOwn} />
+                    <MenuItem
+                        icon={people}
+                        text="Share"
+                        whenDisabled={!doesOwn}
+                        onPress={() => setshareItemOpened(true)}
+                    />
 
                     <MenuItem
                         icon={folder}
@@ -164,6 +171,12 @@ export const ActionMenu = ({ file, close }) => {
                 setIsOpen={setMoveItemOpened}
                 file={file}
                 closeParent={close}
+            />
+            
+            <ShareItemWindow
+                isOpen={shareItemOpened}
+                setIsOpen={setshareItemOpened}
+                file={file}
             />
 
         </View>

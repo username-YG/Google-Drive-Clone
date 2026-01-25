@@ -188,3 +188,20 @@ export async function getAllFolders() {
   return [];
 
 }
+
+export async function getUserById(userId) {
+
+  const token = SecureStore.getItem("token");
+  const response = await fetch(getBaseUrl() + "users/" + userId, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+  return null;
+}

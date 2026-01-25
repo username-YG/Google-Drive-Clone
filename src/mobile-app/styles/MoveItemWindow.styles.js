@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.actionsMenuColor,
     borderRadius: 28,
     padding: 24,
-    marginVertical: 90,
+    maxHeight: '100%'
   },
   title: {
     marginTop: 0,
