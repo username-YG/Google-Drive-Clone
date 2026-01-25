@@ -73,3 +73,19 @@ export async function getUser(setUser) {
     setUser(data);
   }
 }
+
+export async function starItem(fileId, toStar) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + fileId, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "starred": toStar
+    })
+  });
+
+}
