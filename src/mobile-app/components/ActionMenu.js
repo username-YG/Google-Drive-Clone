@@ -2,8 +2,9 @@ import { View, Text, Image } from 'react-native';
 import { styles } from '../styles/ActionMenu.styles.js';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { starItem, trashItem, deleteItem } from "../app/serverLogic.js";
-import { TextInput } from "../components/TextInput.js"
+import { starItem, trashItem, deleteItem, renameItem } from "../app/serverLogic.js";
+import { TextInsertBox } from "./TextInsertBox.js"
+import { useState } from 'react';
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -83,14 +84,14 @@ export const ActionMenu = ({ file, close }) => {
                         icon={restore}
                         text="Restore"
                         whenDisabled={!doesOwn}
-                        onPress={async() => {await trashItem(file.id, false); close(); }}
+                        onPress={async() => { await trashItem(file.id, false); close(); }}
                     />
 
                     <MenuItem
                         icon={delete_forever}
                         text="Delete forever"
                         whenDisabled={!doesOwn}
-                        onPress={async() => {await deleteItem(file.id); close(); }}
+                        onPress={async() => { await deleteItem(file.id); close(); }}
                     />
 
                 </View>
@@ -99,7 +100,13 @@ export const ActionMenu = ({ file, close }) => {
 
                 <View>
 
-                    <MenuItem icon={pencil} text="Rename" whenDisabled={!canPatch} />
+                    <MenuItem
+                        icon={pencil}
+                        text="Rename"
+                        whenDisabled={!canPatch}
+                        onPress={() => setRenameOpened(true)}
+                    />
+
                     <View style={styles.divider}/>
                     <MenuItem icon={people} text="Share" whenDisabled={!doesOwn} />
                     <MenuItem icon={folder} text="Move to" whenDisabled={!doesOwn} />
@@ -110,14 +117,14 @@ export const ActionMenu = ({ file, close }) => {
                             icon={star_selected}
                             text="Remove from starred"
                             whenDisabled={false}
-                            onPress={async() => {await starItem(file.id, false); close(); }}
+                            onPress={async() => { await starItem(file.id, false); close(); }}
                         />
                         :
                         <MenuItem
                             icon={star}
                             text="Star"
                             whenDisabled={false}
-                            onPress={async() => {await starItem(file.id, true); close(); }}
+                            onPress={async() => { await starItem(file.id, true); close(); }}
                         />
                     }
                     
@@ -125,7 +132,7 @@ export const ActionMenu = ({ file, close }) => {
                         icon={trash}
                         text="Move to trash"
                         whenDisabled={false}
-                        onPress={async() => {await trashItem(file.id, true); close(); }}
+                        onPress={async() => { await trashItem(file.id, true); close(); }}
                     />
 
                 </View>
@@ -133,7 +140,13 @@ export const ActionMenu = ({ file, close }) => {
             )}
 
             { /* Popups */ }
-            <TextInput isOpen={renameOpened} setIsOpen={setRenameOpened} />
+            <TextInsertBox
+                title={"Rename " + (file.isFolder ? "folder" : "file")}
+                doneTitle={"Rename"}
+                isOpen={renameOpened}
+                setIsOpen={setRenameOpened}
+                onDone={async(newName) => { await renameItem(file.id, newName); setRenameOpened(false); close(); }}
+            />
 
         </View>
     );

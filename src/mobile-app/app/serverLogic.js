@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 
-function getBaseUrl() {
+export default function getBaseUrl() {
     const hostIp = Constants.expoConfig?.hostUri?.split(':')[0] || 'localhost';
     const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000;
     return `http://${hostIp}:${port}/api/`;
@@ -133,6 +133,22 @@ export async function deleteItem(id) {
       'Content-Type': 'application/json',
       'authorization': 'bearer ' + token
     }
+  });
+
+}
+
+export async function renameItem(fileId, name) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + fileId, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "name": name
+    })
   });
 
 }
