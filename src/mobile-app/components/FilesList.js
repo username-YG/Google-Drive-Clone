@@ -74,6 +74,7 @@ const ExtraFileData = ({ file }) => {
     const role = permissions[userId];
     const doesOwn = (role === "owner");
 
+    // Display timestamp for the user
     const timestamp = new Date(file.timestamp);
     const today = new Date();
     const isToday = timestamp.getDate() === today.getDate() &&
@@ -98,6 +99,7 @@ const FileListItem = ({ file, reload }) => {
     const type = file.name.split('.').pop();
     const icon = (file.isFolder) ? (folder) : (icons[type] || icons["notype"]);
 
+    // Clicking a folder opens it and a file displays it
     const router = useRouter();
     const onItemPress = () => {
         if (file.isFolder) {

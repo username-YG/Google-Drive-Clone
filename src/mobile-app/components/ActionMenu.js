@@ -3,6 +3,7 @@ import { styles } from '../styles/ActionMenu.styles.js';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { starItem, trashItem, deleteItem } from "../app/serverLogic.js";
+import { TextInput } from "../components/TextInput.js"
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -58,8 +59,12 @@ export const ActionMenu = ({ file, close }) => {
     const canPatch = (role === "owner" || role === "writer");
     const doesOwn = (role === "owner");
 
+    // Check file properties
     const isStarred = file.starred.includes(userId);
     const inTrash = file.trashed;
+
+    // Tracking which popups are opened
+    const [renameOpened, setRenameOpened] = useState(false);
 
     return (
         <View style={styles.menu}>
@@ -126,7 +131,10 @@ export const ActionMenu = ({ file, close }) => {
                 </View>
 
             )}
-            
+
+            { /* Popups */ }
+            <TextInput isOpen={renameOpened} setIsOpen={setRenameOpened} />
+
         </View>
     );
 }
