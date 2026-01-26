@@ -1,7 +1,7 @@
 import { TouchableOpacity, Image, Text } from 'react-native';
 import { styles } from '../styles/ProfileButton.styles.js';
 import { useCallback, useState } from "react"
-import { getUser } from "../app/serverLogic.js"
+import { getUser } from "../app/../_serverLogic.js"
 import { useFocusEffect } from 'expo-router';
 
 export default function ProfileButton({ router }) {

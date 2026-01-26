@@ -1,7 +1,7 @@
 import { Modal, TouchableOpacity, ScrollView, View, Text, Image } from "react-native";
 import { styles } from "../styles/ShareItemWindow.styles";
 import { useState, useEffect } from "react";
-import { getUserById, shareWithUser, updatePermission, unshareWithUser } from "../app/serverLogic.js"
+import { getUserById, shareWithUser, updatePermission, unshareWithUser } from "../app/../_serverLogic.js"
 import { TextInsertBox } from "./TextInsertBox.js"
 import { Alert } from 'react-native';
 

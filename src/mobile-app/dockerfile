@@ -2,7 +2,7 @@ FROM node:lts-slim
 
 WORKDIR /usr/googledrive/app
 
-COPY src/mobile-app/package.json src/mobile-app/package-lock.json ./
+COPY src/mobile-app/package*.json ./
 
 RUN npm install
 

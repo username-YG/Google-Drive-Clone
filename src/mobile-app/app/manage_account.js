@@ -1,16 +1,19 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/manage_account.styles';
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from "react"
-import { getUser } from "./serverLogic.js"
+import { useState, useCallback } from "react"
+import { getUser } from "../_serverLogic.js"
 import * as SecureStore from 'expo-secure-store';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ManageAccount() {
 
     const [user, setUser] = useState(null);
-    useEffect(() => {
-        getUser(setUser)
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getUser(setUser);
+        }, [])
+    );
 
     // User details
     const username = user?.username;

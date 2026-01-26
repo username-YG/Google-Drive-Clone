@@ -1,6 +1,6 @@
 import { ScrollView, View, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
-import { searchItems, getFiles } from "../app/serverLogic.js"
+import { searchItems, getFiles } from "../app/../_serverLogic.js"
 import { useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';

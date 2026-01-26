@@ -1,6 +1,6 @@
 import { View, Text, Modal, TouchableOpacity, Image, ScrollView } from "react-native";
 import { styles } from "../styles/MoveItemWindow.styles";
-import { moveItem, getAllFolders } from "../app/serverLogic.js"
+import { moveItem, getAllFolders } from "../app/../_serverLogic.js"
 import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { styles } from '../styles/ActionMenu.styles.js';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { starItem, trashItem, deleteItem, renameItem } from "../app/serverLogic.js";
+import { starItem, trashItem, deleteItem, renameItem } from "../app/../_serverLogic.js";
 import { TextInsertBox } from "./TextInsertBox.js"
 import { MoveItemWindow } from "../components/MoveItemWindow.js"
 import { ShareItemWindow } from "../components/ShareItemWindow.js"

@@ -8,8 +8,8 @@ const sendToServer = (msg) => {
 
         // Send message to server
         // Use environment variables for Docker networking, fallback to process args
-        const ip = process.env.STORAGE_HOST || process.argv[2];
-        const port = +(process.env.APP_PORT || process.argv[3]);
+        const ip = process.env.STORAGE_HOST;
+        const port = +(process.env.APP_PORT);
         const sock = net.connect(port, ip, () => sock.write(`${Buffer.byteLength(msg)} ${msg}`));
         sock.setTimeout(20000); // 20 sec before we give up
 

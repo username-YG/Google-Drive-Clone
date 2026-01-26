@@ -3,6 +3,7 @@ FROM node:lts-alpine
 WORKDIR /usr/googledrive/app
 
 COPY src/react-app/package*.json ./
+
 RUN npm install
 
 COPY src/react-app .

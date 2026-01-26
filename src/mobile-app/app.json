@@ -35,9 +35,6 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ]
-    ],
-    "extra": {
-      "VITE_WEB_PORT": 3000
-    }
+    ]
   }
 }
