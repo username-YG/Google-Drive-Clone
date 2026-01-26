@@ -78,6 +78,12 @@ export default function RootLayout() {
           drawerItemStyle: { display: 'none' }
         }} />
 
+        <Drawer.Screen name="file_viewer" options={{
+          headerShown: false,
+          swipeEnabled: false,
+          drawerItemStyle: { display: 'none' }
+        }} />
+
       </Drawer>
     </GestureHandlerRootView>
   );
