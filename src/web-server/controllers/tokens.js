@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const key = process.env.JWT_SECRET;
 
 // POST /api/tokens
-exports.processLogin = (req, res) => {
+exports.processLogin = async (req, res) => {
     if (!req.body){
         return res.status(400).json({ error: "Missing body" });
     }
@@ -16,7 +16,7 @@ exports.processLogin = (req, res) => {
         }
 
         // Search for the user using the username field
-        const user = User.findByUsername(username);
+        const user = await User.findByUsername(username);
 
         // Verify if the user exists and the password matches
         if (user && user.password === password) {
@@ -24,13 +24,13 @@ exports.processLogin = (req, res) => {
             const token = jwt.sign(
                 {
                     username: user.username,
-                    ID: user.ID
+                    ID: user.id // Using lowercase 'id' as per your updated Model
                 },
                 key
             )
 
             // Return the token in the JSON response
-            res.status(201).location(`/api/users/${user.ID}`).json({ token });
+            res.status(201).location(`/api/users/${user.id}`).json({ token });
         } else {
             // Return 404 if authentication fails
             res.status(404).json({ error: "User not found" });

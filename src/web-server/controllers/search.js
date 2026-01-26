@@ -8,7 +8,7 @@ exports.searchFilesAndDirs = async (req, res) => {
         const requesterID = req.user.ID;
 
         // Return 404 if one of the users doesn't exist
-        if (!Users.findByID(requesterID)) {
+        if (!(await Users.findByID(requesterID))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
