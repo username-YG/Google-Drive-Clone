@@ -1,12 +1,27 @@
 import { useState, useRef } from 'react';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Image, Text, TouchableOpacity, Animated, Pressable } from 'react-native';
 import { styles } from '../styles/PlusButton.styles.js';
 import UploadController from './UploadController.js';
+import { createFolder } from "../_serverLogic.js"
+import { TextInsertBox } from "./TextInsertBox.js"
 
 export default function PlusBtn() {
     const [open, setOpen] = useState(false);
     const animation = useRef(new Animated.Value(0)).current;
     const { uploadFile } = UploadController();
+    const [createFolderOpen, setCreateFolderOpen] = useState(false)
+
+    const router = useRouter();
+    const { parentId } = useLocalSearchParams();
+
+    // Create folder and go to files page
+    const onCreateFolder = async (name) => {
+        await createFolder(name, parentId);
+        setCreateFolderOpen(false);
+        toggleMenu();
+        router.replace('/files');
+    }
 
     const toggleMenu = () => {
         const toValue = open ? 0 : 1;
@@ -64,6 +79,7 @@ export default function PlusBtn() {
 
                 <Animated.View style={[styles.menuItem, menuStyle(-60)]}>
                     <TouchableOpacity 
+                        onPress={() => setCreateFolderOpen(true)}
                         style={styles.itemButton}
                         activeOpacity={0.7}
                     >
@@ -83,6 +99,15 @@ export default function PlusBtn() {
                         <Text style={styles.openText}>+</Text>
                     </TouchableOpacity>
                 </Animated.View>
+
+                <TextInsertBox
+                    title={"New folder"}
+                    doneTitle={"Create"}
+                    isOpen={createFolderOpen}
+                    setIsOpen={setCreateFolderOpen}
+                    onDone={onCreateFolder}
+                />
+
             </View>
         </View>
     );

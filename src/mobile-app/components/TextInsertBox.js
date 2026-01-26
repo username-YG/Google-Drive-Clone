@@ -1,4 +1,4 @@
-import { Modal, TouchableOpacity, View, Text, TextInput, ScrollView } from 'react-native';
+import { Modal, TouchableOpacity, View, Text, TextInput } from 'react-native';
 import { styles } from '../styles/TextInsertBox.styles';
 import { useState } from 'react';
 
@@ -28,7 +28,7 @@ export const TextInsertBox = ({ title, doneTitle, isOpen, setIsOpen, onDone }) =
                                 <Text style={styles.buttonText}>Cancel</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.button} onPress={() => onDone(text)} >
+                            <TouchableOpacity style={styles.button} onPress={async () => await onDone(text)} >
                                 <Text style={styles.buttonText}>{doneTitle}</Text>
                             </TouchableOpacity>
 

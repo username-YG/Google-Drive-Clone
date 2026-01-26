@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useLocalSearchParams } from "expo-router";
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 
 async function createFile(name, content, parentId) {
     const token = SecureStore.getItem("token");
@@ -64,9 +65,10 @@ const readFile = async (fileUri, fileName) => {
     }
 };
 
-function UploadController() {    
+function UploadController() {
     const { folderId } = useLocalSearchParams();
 
+    const router = useRouter();
     const uploadFile = async () => {
         const result = await DocumentPicker.getDocumentAsync({
             type: '*/*',
@@ -79,6 +81,9 @@ function UploadController() {
             const content = await readFile(file.uri, file.name);
             await createFile(file.name, content, folderId);
         }
+
+        // Jump to the files window
+        router.replace('/files');
     };
 
     return ({ uploadFile });

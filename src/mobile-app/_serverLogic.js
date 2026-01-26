@@ -245,3 +245,23 @@ export async function shareWithUser(fileId, username) {
   }
 
 }
+
+export async function createFolder(name, parentId) {
+
+  if (!name) name = "New Folder";
+  if (!parentId) parentId = null;
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files", {
+    'method': 'POST',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "name": name,
+      "isFolder": true,
+      "parentId": parentId
+    })
+  });
+}
