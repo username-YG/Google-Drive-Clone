@@ -1,5 +1,6 @@
 const FILES = require("./files")
 const PERMS = require("./permissions")
+const { FileModel } = require('../database');
 
 exports.getFiles = async (query, usrId) => {
 
@@ -18,18 +19,18 @@ exports.getFiles = async (query, usrId) => {
     }
 
     // getting files or dirs which contian query in their names in the web "library"
-    const allFileIDs = FILES.getAllIDs();
-    for (const fileId of allFileIDs) {
-        const metadata = FILES.getMetadata(fileId);
-        if (metadata && metadata.name.includes(query)) {
-            filteredFilesID.add(fileId);
-        }
+    const nameMatches = await FileModel.find({
+        name: { $regex: query, $options: 'i' }
+    });
+
+    for (const file of nameMatches) {
+        filteredFilesID.add(file.id);
     }
 
     // Remove files with no permission to read
     const permittedFiles = [];
     for (const fileId of filteredFilesID) {
-        const perm = PERMS.getPermissions(fileId);
+        const perm = await PERMS.getPermissions(fileId);
         if (perm && perm[usrId]) {
             const fileObj = await FILES.getFile(fileId);
             permittedFiles.push(fileObj);

@@ -2,28 +2,30 @@ const Files = require('../models/files')
 const Perms = require('../models/permissions')
 const Users = require('../models/users')
 
-function doesOwn(item, userId) {
-    const permissions = Perms.getPermissions(item.id);
-    return (permissions && permissions[userId] == "owner");
+// Helper function now needs to be async to await database permissions
+async function doesOwn(item, userId) {
+    const permissions = await Perms.getPermissions(item.id);
+    return (permissions && permissions[userId] === "owner");
 }
 
 function isToday(timestamp) {
     if (!timestamp) return false;
-    
+
     const date = new Date(timestamp);
     const today = new Date();
 
     return date.getDate() === today.getDate() &&
-           date.getMonth() === today.getMonth() &&
-           date.getFullYear() === today.getFullYear();
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
 }
 
-function filterFiles(files, filterType, userId) {
+// Adjusted filter logic to handle async ownership checks
+async function filterFiles(files, filterType, userId) {
 
     // Possible filters
     const Filters = {
-        "OWNS": (item) => { return doesOwn(item, userId) },
-        "SHARES": (item) => { return !doesOwn(item, userId) },
+        "OWNS": async (item) => { return await doesOwn(item, userId) },
+        "SHARES": async (item) => { return !(await doesOwn(item, userId)) },
         "STARRED": (item) => { return (item.starred.includes(userId)) },
         "TRASHED": (item) => { return item.trashed },
         "NOT TRASHED": (item) => { return !(item.trashed) },
@@ -32,13 +34,12 @@ function filterFiles(files, filterType, userId) {
         "RECENT": (item) => { return isToday(item.timestamp); }
     }
 
-    // Get the function to filter with
     const filterFunc = Filters[filterType];
     if (typeof filterFunc !== 'function') return files;
 
-    // Return filtered items
-    let filteredFiles = files.filter(filterFunc);
-    return filteredFiles;
+    // Because some filters are async, we use a map and filter pattern
+    const results = await Promise.all(files.map(filterFunc));
+    return files.filter((_, index) => results[index]);
 }
 
 exports.createFile = async (req, res) => {
@@ -61,28 +62,28 @@ exports.createFile = async (req, res) => {
 
         // Return 404 is the parent doesn't exist or isn't a folder
         if (parentId) { // A null parent is root folder
-            const parentMetadata = Files.getMetadata(parentId);
+            const parentMetadata = await Files.getMetadata(parentId);
             if (!parentMetadata || !parentMetadata.isFolder) {
                 return res.status(404).json({ error: 'Parent not found' });
             }
         }
 
         // Return 404 if the user doesn't exist
-        if (!Users.findByID(usrId)) {
+        if (!(await Users.findByID(usrId))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
         // Return 403 if the user doesn't have permissions to write to the parent folder
         // Everyone is allowed to write to the root so we don't check that
         if (parentId) {
-            const perm = Perms.getPermissions(parentId);
+            const perm = await Perms.getPermissions(parentId);
             if (!perm || !perm[usrId] || (perm[usrId] != "owner" && perm[usrId] != "writer")) {
                 return res.status(403).json({ error: "Forbidden" })
             }
         }
 
         const newFile = await Files.createFile(name, content, isFolder, parentId);
-        Perms.addPermission(newFile.id, usrId, "owner"); // Add owner permissions
+        await Perms.addPermission(newFile.id, usrId, "owner"); // Add owner permissions
         res.status(201).location(`/api/files/${newFile.id}`).end()
 
     } catch(err) {
@@ -96,20 +97,20 @@ exports.getAllFiles = async (req, res) => {
         const withContent = req.headers["withcontent"] !== "false";
 
         // Return 404 if the user doesn't exist
-        if (!Users.findByID(usrId)) {
+        if (!(await Users.findByID(usrId))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
         // This special filter allows us to fetch items from all levels and not just root
-        let allFiles = Files.getAllFiles();
+        let allFiles = await Files.getAllFiles();
         if (req.headers && req.headers.filter && req.headers.filter.includes("ALL LEVELS")) {
-            allFiles = Files.getAllIDs();
+            allFiles = await Files.getAllIDs();
         }
 
         // Filter only items the user is allowed to read
         const permittedFiles = [];
         for (const fileId of allFiles) {
-            const perm = Perms.getPermissions(fileId);
+            const perm = await Perms.getPermissions(fileId);
             if (perm && perm[usrId]) {
                 const fileObj = await Files.getFile(fileId, withContent);
                 permittedFiles.push(fileObj);
@@ -121,7 +122,7 @@ exports.getAllFiles = async (req, res) => {
         if (req.headers && req.headers.filter) {
             const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
-                filteredFiles = filterFiles(filteredFiles, filterType, usrId);
+                filteredFiles = await filterFiles(filteredFiles, filterType, usrId);
             }
         }
 
@@ -137,23 +138,23 @@ exports.getFile = async (req, res) => {
         const usrId = req.user.ID;
 
         // Return 404 if the file doesn't exist
-        if (!Files.getMetadata(req.params.id)) {
+        if (!(await Files.getMetadata(req.params.id))) {
             return res.status(404).json({ error: 'File not found' });
         }
         // Return 404 if the user doesn't exist
-        if (!Users.findByID(usrId)) {
+        if (!(await Users.findByID(usrId))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
         // Return 403 if the user doesn't have permissions to read the item
-        const perm = Perms.getPermissions(req.params.id);
+        const perm = await Perms.getPermissions(req.params.id);
         if (!perm || !perm[usrId]) {
             return res.status(403).json({ error: "Forbidden" })
         }
 
         const withContent = req.headers["withcontent"] !== "false";
         let file = await Files.getFile(req.params.id, withContent);
-        
+
         // If a filter has been specified for folder content, apply it
         if (file.isFolder && req.headers && req.headers.filter) {
 
@@ -163,7 +164,7 @@ exports.getFile = async (req, res) => {
             // Filter
             const filters = req.headers.filter.split(',').map(f => f.trim());
             for (const filterType of filters) {
-                filteredContent = filterFiles(filteredContent, filterType, usrId);
+                filteredContent = await filterFiles(filteredContent, filterType, usrId);
             }
 
             // Replace actual file with id
@@ -193,11 +194,11 @@ exports.updateFile = async (req, res) => {
         let { name, content, parentId, starred, trashed, timestamp } = req.body
 
         // Ensure the file and user exists
-        const item = Files.getMetadata(req.params.id);
+        const item = await Files.getMetadata(req.params.id);
         if (!item) {
             return res.status(404).json({ error: 'File not found' });
         }
-        if (!Users.findByID(usrId)) {
+        if (!(await Users.findByID(usrId))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
 
@@ -217,7 +218,7 @@ exports.updateFile = async (req, res) => {
 
         // Ensure the parent exists and is a folder
         if (parentId) {  // A null parent is root folder
-            const parent = Files.getMetadata(parentId);
+            const parent = await Files.getMetadata(parentId);
             if (!parent || !parent.isFolder) {
                 return res.status(404).json({ error: 'Parent not found' });
             }
@@ -227,7 +228,7 @@ exports.updateFile = async (req, res) => {
         }
 
         // Return 403 if the user doesn't have permissions to read the file
-        const perm = Perms.getPermissions(req.params.id);
+        const perm = await Perms.getPermissions(req.params.id);
         if (!perm || !perm[usrId]) {
             return res.status(403).json({ error: "Forbidden" })
         }
@@ -250,14 +251,14 @@ exports.updateFile = async (req, res) => {
         // Return 403 if the user doesn't have permissions to write to the folder
         // Everyone is allowed to write to the root so we don't check that
         if (parentId) {
-            const parentPerm = Perms.getPermissions(parentId);
+            const parentPerm = await Perms.getPermissions(parentId);
             if (!parentPerm || !parentPerm[usrId] || (parentPerm[usrId] != "owner" && parentPerm[usrId] != "writer")) {
                 return res.status(403).json({ error: "Forbidden" })
             }
         }
 
-        const updatedFile = await Files.updateFile(req.params.id,name, content, parentId, 
-                                                    usrId, trashed, starred, timestamp);
+        const updatedFile = await Files.updateFile(req.params.id,name, content, parentId,
+            usrId, trashed, starred, timestamp);
         res.status(204).end()
 
     } catch(err) {
@@ -271,16 +272,16 @@ exports.deleteFile = async (req, res) => {
         const usrId = req.user.ID;
 
         // Return 404 if the user doesn't exist
-        if (!Users.findByID(usrId)) {
+        if (!(await Users.findByID(usrId))) {
             return res.status(404).json({ error: 'Authentication user not found' });
         }
         // Return 404 if the file doesn't exist
-        if (!Files.getMetadata(req.params.id)) {
+        if (!(await Files.getMetadata(req.params.id))) {
             return res.status(404).json({ error: 'File not found' });
         }
 
         // Return 403 if the user doesn't have owner permissions
-        const perm = Perms.getPermissions(req.params.id);
+        const perm = await Perms.getPermissions(req.params.id);
         if (!perm || !perm[usrId] || perm[usrId] != "owner") {
             return res.status(403).json({ error: "Forbidden" })
         }
