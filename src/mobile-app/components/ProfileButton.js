@@ -1,7 +1,7 @@
 import { TouchableOpacity, Image, Text } from 'react-native';
 import { styles } from '../styles/ProfileButton.styles.js';
 import { useState, useEffect } from "react"
-import { getUser } from "../app/serverLogic.js"
+import { getUser } from "../_serverLogic.js"
 
 export default function ProfileButton({ router }) {
 
