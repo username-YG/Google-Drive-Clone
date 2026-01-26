@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { View, Image } from 'react-native';
 import { styles } from '../../styles/tabs._layout.styles';
 import { COLORS } from '../../styles/Theme';
+import PlusBtn from '../../components/PlusButton.js';
 
 const baseUrl = "../../assets/icons/"
 const ICONS = {
@@ -41,21 +42,24 @@ function styleIcon({ focused, color, size, route }) {
 
 export default function TabsLayout() {
     return (
-        <Tabs
-            screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarActiveTintColor: "black",
-                tabBarStyle: styles.bottomBar,
-                tabBarLabelStyle: styles.bottomBarLabel,
-                tabBarIcon: ({focused, color, size}) => styleIcon({focused, color, size, route}),
-                tabBarLabel: ICONS[route.name]?.label
-            })}
-        >
-            <Tabs.Screen name="home" />
-            <Tabs.Screen name="starred" />
-            <Tabs.Screen name="shared" />
-            <Tabs.Screen name="files" />
-            <Tabs.Screen name="folderContent" options={{ href: null }} />
-        </Tabs>
+        <>
+            <PlusBtn/>
+            <Tabs
+                screenOptions={({ route }) => ({
+                    headerShown: false,
+                    tabBarActiveTintColor: "black",
+                    tabBarStyle: styles.bottomBar,
+                    tabBarLabelStyle: styles.bottomBarLabel,
+                    tabBarIcon: ({focused, color, size}) => styleIcon({focused, color, size, route}),
+                    tabBarLabel: ICONS[route.name]?.label
+                })}
+            >
+                <Tabs.Screen name="home" />
+                <Tabs.Screen name="starred" />
+                <Tabs.Screen name="shared" />
+                <Tabs.Screen name="files" />
+                <Tabs.Screen name="folderContent" options={{ href: null }} />
+            </Tabs>
+        </>
     );
 }

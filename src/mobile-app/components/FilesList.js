@@ -1,9 +1,10 @@
 import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
-import { searchItems, getFiles } from "../app/serverLogic.js"
+import { searchItems, getFiles } from "../_serverLogic.js"
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname} from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import ShareController from './ShareController';
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -105,6 +106,13 @@ const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
             });
         }
     }
+
+    // Added here
+    const handleDownload = async () => {
+        if (!file.isFolder) {
+            await ShareController(file.id);
+        }
+    }
     
     return (
         <TouchableOpacity style={styles.box} onPress={onFolderPress}>
@@ -115,7 +123,12 @@ const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
                 <Text style={styles.fileName} numberOfLines={1}>{file.name}</Text>
                 <ExtraFileData file={file}></ExtraFileData>
             </View>
-            <Image source={dots} style={styles.sideIcon} resizeMode="contain"></Image>
+            <TouchableOpacity 
+                onPress={handleDownload} 
+                style={{ padding: 10 }}
+            >
+                <Image source={dots} style={styles.sideIcon} resizeMode="contain"></Image>
+            </TouchableOpacity>
         </TouchableOpacity>
     )
 }
