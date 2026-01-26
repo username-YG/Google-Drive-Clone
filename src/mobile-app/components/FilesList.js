@@ -1,6 +1,6 @@
 import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
-import { searchItems, getFiles } from "../app/serverLogic.js"
+import { searchItems, getFiles } from "../_serverLogic.js"
 import {useEffect, useState} from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -89,13 +89,32 @@ const ExtraFileData = ({ file }) => {
 }
 
 const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
-    
+    const router = useRouter();
     // The type determines the file's icon
     const type = file.name.split('.').pop();
     const icon = (file.isFolder) ? (folder) : (icons[type] || icons["notype"]);
 
+    const handlePress = () => {
+        if (file.isFolder) {
+            // Navigate deeper into folders
+            router.push({ pathname: '/(tabs)/files', params: { folderId: file.id } });
+        } else if (type === 'pdf') {
+            return;
+        }  else {
+            // Open the file viewer for text, images, or PDFs
+            router.push({
+                pathname: '/file_viewer',
+                params: {
+                    fileId: file.id,
+                    fileName: file.name,
+                    fileType: type
+                }
+            });
+        }
+    };
+
     return (
-        <TouchableOpacity style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={handlePress}>
             <View style={styles.iconBox}>
                 <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
             </View>

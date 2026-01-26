@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/manage_account.styles';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from "react"
-import { getUser } from "./serverLogic.js"
+import { getUser } from "../_serverLogic.js"
 
 export default function ManageAccount() {
 
