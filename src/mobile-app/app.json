@@ -43,9 +43,6 @@
           "isUsedInBackgroundTask": false
         }
       ]
-    ],
-    "extra": {
-      "VITE_WEB_PORT": 3000
-    }
+    ]
   }
 }

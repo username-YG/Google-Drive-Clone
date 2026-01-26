@@ -1,15 +1,19 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/manage_account.styles';
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from "react"
+import { useState, useCallback } from "react"
 import { getUser } from "../_serverLogic.js"
+import * as SecureStore from 'expo-secure-store';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ManageAccount() {
 
     const [user, setUser] = useState(null);
-    useEffect(() => {
-        getUser(setUser)
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getUser(setUser);
+        }, [])
+    );
 
     // User details
     const username = user?.username;
@@ -17,7 +21,14 @@ export default function ManageAccount() {
     const profilePic = user?.profilePic || "";
     if (!username && !displayName) { return (<></>) }
 
+    // Perform logout
     const router = useRouter();
+    const logOut = async () => {
+        await SecureStore.deleteItemAsync("token");
+        await SecureStore.deleteItemAsync("id");
+        router.replace('/login/username')
+    }
+
     return (
         <View style={styles.screen}>
             <Text style={styles.username}>{username}</Text>
@@ -27,7 +38,7 @@ export default function ManageAccount() {
                 <Text style={styles.noProfileImage}>{displayName ? displayName[0] : "?"}</Text>
             )}
             <Text style={styles.displayName}>Hi, {displayName}!</Text>
-            <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/login/username')}>
+            <TouchableOpacity style={styles.logoutButton} onPress={logOut}>
                 <Text style={styles.logoutText}>Log out of this account</Text>
             </TouchableOpacity>
         </View>

@@ -45,7 +45,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/tokens', tokensRoutes);
 
-const webPort = +process.argv[4] || 3000;
+const webPort = +(process.env.WEB_PORT) || 3000;
 app.listen(webPort, () => {
     console.log(`Server running on port ${webPort}`);
 });

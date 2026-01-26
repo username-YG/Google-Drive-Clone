@@ -5,7 +5,7 @@ import folder from "../../../../assets/folder.png"
 import driveIcon from "../../../../assets/drive.png"
 
 import "./MoveItemPopup.css"
-
+getAllFolders
 const MoveItemPopup = ({ current, toggle, reload, setReload }) => {
 
   const [folders, setFolders] = useState([]);

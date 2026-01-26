@@ -1,9 +1,11 @@
-import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Modal } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
-import { searchItems, getFiles } from "../_serverLogic.js"
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname, useLocalSearchParams } from 'expo-router';
+import { searchItems, getFiles } from "../app/../_serverLogic.js"
+import { useState, useCallback } from 'react';
+import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import { useFocusEffect } from '@react-navigation/native';
+import { ActionMenu } from "../components/ActionMenu.js"
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -72,6 +74,7 @@ const ExtraFileData = ({ file }) => {
     const role = permissions[userId];
     const doesOwn = (role === "owner");
 
+    // Display timestamp for the user
     const timestamp = new Date(file.timestamp);
     const today = new Date();
     const isToday = timestamp.getDate() === today.getDate() &&
@@ -90,16 +93,20 @@ const ExtraFileData = ({ file }) => {
     );
 }
 
-const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
-    const router = useRouter();
+const FileListItem = ({ file, reload }) => {
+    
     // The type determines the file's icon
     const type = file.name.split('.').pop();
     const icon = (file.isFolder) ? (folder) : (icons[type] || icons["notype"]);
 
-    const handlePress = () => {
+    // Clicking a folder opens it and a file displays it
+    const router = useRouter();
+    const onItemPress = () => {
         if (file.isFolder) {
-            // Navigate deeper into folders
-            router.push({ pathname: '/(tabs)/files', params: { folderId: file.id } });
+            router.push({
+                pathname: '/folderContent',   
+                params: { folderId: file.id, folderName: file.name }
+            });
         } else if (type === 'pdf') {
             return;
         }  else {
@@ -113,70 +120,85 @@ const FileListItem = ({ file, selected, onSelect, reload, setReload }) => {
                 }
             });
         }
-    };
+    }
 
+    const [actionsOpen, setActionsOpen] = useState(false);
     return (
-        <TouchableOpacity style={styles.box} onPress={handlePress}>
-            <View style={styles.iconBox}>
-                <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
-            </View>
-            <View style={styles.textList}>
-                <Text style={styles.fileName} numberOfLines={1}>{file.name}</Text>
-                <ExtraFileData file={file}></ExtraFileData>
-            </View>
-            <Image source={dots} style={styles.sideIcon} resizeMode="contain"></Image>
-        </TouchableOpacity>
+        <View>
+
+            <Modal animationType="slide" transparent={true} visible={actionsOpen} onRequestClose={() => setActionsOpen(false)} >
+                <TouchableOpacity style={styles.blackBackground} activeOpacity={1} onPress={() => setActionsOpen(false)}>
+                    <TouchableOpacity activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+                        <ActionMenu file={file} close={() => { setActionsOpen(false); reload(); }} />
+                    </TouchableOpacity>
+                </TouchableOpacity>
+            </Modal>
+
+            <TouchableOpacity style={styles.box} onPress={onItemPress} onLongPress={() => setActionsOpen(true)}>
+
+                <View style={styles.iconBox}>
+                    <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
+                </View>
+
+                <View style={styles.textList}>
+                    <Text style={styles.fileName} numberOfLines={1}>{file.name}</Text>
+                    <ExtraFileData file={file}></ExtraFileData>
+                </View>
+
+                <TouchableOpacity style={styles.sideIconBackground} onPress={(e) => { e.stopPropagation(); setActionsOpen(true); }}>
+                    <Image source={dots} style={styles.sideIcon} resizeMode="contain"></Image>
+                </TouchableOpacity>
+
+            </TouchableOpacity>
+        </View>
     )
 }
 
 export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
 
-    //////////////
-    const reload = undefined;
-    const setReload = undefined;
-    /////////////
-
     const [items, setItems] = useState([]);
-    const [selected, setSelected] = useState(null); // Track currently selected item
     const [loading, setLoading] = useState(false);
     const [parent, setParent] = useState(null);
-
+    const [toReload, setToReload] = useState(false);
     const router = useRouter();
 
-    // Reload files when one of those change
-    useEffect(() => {
-        const loadData = async () => {
-            setLoading(true); // Show loading screen
-            await updateData(folderId, setItems, filter, router, query, setParent);
-            setLoading(false); // Hide loading screen
+    // Reload files on every load
+    useFocusEffect(
+        useCallback(() => {
+            const loadData = async () => {
+                setLoading(true); // Show loading screen
+                await updateData(folderId, setItems, filter, router, query, setParent);
+                setLoading(false); // Hide loading screen
+            }
+            loadData();
+        }, [folderId, query, setParent, toReload])
+    );
+
+    // When the user goes back, navigate to the parent folder
+    const goBack = async () => {
+        setLoading(true); // Show loading screen
+        const data = await getFiles("/files/" + parent, filter, router, "false");
+        setLoading(false); // Show loading screen
+        if (data) {
+            router.push({
+                pathname: "/folderContent",
+                params: { folderId: parent, folderName: data.name }
+            });
+        } else {
+            router.navigate("/home"); // When navigating to root folder
         }
-        loadData();
-    }, [folderId, reload, query, setParent]);
-    
+    }
+
     // We seperate the files and folders on the screen
     const foldersObjects = items.filter(item => item.isFolder === true);
     const filesObjects = items.filter(item => item.isFolder === false);
 
     const folders = foldersObjects.map((item, i) =>
-        <FileListItem
-            key={i}
-            file={item}
-            selected={selected}
-            onSelect={() => setSelected(item.id)}
-            reload={reload}
-            setReload={setReload}
-        />
+        <FileListItem key={i} file={item} reload={() => setToReload(!toReload)} />
     );
 
     const files = filesObjects.map((item, i) =>
-        <FileListItem
-            key={i}
-            file={item}
-            selected={selected}
-            onSelect={() => setSelected(item.id)}
-            reload={reload}
-            setReload={setReload}
-        />
+        <FileListItem key={i} file={item} reload={() => setToReload(!toReload)} />
     );
 
     // When the user goes back, navigate to the parent folder

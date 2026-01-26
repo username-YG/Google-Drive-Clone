@@ -13,9 +13,7 @@ export const styles = StyleSheet.create({
   bar: {
     fontSize: 18,
     padding: 5,
-    paddingHorizontal: 60,
-    color: '#1F1F1F',
-    width: '100%',
+    paddingHorizontal: 50,
     textAlign: 'center',
     opacity: 0.7
   },

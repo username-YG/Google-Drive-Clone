@@ -9,4 +9,5 @@ export const COLORS = {
     logoutText: '#346ac1',
     filesListItem: '#FFFFFF',
     fileIconBox: '#F3F5F7',
+    actionsMenuColor: '#FFFFFF',
 };

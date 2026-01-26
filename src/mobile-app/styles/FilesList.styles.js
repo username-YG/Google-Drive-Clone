@@ -66,11 +66,14 @@ export const styles = StyleSheet.create({
         fontSize: 13,
         opacity: 0.7,
     },
+    sideIconBackground: {
+        padding: 10,
+        marginRight: -10,
+    },
     sideIcon: {
         width: 20,
         height: 20,
         opacity: 0.8,
-        marginLeft: 12,
     },
     loader: {
         padding: 25,
@@ -83,5 +86,10 @@ export const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 10,
         resizeMode: 'contain',
-    }
+    },
+    blackBackground: {
+        flex: 1,
+        backgroundColor: '#00000055',
+        justifyContent: 'flex-end',
+    },
 });

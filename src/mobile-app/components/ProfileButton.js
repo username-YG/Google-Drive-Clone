@@ -1,14 +1,17 @@
 import { TouchableOpacity, Image, Text } from 'react-native';
 import { styles } from '../styles/ProfileButton.styles.js';
-import { useState, useEffect } from "react"
-import { getUser } from "../_serverLogic.js"
+import { useCallback, useState } from "react"
+import { getUser } from "../app/../_serverLogic.js"
+import { useFocusEffect } from 'expo-router';
 
 export default function ProfileButton({ router }) {
 
     const [user, setUser] = useState(null);
-    useEffect(() => {
-        getUser(setUser)
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getUser(setUser);
+        }, [])
+    );
 
     // User details
     const username = user?.username;
