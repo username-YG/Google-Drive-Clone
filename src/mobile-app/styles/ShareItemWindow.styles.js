@@ -74,6 +74,10 @@ export const styles = StyleSheet.create({
     buttonText: {
         fontSize: 14,
         fontWeight: '500',
+        alignSelf: 'center',
         color: COLORS.hard_selected,
+    },
+    roleChoise: {
+        fontSize: 18,
     },
 });

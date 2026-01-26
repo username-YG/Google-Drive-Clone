@@ -111,19 +111,6 @@ export async function trashItem(id, toTrash) {
 
 }
 
-export async function unshareWithUser(fileId, pid) {
-
-  const token = SecureStore.getItem("token")
-  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${pid}`, {
-    'method': 'DELETE',
-    'headers': {
-      'Content-Type': 'application/json',
-      'authorization': 'bearer ' + token
-    }
-  });
-  
-}
-
 export async function deleteItem(id) {
 
   const token = SecureStore.getItem("token")
@@ -204,4 +191,57 @@ export async function getUserById(userId) {
     return await response.json();
   }
   return null;
+}
+
+
+export async function unshareWithUser(fileId, pid) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${pid}`, {
+    'method': 'DELETE',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    }
+  });
+  
+}
+
+export async function updatePermission(fileId, userId, role) {
+
+  const token = SecureStore.getItem("token");
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions/${userId}`, {
+    'method': 'PATCH',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      'role': role
+    })
+  });
+
+}
+
+export async function shareWithUser(fileId, username) {
+
+  const token = SecureStore.getItem("token");
+  const response = await fetch(getBaseUrl() + `files/${fileId}/permissions`, {
+    'method': 'POST',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      'username': username,
+      'role': "reader"
+    })
+  });
+
+  if (response.status === 404 || response.status === 400) {
+    const data = await response.json();
+    if (data.error === "Permission already exists") return "The user is already shared!";
+    if (data.error === "User in body not found" || data.error === "Missing args") return "User doesn't exists!";
+  }
+
 }

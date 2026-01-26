@@ -177,6 +177,7 @@ export const ActionMenu = ({ file, close }) => {
                 isOpen={shareItemOpened}
                 setIsOpen={setshareItemOpened}
                 file={file}
+                closeParent={close}
             />
 
         </View>
