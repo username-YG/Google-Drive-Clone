@@ -12,6 +12,8 @@ export const styles = StyleSheet.create({
         borderTopEndRadius: 15,
         borderTopStartRadius: 15,
         backgroundColor: COLORS.filesListItem,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     titleText: {
         fontSize: 18,
@@ -74,5 +76,12 @@ export const styles = StyleSheet.create({
         padding: 25,
         fontSize: 22,
         alignSelf: 'center'
+    },
+    goBack: {
+        width: 23,
+        height: 23,
+        marginLeft: 5,
+        marginRight: 10,
+        resizeMode: 'contain',
     }
 });

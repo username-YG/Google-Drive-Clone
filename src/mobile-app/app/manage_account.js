@@ -27,7 +27,7 @@ export default function ManageAccount() {
                 <Text style={styles.noProfileImage}>{displayName ? displayName[0] : "?"}</Text>
             )}
             <Text style={styles.displayName}>Hi, {displayName}!</Text>
-            <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/login')}>
+            <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/login/username')}>
                 <Text style={styles.logoutText}>Log out of this account</Text>
             </TouchableOpacity>
         </View>

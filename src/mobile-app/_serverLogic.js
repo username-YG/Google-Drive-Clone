@@ -50,7 +50,7 @@ export async function getFiles(url, filter, router, withContent) {
 
   // If the user's token doesn't exist or invalid, we send to login
   if (response.status === 404 || response.status === 403 || response.status === 401) {
-    router.replace('/login');
+    router.replace('/login/username');
   }
 
 }
