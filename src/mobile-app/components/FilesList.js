@@ -200,22 +200,7 @@ export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
     const files = filesObjects.map((item, i) =>
         <FileListItem key={i} file={item} reload={() => setToReload(!toReload)} />
     );
-
-    // When the user goes back, navigate to the parent folder
-    const goBack = async () => {
-        setLoading(true); // Show loading screen
-        const data = await getFiles("/files/" + parent, filter, router, "false");
-        setLoading(false); // Show loading screen
-        if (data) {
-            router.push({
-                pathname: "/folderContent",
-                params: { folderId: parent, folderName: data.name }
-            });
-        } else {
-            router.navigate("/home"); // When navigating to root folder
-        }
-    }
-
+    
     return (
         <ScrollView>
 
