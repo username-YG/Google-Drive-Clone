@@ -7,6 +7,7 @@ import { starItem, trashItem, deleteItem, renameItem } from "../app/../_serverLo
 import { TextInsertBox } from "./TextInsertBox.js"
 import { MoveItemWindow } from "../components/MoveItemWindow.js"
 import { ShareItemWindow } from "../components/ShareItemWindow.js"
+import ShareController from "../components/ShareController.js"
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -20,6 +21,7 @@ import people from "../assets/icons/people.png"
 import star from "../assets/icons/star.png"
 import star_selected from "../assets/icons/selected/star.png"
 import trash from "../assets/icons/trash.png"
+import share from "../assets/icons/share.png"
 
 import delete_forever from "../assets/icons/delete_forever.png"
 import restore from "../assets/icons/restore.png"
@@ -111,6 +113,13 @@ export const ActionMenu = ({ file, close }) => {
                         onPress={() => setRenameOpened(true)}
                     />
 
+                    <MenuItem
+                        icon={folder}
+                        text="Move to"
+                        whenDisabled={!doesOwn}
+                        onPress={() => setMoveItemOpened(true)}
+                    />
+
                     <View style={styles.divider}/>
 
                     <MenuItem
@@ -120,12 +129,14 @@ export const ActionMenu = ({ file, close }) => {
                         onPress={() => setshareItemOpened(true)}
                     />
 
-                    <MenuItem
-                        icon={folder}
-                        text="Move to"
-                        whenDisabled={!doesOwn}
-                        onPress={() => setMoveItemOpened(true)}
-                    />
+                    { !(file.isFolder) &&
+                        <MenuItem
+                            icon={share}
+                            text="Send a copy.."
+                            whenDisabled={false}
+                            onPress={async() => { await ShareController(file.id); close(); }}////////////
+                        />
+                    }
 
                     <View style={styles.divider}/>
 

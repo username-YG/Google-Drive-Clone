@@ -1,28 +1,6 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import * as SecureStore from 'expo-secure-store';
-import Constants from 'expo-constants';
-
-async function getFile(fileId) {
-    const token = SecureStore.getItem("token");
-
-    // get the item
-    const hostIp = Constants.expoConfig.hostUri?.split(':')[0];
-    const port = Constants.expoConfig.extra?.VITE_WEB_PORT || 3000;
-    const response = await fetch(`http://${hostIp}:${port}/api/files/${fileId}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-    });
-
-    if (response.status === 200) {
-        return await response.json();
-    }
-
-    return null;
-};
+import { getFile } from "../_serverLogic.js"
 
 const getFileMimeType = (file) => {
     const type = file.name.split('.').pop().toLowerCase();
