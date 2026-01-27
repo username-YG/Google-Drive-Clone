@@ -1,16 +1,43 @@
-import { TextInput } from 'react-native';
+import { TextInput, View } from 'react-native';
 import { styles } from '../styles/OpenSearchBar.styles';
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function OpenSearchBar() {
+
+  const [query, setQuery] = useState("")
   const ref = useRef(null);
+  const router = useRouter();
+
+  // Perform search 300ms after user finished inserting query
+  const searchQuery = () => { router.replace({ pathname: '/search', params: { q: query }}) }
+  useEffect(() => {
+    const timeout = setTimeout(searchQuery, 300);
+    return () => clearTimeout(timeout);
+  }, [query]);
+
+  // Auto focus on text input
+  useFocusEffect(
+    useCallback(() => {
+      setQuery("");
+      const timer = setTimeout(() => ref.current?.focus(), 100);
+      return () => clearTimeout(timer);
+    }, [])
+  );
+
   return (
-    <TextInput
-        placeholder="Search in Drive"
-        autoFocus={true}
-        ref={ref}
-        onBlur={() => ref.current?.focus()}
-        style={styles.textInput}
-    />
+    <View>
+      <TextInput
+          placeholder="Search in Drive"
+          value={query}
+          ref={ref}
+          autoFocus={true}
+          style={styles.textInput}
+          onChangeText={setQuery}
+          returnKeyType="search"
+          onSubmitEditing={() => ref.current?.blur()}
+      />
+    </View>
   );
 }
