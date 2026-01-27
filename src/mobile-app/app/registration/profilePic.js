@@ -58,23 +58,23 @@ export default function ProfilePic() {
   };
 
   return (
-    <ProfilePicStep
-      pickImage={async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ['images'],
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 1,
-        });
+      <ProfilePicStep
+          pickImage={async () => {
+            const result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ['images'],
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 1,
+            });
 
-        if (!result.canceled) {
-          setProfilePic(result.assets[0].uri);
-        }
-      }}
-      profilePic={profilePic}
-      onBack={() => router.back()}
-      onFinish={handleSubmit}
-      error={error}
-    />
+            if (!result.canceled) {
+              setProfilePic(result.assets[0].uri);
+            }
+          }}
+          profilePic={profilePic}
+          onBack={() => router.back()}
+          onFinish={handleSubmit}
+          error={error}
+      />
   );
 }

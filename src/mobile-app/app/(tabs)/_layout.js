@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { View, Image } from 'react-native';
 import { styles } from '../../styles/tabs._layout.styles';
-import { COLORS } from '../../styles/Theme';
+import { useTheme } from '../../components/ThemeContext';
 import PlusBtn from '../../components/PlusButton.js';
 
 const baseUrl = "../../assets/icons/"
@@ -28,12 +28,16 @@ const ICONS = {
     },
 };
 
-function styleIcon({ focused, color, size, route }) {
+// Pass theme as a parameter to the helper function
+function styleIcon({ focused, color, size, route, theme }) {
     if (!ICONS[route.name]) return null;
     return (
-        <View style={[ styles.iconBackground, { backgroundColor: focused ? (COLORS.light_selected) : (COLORS.bottomBar) }]}>
+        <View style={[
+            styles.iconBackground,
+            { backgroundColor: focused ? theme.light_selected : 'transparent' }
+        ]}>
             <Image
-                source={focused ? (ICONS[route.name].selected) : (ICONS[route.name].default)}
+                source={focused ? ICONS[route.name].selected : ICONS[route.name].default}
                 style={{ width: size, height: size, tintColor: color }}
             />
         </View>
@@ -41,17 +45,21 @@ function styleIcon({ focused, color, size, route }) {
 }
 
 export default function TabsLayout() {
+    const { theme } = useTheme(); // Access the active theme
+
     return (
         <>
             <PlusBtn/>
             <Tabs
                 screenOptions={({ route }) => ({
                     headerShown: false,
-                    tabBarActiveTintColor: "black",
-                    tabBarStyle: styles.bottomBar,
+                    tabBarActiveTintColor: theme.text,
+                    tabBarInactiveTintColor: theme.text + '80',
+                    tabBarStyle: [styles.bottomBar, { backgroundColor: theme.bottomBar, borderTopWidth: 0 }],
                     tabBarLabelStyle: styles.bottomBarLabel,
-                    tabBarIcon: ({focused, color, size}) => styleIcon({focused, color, size, route}),
-                    tabBarLabel: ICONS[route.name]?.label
+                    tabBarIcon: ({focused, color, size}) => styleIcon({focused, color, size, route, theme}),
+                    tabBarLabel: ICONS[route.name]?.label,
+                    sceneContainerStyle: { backgroundColor: theme.background }
                 })}
             >
                 <Tabs.Screen name="home" />

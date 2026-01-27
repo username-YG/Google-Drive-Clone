@@ -1,13 +1,13 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
 
 export default function LoginLayout() {
     return (
-        <Stack
-            initialRouteName="username"
-            screenOptions={{
-                headerShown: false,
-                animation: 'slide_from_right',
-            }} 
-        />
+        <Stack screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: 'transparent' }
+        }}>
+            <Stack.Screen name="username" />
+            <Stack.Screen name="password" />
+        </Stack>
     );
 }

@@ -23,15 +23,15 @@ export default function Password() {
   };
 
   return (
-    <PasswordStep
-      title="Create a strong password"
-      subtitle="Create a strong password with a mixture of letters, numbers and symbols"
-      password={password}
-      setPassword={setPassword}
-      onNext={onNext}
-      onBack={() => router.back()}
-      error={error}
-      inputRef={passwordRef}
-    />
+      <PasswordStep
+          title="Create a strong password"
+          subtitle="Create a strong password with a mixture of letters, numbers and symbols"
+          password={password}
+          setPassword={setPassword}
+          onNext={onNext}
+          onBack={() => router.back()}
+          error={error}
+          inputRef={passwordRef}
+      />
   );
 }

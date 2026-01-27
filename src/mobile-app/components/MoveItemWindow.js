@@ -3,12 +3,13 @@ import { styles } from "../styles/MoveItemWindow.styles";
 import { moveItem, getAllFolders } from "../app/../_serverLogic.js"
 import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
+import { useTheme } from './ThemeContext';
 
 import folder from "../assets/mimetypes/folder.png"
 import driveIcon from "../assets/icons/drive.png"
 
 export const MoveItemWindow = ({ isOpen, setIsOpen, file, closeParent }) => {
-  
+  const { theme } = useTheme(); // Access the active theme
   const [folders, setFolders] = useState([]);
 
   // Do you own this item
@@ -23,8 +24,8 @@ export const MoveItemWindow = ({ isOpen, setIsOpen, file, closeParent }) => {
   useEffect(() => {
     const updateFolders = async () => {
       const allFolders = await getAllFolders();
-      setFolders(allFolders.filter(fold => 
-        (fold.id !== file.id) && doesOwn(fold)
+      setFolders(allFolders.filter(fold =>
+          (fold.id !== file.id) && doesOwn(fold)
       )); // Exculed current and unowned item
     }
     updateFolders();
@@ -37,41 +38,47 @@ export const MoveItemWindow = ({ isOpen, setIsOpen, file, closeParent }) => {
   }
 
   return (
-    <Modal animationType="fade" transparent={true} visible={isOpen} onRequestClose={() => setIsOpen(false)}>
-      <TouchableOpacity style={styles.blackBackground} activeOpacity={1} onPress={() => setIsOpen(false)}>
-        <TouchableOpacity activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+      <Modal animationType="fade" transparent={true} visible={isOpen} onRequestClose={() => setIsOpen(false)}>
+        <TouchableOpacity style={styles.blackBackground} activeOpacity={1} onPress={() => setIsOpen(false)}>
+          <TouchableOpacity activeOpacity={1} onPress={(e) => e.stopPropagation()}>
 
-            <View style={styles.window}>
-              
-              <Text style={styles.title}>Move "{file?.name}"</Text>
+            {/* Apply themed background to the window */}
+            <View style={[styles.window, { backgroundColor: theme.actionsMenuColor }]}>
+
+              {/* Apply themed color to the title */}
+              <Text style={[styles.title, { color: theme.text }]}>Move "{file?.name}"</Text>
 
               <ScrollView style={styles.foldersList}>
-                
+
                 <TouchableOpacity style={styles.listItem} onPress={() => onMoveItem(null)}>
-                  <Image source={driveIcon} style={styles.icon} />
-                  <Text style={styles.listItemText}>My Drive</Text>
+                  {/* Apply tint color to the drive icon */}
+                  <Image source={driveIcon} style={[styles.icon, { tintColor: theme.text }]} />
+                  {/* Apply themed color to the list item text */}
+                  <Text style={[styles.listItemText, { color: theme.text }]}>My Drive</Text>
                 </TouchableOpacity>
 
                 {folders.map((fold) => (
-                  <TouchableOpacity key={fold.id} style={styles.listItem} onPress={() => onMoveItem(fold.id)}>
-                    <Image source={folder} style={styles.icon} />
-                    <Text style={styles.listItemText}>{fold.name}</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity key={fold.id} style={styles.listItem} onPress={() => onMoveItem(fold.id)}>
+                      <Image source={folder} style={styles.icon} />
+                      {/* Apply themed color to folder names */}
+                      <Text style={[styles.listItemText, { color: theme.text }]}>{fold.name}</Text>
+                    </TouchableOpacity>
                 ))}
 
                 <View style={styles.buttons}>
                   <TouchableOpacity style={styles.button} onPress={() => setIsOpen(false)}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    {/* Apply themed color to the button text */}
+                    <Text style={[styles.buttonText, { color: theme.hard_selected }]}>Cancel</Text>
                   </TouchableOpacity>
                 </View>
 
               </ScrollView>
-              
+
             </View>
 
+          </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
-    </Modal>
+      </Modal>
   );
 };
 

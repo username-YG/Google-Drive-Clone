@@ -8,6 +8,7 @@ import { TextInsertBox } from "./TextInsertBox.js"
 import { MoveItemWindow } from "../components/MoveItemWindow.js"
 import { ShareItemWindow } from "../components/ShareItemWindow.js"
 import ShareController from "../components/ShareController.js"
+import { useTheme } from './ThemeContext';
 
 import txt from "../assets/mimetypes/txt.png"
 import docs from "../assets/mimetypes/docs.png"
@@ -27,17 +28,18 @@ import delete_forever from "../assets/icons/delete_forever.png"
 import restore from "../assets/icons/restore.png"
 
 const icons = {
-  "txt": txt,
-  "docs": docs,
-  "docx": docs,
-  "notype": notype,
-  "jpg": image,
-  "jpeg": image,
-  "png": image,
-  "pdf": pdf
+    "txt": txt,
+    "docs": docs,
+    "docx": docs,
+    "notype": notype,
+    "jpg": image,
+    "jpeg": image,
+    "png": image,
+    "pdf": pdf
 }
 
 const MenuItem = ({ icon, text, whenDisabled, onPress }) => {
+    const { theme } = useTheme();
     // If the user doesn't have permission the button is disabled
     return (
         <TouchableOpacity
@@ -45,13 +47,14 @@ const MenuItem = ({ icon, text, whenDisabled, onPress }) => {
             disabled={whenDisabled}
             onPress={onPress}
         >
-            <Image source={icon} style={styles.menuItemIcon} />
-            <Text style={styles.menuItemText}>{text}</Text>
+            <Image source={icon} style={[styles.menuItemIcon, { tintColor: theme.text }]} />
+            <Text style={[styles.menuItemText, { color: theme.text }]}>{text}</Text>
         </TouchableOpacity>
     )
 }
 
 export const ActionMenu = ({ file, close }) => {
+    const { theme } = useTheme();
     if (!file) return;
 
     // The type determines the file's icon
@@ -75,12 +78,12 @@ export const ActionMenu = ({ file, close }) => {
     const [shareItemOpened, setshareItemOpened] = useState(false);
 
     return (
-        <View style={styles.menu}>
+        <View style={[styles.menu, { backgroundColor: theme.actionsMenuColor }]}>
 
-            <View style={styles.smallLine} />
+            <View style={[styles.smallLine, { backgroundColor: theme.text, opacity: 0.5 }]} />
             <View style={styles.title}>
                 <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
-                <Text style={styles.fileName}>{file.name}</Text>
+                <Text style={[styles.fileName, { color: theme.text }]}>{file.name}</Text>
             </View>
 
             { inTrash ? (
@@ -121,7 +124,7 @@ export const ActionMenu = ({ file, close }) => {
                         onPress={() => setMoveItemOpened(true)}
                     />
 
-                    <View style={styles.divider}/>
+                    <View style={[styles.divider, { backgroundColor: theme.border }]}/>
 
                     <MenuItem
                         icon={people}
@@ -139,7 +142,7 @@ export const ActionMenu = ({ file, close }) => {
                         />
                     }
 
-                    <View style={styles.divider}/>
+                    <View style={[styles.divider, { backgroundColor: theme.border }]}/>
 
                     { isStarred ?
                         <MenuItem
@@ -156,7 +159,7 @@ export const ActionMenu = ({ file, close }) => {
                             onPress={async() => { await starItem(file.id, true); close(); }}
                         />
                     }
-                    
+
                     <MenuItem
                         icon={trash}
                         text="Move to trash"
@@ -184,7 +187,7 @@ export const ActionMenu = ({ file, close }) => {
                 file={file}
                 closeParent={close}
             />
-            
+
             <ShareItemWindow
                 isOpen={shareItemOpened}
                 setIsOpen={setshareItemOpened}
