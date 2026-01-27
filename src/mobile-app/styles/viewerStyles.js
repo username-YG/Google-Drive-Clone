@@ -75,4 +75,9 @@ export const styles = StyleSheet.create({
         backgroundColor: '#00000055',
         justifyContent: 'flex-end',
     },
+    unsupportedMsg: {
+        fontSize: 24,
+        textAlign: 'center',
+        paddingTop: 20,
+    }
 });

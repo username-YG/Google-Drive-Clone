@@ -8,13 +8,11 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    marginRight: 25,
   },
   bar: {
     fontSize: 18,
-    padding: 5,
-    paddingHorizontal: 50,
     textAlign: 'center',
-    opacity: 0.7
+    opacity: 0.7,
   },
 });

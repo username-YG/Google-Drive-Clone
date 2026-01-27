@@ -107,9 +107,7 @@ const FileListItem = ({ file, reload }) => {
                 pathname: '/folderContent',   
                 params: { folderId: file.id, folderName: file.name }
             });
-        } else if (type === 'pdf') {
-            return;
-        }  else {
+        } else {
             // Open the file viewer for text, images, or PDFs
             router.push({
                 pathname: '/file_viewer',

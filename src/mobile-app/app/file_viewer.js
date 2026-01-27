@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -15,6 +15,7 @@ import dots from "../assets/icons/dots.png";
 import backIcon from "../assets/icons/back.png";
 import { styles } from '../styles/viewerStyles';
 import { ActionMenu } from "../components/ActionMenu.js"
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function File_viewer() {
     const { fileId } = useLocalSearchParams();
@@ -29,23 +30,19 @@ export default function File_viewer() {
     const isText = fileType?.toLowerCase() === 'txt';
 
     // Get the file to display
-    useEffect(() => {
-        const loadFile = async () => {
-            if (fileType?.toLowerCase() === 'pdf') {
-                setLoading(false);
-                return;
-            }
-            try {
-                const data = await getFile(fileId, "true");
-                if (data) setFile(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("File Load Error:", error);
-                setLoading(false);
-            }
-        };
-        loadFile();
-    }, [fileId, reload]);
+    const loadFile = async () => {
+        try {
+            const data = await getFile(fileId, "true");
+            if (data) setFile(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("File Load Error:", error);
+            setLoading(false);
+        }
+    };
+
+    // Load when screen opens and when a dependency change
+    useFocusEffect(useCallback(() => { loadFile(); }, [fileId, reload]));
 
     if (loading) return (
         <View style={[styles.container, isImage && styles.blackBg, styles.center]}>
@@ -64,7 +61,7 @@ export default function File_viewer() {
                         iconStyle={isImage ? { tintColor: '#fff' } : {}}
                     />
                     <Text style={[styles.headerTitle, isImage && styles.whiteText]} numberOfLines={1}>
-                        {file.name}
+                        {file?.name}
                     </Text>
                 </View>
                 <TouchableOpacity onPress={(e) => { e.stopPropagation(); setActionsOpen(true); }} style={styles.menuButton}>
@@ -75,16 +72,20 @@ export default function File_viewer() {
             <View style={styles.viewer}>
                 {isText && (
                     <ScrollView style={styles.whiteBg} contentContainerStyle={styles.textContainer}>
-                        <Text style={styles.textContent}>{file.content}</Text>
+                        <Text style={styles.textContent}>{file?.content}</Text>
                     </ScrollView>
                 )}
 
                 {isImage && (
                     <Image
-                        source={{ uri: (file.content)?.startsWith('data:') ? (file.content) : `data:image/png;base64,${file.content}` }}
+                        source={{ uri: (file?.content)?.startsWith('data:') ? (file?.content) : `data:image/png;base64,${file?.content}` }}
                         style={styles.fullImage}
                         resizeMode="contain"
                     />
+                )}
+
+                { (!isImage && !isText) && (
+                    <Text style={styles.unsupportedMsg}>No preview available</Text>
                 )}
             </View>
 

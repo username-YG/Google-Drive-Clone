@@ -30,6 +30,8 @@ export default function RootLayout() {
         { /* Main app screens (all except 'tabs' appear in sidebar) */ }
         <Drawer.Screen name="(tabs)" options={{
           headerTitle: () => <CloseSearchBar />,
+          headerTitleContainerStyle: { width: '100%' },
+          headerTitleAlign: 'left',
           headerRight: () => <ProfileButton router={router} />,
           drawerItemStyle: { display: 'none' }
         }} />

@@ -52,6 +52,7 @@ const MenuItem = ({ icon, text, whenDisabled, onPress }) => {
 }
 
 export const ActionMenu = ({ file, close }) => {
+    if (!file) return;
 
     // The type determines the file's icon
     const type = file.name.split('.').pop();
