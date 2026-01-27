@@ -30,6 +30,8 @@ export default function RootLayout() {
         { /* Main app screens (all except 'tabs' appear in sidebar) */ }
         <Drawer.Screen name="(tabs)" options={{
           headerTitle: () => <CloseSearchBar />,
+          headerTitleContainerStyle: { width: '100%' },
+          headerTitleAlign: 'left',
           headerRight: () => <ProfileButton router={router} />,
           drawerItemStyle: { display: 'none' }
         }} />
@@ -73,6 +75,8 @@ export default function RootLayout() {
 
         <Drawer.Screen name="search" options={{
           headerTitle: () => <OpenSearchBar />,
+          headerTitleContainerStyle: { width: '100%' },
+          headerTitleAlign: 'left',
           headerLeft: () => <TopBarButton router={router} img={require("../assets/icons/back.png")} target="/home" />,
           swipeEnabled: false,
           drawerItemStyle: { display: 'none' }

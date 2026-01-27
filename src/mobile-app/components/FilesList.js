@@ -1,7 +1,7 @@
-import { ScrollView, View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Modal, DeviceEventEmitter } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
 import { searchItems, getFiles } from "../app/../_serverLogic.js"
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -107,17 +107,11 @@ const FileListItem = ({ file, reload }) => {
                 pathname: '/folderContent',   
                 params: { folderId: file.id, folderName: file.name }
             });
-        } else if (type === 'pdf') {
-            return;
-        }  else {
+        } else {
             // Open the file viewer for text, images, or PDFs
             router.push({
                 pathname: '/file_viewer',
-                params: {
-                    fileId: file.id,
-                    fileName: file.name,
-                    fileType: type
-                }
+                params: { fileId: file.id }
             });
         }
     }
@@ -174,6 +168,12 @@ export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
         }, [folderId, query, setParent, toReload])
     );
 
+    // Reload files on reload signal from another file
+    useEffect(() => {
+        const subscription = DeviceEventEmitter.addListener('reload', () => setToReload(val => !val));
+        return () => { subscription.remove(); };
+    }, []);
+
     // When the user goes back, navigate to the parent folder
     const goBack = async () => {
         setLoading(true); // Show loading screen
@@ -200,22 +200,7 @@ export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
     const files = filesObjects.map((item, i) =>
         <FileListItem key={i} file={item} reload={() => setToReload(!toReload)} />
     );
-
-    // When the user goes back, navigate to the parent folder
-    const goBack = async () => {
-        setLoading(true); // Show loading screen
-        const data = await getFiles("/files/" + parent, filter, router, "false");
-        setLoading(false); // Show loading screen
-        if (data) {
-            router.push({
-                pathname: "/folderContent",
-                params: { folderId: parent, folderName: data.name }
-            });
-        } else {
-            router.navigate("/home"); // When navigating to root folder
-        }
-    }
-
+    
     return (
         <ScrollView>
 

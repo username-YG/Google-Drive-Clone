@@ -3,6 +3,7 @@ import { ProfilePicStep } from  '../../components/Steps.js';
 import useRegistration from '../../components/RegistrationContext.js';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 
 export default function ProfilePic() {
   const router = useRouter();
@@ -21,6 +22,14 @@ export default function ProfilePic() {
   const handleSubmit = async () => {
     const displayName = `${firstName} ${lastName}`.trim();
 
+    let base64Image = null;
+    if (profilePic) {
+      base64Image = await FileSystem.readAsStringAsync(profilePic, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      base64Image = `data:image/jpeg;base64,${base64Image}`;
+    }
+
     try {
       const hostIp = Constants.expoConfig?.hostUri?.split(':')[0] || 'localhost';
       const port = Constants.expoConfig.extra.VITE_WEB_PORT || 3000;
@@ -32,7 +41,7 @@ export default function ProfilePic() {
           username,
           password,
           displayName,
-          profilePic
+          profilePic: base64Image
         })
       });
 

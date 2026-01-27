@@ -69,5 +69,15 @@ export const styles = StyleSheet.create({
     fullImage: {
         width: '100%',
         height: '100%'
+    },
+    blackBackground: {
+        flex: 1,
+        backgroundColor: '#00000055',
+        justifyContent: 'flex-end',
+    },
+    unsupportedMsg: {
+        fontSize: 24,
+        textAlign: 'center',
+        paddingTop: 20,
     }
 });

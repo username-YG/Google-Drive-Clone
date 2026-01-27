@@ -55,6 +55,24 @@ export async function getFiles(url, filter, router, withContent) {
 
 }
 
+export async function getFile(id, withcontent) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token,
+      'withcontent': withcontent
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+
+}
+
 export async function getUser(setUser) {
 
   const token = SecureStore.getItem("token")
@@ -244,4 +262,24 @@ export async function shareWithUser(fileId, username) {
     if (data.error === "User in body not found" || data.error === "Missing args") return "User doesn't exists!";
   }
 
+}
+
+export async function createFolder(name, parentId) {
+
+  if (!name) name = "New Folder";
+  if (!parentId) parentId = null;
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files", {
+    'method': 'POST',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token
+    },
+    'body': JSON.stringify({
+      "name": name,
+      "isFolder": true,
+      "parentId": parentId
+    })
+  });
 }
