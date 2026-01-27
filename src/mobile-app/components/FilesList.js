@@ -113,11 +113,7 @@ const FileListItem = ({ file, reload }) => {
             // Open the file viewer for text, images, or PDFs
             router.push({
                 pathname: '/file_viewer',
-                params: {
-                    fileId: file.id,
-                    fileName: file.name,
-                    fileType: type
-                }
+                params: { fileId: file.id }
             });
         }
     }

@@ -55,6 +55,24 @@ export async function getFiles(url, filter, router, withContent) {
 
 }
 
+export async function getFile(id, withcontent) {
+
+  const token = SecureStore.getItem("token")
+  const response = await fetch(getBaseUrl() + "files/" + id, {
+    'method': 'GET',
+    'headers': {
+      'Content-Type': 'application/json',
+      'authorization': 'bearer ' + token,
+      'withcontent': withcontent
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+
+}
+
 export async function getUser(setUser) {
 
   const token = SecureStore.getItem("token")

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -6,26 +6,29 @@ import {
     ScrollView,
     ActivityIndicator,
     TouchableOpacity,
-    Platform,
-    ActionSheetIOS,
-    Alert
+    Modal,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getFiles } from '../_serverLogic';
+import { getFiles, getFile } from '../_serverLogic';
 import TopBarButton from '../components/TopBarButton';
 import dots from "../assets/icons/dots.png";
 import backIcon from "../assets/icons/back.png";
 import { styles } from '../styles/viewerStyles';
+import { ActionMenu } from "../components/ActionMenu.js"
 
 export default function File_viewer() {
-    const { fileId, fileName, fileType } = useLocalSearchParams();
-    const [content, setContent] = useState(null);
+    const { fileId } = useLocalSearchParams();
     const [loading, setLoading] = useState(true);
+    const [actionsOpen, setActionsOpen] = useState(false);
+    const [file, setFile] = useState(null);
+    const [reload, setReload] = useState(false);
     const router = useRouter();
 
+    const fileType = file?.name.split('.').pop();
     const isImage = ['jpg', 'jpeg', 'png'].includes(fileType?.toLowerCase());
     const isText = fileType?.toLowerCase() === 'txt';
 
+    // Get the file to display
     useEffect(() => {
         const loadFile = async () => {
             if (fileType?.toLowerCase() === 'pdf') {
@@ -33,8 +36,8 @@ export default function File_viewer() {
                 return;
             }
             try {
-                const data = await getFiles(`/files/${fileId}`, [], router, "true");
-                if (data) setContent(data.content);
+                const data = await getFile(fileId, "true");
+                if (data) setFile(data);
                 setLoading(false);
             } catch (error) {
                 console.error("File Load Error:", error);
@@ -42,23 +45,7 @@ export default function File_viewer() {
             }
         };
         loadFile();
-    }, [fileId]);
-
-    const showOptions = () => {
-        const options = ['Cancel', 'Rename', 'Share', 'Move to', 'Add to Starred', 'Move to Trash', 'Download'];
-        if (Platform.OS === 'ios') {
-            ActionSheetIOS.showActionSheetWithOptions(
-                { options, cancelButtonIndex: 0, destructiveButtonIndex: 5, title: fileName },
-                (index) => { if (index !== 0) console.log(`Action: ${options[index]}`); }
-            );
-        } else {
-            Alert.alert(fileName, "Select an option", options.slice(1).map(opt => ({
-                text: opt,
-                onPress: () => console.log(`Action: ${opt}`),
-                style: opt === 'Move to Trash' ? 'destructive' : 'default'
-            })));
-        }
-    };
+    }, [fileId, reload]);
 
     if (loading) return (
         <View style={[styles.container, isImage && styles.blackBg, styles.center]}>
@@ -77,10 +64,10 @@ export default function File_viewer() {
                         iconStyle={isImage ? { tintColor: '#fff' } : {}}
                     />
                     <Text style={[styles.headerTitle, isImage && styles.whiteText]} numberOfLines={1}>
-                        {fileName}
+                        {file.name}
                     </Text>
                 </View>
-                <TouchableOpacity onPress={showOptions} style={styles.menuButton}>
+                <TouchableOpacity onPress={(e) => { e.stopPropagation(); setActionsOpen(true); }} style={styles.menuButton}>
                     <Image source={dots} style={[styles.menuIcon, isImage && { tintColor: '#fff' }]} />
                 </TouchableOpacity>
             </View>
@@ -88,18 +75,26 @@ export default function File_viewer() {
             <View style={styles.viewer}>
                 {isText && (
                     <ScrollView style={styles.whiteBg} contentContainerStyle={styles.textContainer}>
-                        <Text style={styles.textContent}>{content}</Text>
+                        <Text style={styles.textContent}>{file.content}</Text>
                     </ScrollView>
                 )}
 
                 {isImage && (
                     <Image
-                        source={{ uri: content?.startsWith('data:') ? content : `data:image/png;base64,${content}` }}
+                        source={{ uri: (file.content)?.startsWith('data:') ? (file.content) : `data:image/png;base64,${file.content}` }}
                         style={styles.fullImage}
                         resizeMode="contain"
                     />
                 )}
             </View>
+
+            <Modal animationType="slide" transparent={true} visible={actionsOpen} onRequestClose={() => setActionsOpen(false)} >
+                <TouchableOpacity style={styles.blackBackground} activeOpacity={1} onPress={() => setActionsOpen(false)}>
+                    <TouchableOpacity activeOpacity={1} onPress={(e) => e.stopPropagation()}>
+                        <ActionMenu file={file} close={() => { setActionsOpen(false); setReload(!reload); }} />
+                    </TouchableOpacity>
+                </TouchableOpacity>
+            </Modal>
         </View>
     );
 }

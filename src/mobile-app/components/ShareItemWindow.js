@@ -83,8 +83,8 @@ export const ShareItemWindow = ({ isOpen, setIsOpen, file, closeParent }) => {
 
                     <ScrollView style={styles.usersList}>
 
-                        {users.map((user) => (
-                            <UserListItem key={user.ID} user={user} onPress={() => setSelectedUser(user)} />
+                        {users.map((user, i) => (
+                            <UserListItem key={i} user={user} onPress={() => setSelectedUser(user)} />
                         ))}
 
                         <View style={styles.buttons}>
