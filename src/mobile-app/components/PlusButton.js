@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
+import { useGlobalSearchParams, usePathname, useRouter } from 'expo-router';
 import { View, Image, Text, TouchableOpacity, Animated, Pressable, DeviceEventEmitter } from 'react-native';
 import { styles } from '../styles/PlusButton.styles.js';
 import UploadController from './UploadController.js';
@@ -11,17 +11,17 @@ export default function PlusBtn() {
     const animation = useRef(new Animated.Value(0)).current;
     const { uploadFile } = UploadController();
     const [createFolderOpen, setCreateFolderOpen] = useState(false)
-    const { parentId } = useLocalSearchParams();
+    const { folderId } = useGlobalSearchParams();
 
     // Create folder and go to files page
     const pathname = usePathname();
     const router = useRouter();
     const onCreateFolder = async (name) => {
-        await createFolder(name, parentId);
+        await createFolder(name, folderId);
         DeviceEventEmitter.emit('reload');
         setCreateFolderOpen(false);
         toggleMenu();
-        if (pathname !== '/' && pathname !== '/home') router.replace('/home');
+        if (pathname !== '/' && pathname !== '/home' && pathname !== '/folderContent') router.replace('/files');
     }
 
     const toggleMenu = () => {

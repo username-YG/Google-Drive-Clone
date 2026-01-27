@@ -1,7 +1,7 @@
 import * as DocumentPicker from 'expo-document-picker';
 import * as SecureStore from 'expo-secure-store';
 import * as FileSystem from 'expo-file-system/legacy';
-import { useLocalSearchParams, useRouter, usePathname } from "expo-router";
+import { useGlobalSearchParams, useRouter, usePathname } from "expo-router";
 import Constants from 'expo-constants';
 import { DeviceEventEmitter } from 'react-native';
 
@@ -66,7 +66,7 @@ const readFile = async (fileUri, fileName) => {
 };
 
 function UploadController() {
-    const { folderId } = useLocalSearchParams();
+    const { folderId } = useGlobalSearchParams();
     const pathname = usePathname();
     const router = useRouter();
     
@@ -83,7 +83,7 @@ function UploadController() {
             await createFile(file.name, content, folderId);
         }
 
-        if (pathname !== '/' && pathname !== '/home') router.replace('/home')
+        if (pathname !== '/' && pathname !== '/home' && pathname !== '/folderContent') router.replace('/files')
         DeviceEventEmitter.emit('reload');
     };
 
