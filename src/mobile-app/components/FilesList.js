@@ -1,7 +1,7 @@
-import { ScrollView, View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, Modal, DeviceEventEmitter } from 'react-native';
 import { styles } from '../styles/FilesList.styles.js';
 import { searchItems, getFiles } from "../app/../_serverLogic.js"
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -169,6 +169,12 @@ export const FilesList = ({ folderId, filter, emptyFolder, title, query }) => {
             loadData();
         }, [folderId, query, setParent, toReload])
     );
+
+    // Reload files on reload signal from another file
+    useEffect(() => {
+        const subscription = DeviceEventEmitter.addListener('reload', () => setToReload(val => !val));
+        return () => { subscription.remove(); };
+    }, []);
 
     // When the user goes back, navigate to the parent folder
     const goBack = async () => {

@@ -9,7 +9,7 @@ import {
     Modal,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getFiles, getFile } from '../_serverLogic';
+import { getFile } from '../_serverLogic';
 import TopBarButton from '../components/TopBarButton';
 import dots from "../assets/icons/dots.png";
 import backIcon from "../assets/icons/back.png";
