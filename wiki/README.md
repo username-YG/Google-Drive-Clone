@@ -4,15 +4,15 @@
 
 1. **[System Overview](#-overview)**
 2. **[Requirements](#-requirements)**
-4. **[Running instructions](#-running-instructions)**
-5. **Website guide**
-    - **[Registration and Authentication](#5-registration-and-authentication)**
-    - **[Upload and View Files](#6-upload-and-view-files)**
-    - **[Files Operations](#7-files-operations)**
-6. **Mobile guide**
-    - **[Registration and Authentication](#registration-and-authentication)**
-    - **[Upload and view files](#upload-and-view-files)**
-    - **[Files operations](#files-operations)**
+3. **[Running instructions](#-running-instructions)**
+4. **[Website guide](#-website-guide)**
+    - **[Registration and Authentication](#web-auth)**
+    - **[Upload and View Files](#web-upload)**
+    - **[File Operations](#web-ops)**
+5. **[Mobile guide](#-mobile-guide)**
+    - **[Registration and Authentication](#mobile-auth)**
+    - **[Upload and view files](#mobile-upload)**
+    - **[File operations](#mobile-ops)**
 
 ## 📚 Detailed Documentation
 
@@ -21,8 +21,8 @@
 - **[API documentation](./documentation/API.md)**
 
 ---
-## 🧐 System Overview
 <a id="-overview"></a>
+## 🧐 System Overview
 ### 🧩 Main components
 The google drive system consists of the following components:
  1.  **Storage server:** Multithreaded C++ server to store files.
@@ -76,8 +76,8 @@ graph TD
 - [x] **Mobile App:** Interactive mobile app for Android/iOs Users.
 - [x] **CLI:** Can interact with the storage server directly from the command line.
 
-## ✅ Requirements
 <a id="-requirements"></a>
+## ✅ Requirements
 Before we start, make sure you have the following 
 
 - **Git**
@@ -89,11 +89,10 @@ Before we start, make sure you have the following
   - OR set up an Emulator.
   - See [Expo setup guide](https://docs.expo.dev/get-started/set-up-your-environment/).
 
-## 🚦 Running instructions
 <a id="-running-instructions"></a>
+## 🚦 Running instructions
 ### 💻 Step 1: Setup
-Ensure Docker Desktop is running.
-Clone the repository and enter the folder:
+Open Docker Desktop, clone the repository and enter the folder:
 ```bash
 git clone https://github.com/username-YG/Google-Drive-Project-ASP
 cd Google-Drive-Project-ASP
@@ -103,9 +102,9 @@ Start the web server, storage server, mongo and website:
 ```bash
 docker-compose up --build mongodb storage-server web-server react-app
 ```
-Enter the website at [http://localhost:5173/](http://localhost:5173/).  
+👉 **Enter the website:** [http://localhost:5173/](http://localhost:5173/).  
 <details>
-  <summary><strong>👇 You can also run each service separately</strong></summary>
+  <summary><strong>You can also run each service separately</strong></summary>
 
   <br>
 
@@ -131,45 +130,61 @@ docker-compose up --build react-app
 
 </details>
 
-### 📱 Step 3: Mobile app (Option A - Emulator)
+### 📱 Step 3: Mobile app
+Choose one of the options below:
+### 🅰 Option A - Emulator
 ```bash
+# Bash
 HOST_IP=10.0.2.2 docker-compose run --service-ports --rm mobile-app
+
+# Powershell
+$env:HOST_IP="10.0.2.2"; docker-compose run --service-ports --rm mobile-app
 ```
-Start the emulator, Install Expo Go and insert the URL "exp://10.0.2.2:8081".  
+**When done:** Start the emulator, Install Expo Go and insert the URL "exp://10.0.2.2:8081".  
 
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/1b7b25bb-9ab2-48f0-9c65-b80141cd89df" />     
 <br>
 
-### 📱 Step 3: Mobile app (Option B - physical device)
+### 🅱 Option B - physical device
 Your phone and computer must be on the same local network.
 Find your computer's IP by running:
 ```bash
 # If on Ethernet:
-powershell.exe -Command "(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias 'Ethernet').IPAddress"
+powershell.exe -Command "(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias *Ethernet*).IPAddress"
 
 # If on Wi-Fi:
-powershell.exe -Command "(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias 'Wi-Fi').IPAddress"
+powershell.exe -Command "(Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias *Wi-Fi*).IPAddress"
 
 # Manually check:
 ipconfig.exe
 ```
-Run the mobile app (replace [YOUR_IP] with the address you found above)
+> [!TIP]
+> Local IPv4 addresses usually starts with 192.168... or 10....
+
+**Run the app:** replace [YOUR_IP] with the address you found above:
 ```bash
+# Bash
 HOST_IP=[YOUR_IP] docker-compose run --service-ports --rm --build mobile-app
+
+# Powershell
+$env:HOST_IP="[YOUR_IP]"; docker-compose run --service-ports --rm mobile-app
 ```
-Open Expo Go on your phone, scan the QR and enjoy!
+**When done:** Open Expo Go on your phone, scan the QR and enjoy!
 
 ---
 
-## Website guide
+<a id="-website-guide"></a>
+## Website guide 🖥
 The website is a smart web application designed to emulate the core functionality and user experience of Google Drive. It is built as a modern Single Page Application that seamlessly integrates an interactive user interface with a dynamic backend server for real-time data management.
 We'll show here the main functionality and a more expanded explanation can be found at - **[Website documentation](./documentation/website.md)**
 
 To run the website, follow the guide from the Running Instructions above.
 Then, the website works like that:
 
+<a id="web-auth"></a>
 ### Registration and Authentication
 The Web interface provides a secure and seamless onboarding process.
+
 - Multi-step Registration: Users can create an account by providing a display name, username (the mail address), password, and a profile picture upload.
 <img width="600" height="810" alt="image" src="https://github.com/user-attachments/assets/d4826053-c3d5-46e2-8244-4ee436418ea2" />
 <img width="600" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
@@ -178,6 +193,7 @@ The Web interface provides a secure and seamless onboarding process.
 - Validation: Real-time feedback for password strength and username availability.
 <img width="600" height="793" alt="image" src="https://github.com/user-attachments/assets/08d874e6-d84a-43fa-a9c2-d8819a437d33" />
 
+<a id="web-upload"></a>
 ### Upload and View Files
 Efficient file management is at the core of the Google Drive project.
 - Universal Upload: Supports various file types (Images, Text and PDF). Files are transmitted from the React frontend to the Node.js server, which then streams them to the C++ Storage Server.
@@ -191,6 +207,7 @@ Efficient file management is at the core of the Google Drive project.
 <img width="600" height="831" alt="image" src="https://github.com/user-attachments/assets/a83e2f30-b035-4f91-b5a9-5440fa231f02" />
 <img width="600" height="832" alt="image" src="https://github.com/user-attachments/assets/7dfa170d-cd3f-4fb9-9c10-b9a5f1f31836" />
 
+<a id="web-ops"></a>
 ### File Operations
 A rich set of features to manage your data, mimicking the full Google Drive experience:
 - Search & Filter: A powerful search engine (implemented via a dedicated Search Controller) that finds files instantly by name or type.
@@ -210,9 +227,13 @@ Trash Management: Integrated safety net – files can be moved to the Trash and 
 <img width="600" height="754" alt="image" src="https://github.com/user-attachments/assets/8fea6577-ae5b-4b5d-be62-c480314523c5" />
 <img width="600" height="699" alt="image" src="https://github.com/user-attachments/assets/11dd84eb-25b7-4f37-8da0-b6e802519002" />
 
-## Mobile-App guide
+---
+<a id="-mobile-guide"></a>
+## Mobile-App guide 📱
+<a id="mobile-auth"></a>
 ### Registration and Authentication
 The mobile application offers a native, step-by-step onboarding experience designed for small screens.
+
 
 - Guided Registration: A clean, sequential flow that guides users through entering their username, password, display name, and selecting a profile picture from their gallery.
 <img src="https://github.com/user-attachments/assets/9cbc3518-62e7-44f3-9f04-12b69e1b5056" width="180" />
@@ -220,8 +241,9 @@ The mobile application offers a native, step-by-step onboarding experience desig
 - Native Authentication: Secure login persistence using local storage, ensuring users stay logged in between app sessions.
 <img src="https://github.com/user-attachments/assets/cde0e9a3-0b6d-45ba-a03a-a41e7d022456" width="180" />
 
-### Upload and View Files 
-Optimized for on-the-go productivity, the mobile app provides full access to the cloud storage.
+<a id="mobile-upload"></a>
+### Upload and View Files  
+Optimized for on-the-go productivity, the mobile app provides full access to the cloud storage.  
 <img src="https://github.com/user-attachments/assets/8fa628ac-d904-4a78-a3cb-0dfcef7b8dd2" width="180" />
 <img src="https://github.com/user-attachments/assets/59af9e5e-c548-479c-a1d0-c9529c11a5f0" width="180" />
 
@@ -232,10 +254,11 @@ Optimized for on-the-go productivity, the mobile app provides full access to the
 <img src="https://github.com/user-attachments/assets/6667b5ad-c956-42c3-9f25-a169912aee62" width="180" />
 <img src="https://github.com/user-attachments/assets/8be88644-f480-469c-8372-5aeeac48510e" width="180" />
 
-Visual Navigation: A tab-based navigation system (Home, Starred, Shared, Files) with custom icons that clearly distinguish between different file categories.
+Visual Navigation: A tab-based navigation system (Home, Starred, Shared, Files) with custom icons that clearly distinguish between different file categories.  
 <img src="https://github.com/user-attachments/assets/bfbf69a0-fbda-44bc-bcc0-e32346bceddf" width="180" />
 <img src="https://github.com/user-attachments/assets/df01ed18-96d3-44c4-b835-737961ab351f" width="180" />
 
+<a id="mobile-ops"></a>
 ### Mobile File Operations
 The app delivers a full suite of management tools via a mobile-optimized UI:
 
@@ -264,8 +287,9 @@ And now everything will be in dark mode!
 <img width="600" height="785" alt="image" src="https://github.com/user-attachments/assets/ee2d843a-5e64-450c-bcd5-c246c7a00e9a" />
 <img width="600" height="808" alt="image" src="https://github.com/user-attachments/assets/1bf030a2-43e5-46c6-abe4-4508281f7158" />
 <img width="600" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
-
-And Also for the Mobile app:
+<br>
+And Also for the Mobile app:  
+<br>
 <img src="https://github.com/user-attachments/assets/893bcf7d-5371-41a2-95ba-3a246ab77d75" width="180" />
 <img src="https://github.com/user-attachments/assets/380a22af-1132-477f-98ff-56141bd2152b" width="180" />
 <img src="https://github.com/user-attachments/assets/0668cbb0-f072-46c9-a945-5de870ba623d" width="180" />
