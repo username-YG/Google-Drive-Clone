@@ -6,8 +6,10 @@
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-FB015B?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 
 </div>
 
@@ -17,7 +19,8 @@ A full-stack cloud storage solution mimicking Google Drive's core functionality.
 
 ## 📚 Documentation
 
-Everything you need is in our detailed guides:
+Everything you need is in our detailed guides:  
+👉 [Full documentation](./wiki/README.md)
 
 | Guide | Description |
 |-------|-------------|
@@ -140,15 +143,3 @@ Scan the QR code with Expo Go and you're in!
 <img width="180" alt="Mobile Files" src="https://github.com/user-attachments/assets/8fa628ac-d904-4a78-a3cb-0dfcef7b8dd2" />
 <img width="180" alt="Mobile Preview" src="https://github.com/user-attachments/assets/6667b5ad-c956-42c3-9f25-a169912aee62" />
 <img width="180" alt="Mobile Actions" src="https://github.com/user-attachments/assets/d8841eba-1d98-4bdf-baf8-0b4efad6a4ae" />
-
----
-
-<div align="center">
-
-**⭐ Star this repo if you found it helpful!**
-
-Built for Advanced Systems Programming Course
-
-[📖 Full Documentation](./documentation/) • [🐛 Report Bug](https://github.com/username-YG/Google-Drive-Project-ASP/issues)
-
-</div>
