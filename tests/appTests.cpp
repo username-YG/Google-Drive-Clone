@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
-#include "../src/App.h"
-#include "../src/InputOutputs/StreamInputOutput.h"
-#include "../src/commands/addCommand.h"
-#include "../src/commands/getCommand.h"
-#include "../src/commands/searchCommand.h"
-#include "../src/commands/deleteCommand.h"
-#include "../src/compressions/RLE.h"
+#include "../src/storage-server/App.h"
+#include "../src/storage-server/InputOutputs/StreamInputOutput.h"
+#include "../src/storage-server/commands/addCommand.h"
+#include "../src/storage-server/commands/getCommand.h"
+#include "../src/storage-server/commands/searchCommand.h"
+#include "../src/storage-server/commands/deleteCommand.h"
+#include "../src/storage-server/compressions/RLE.h"
 
 #include <map>
 #include <string>

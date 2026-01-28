@@ -1,7 +1,11 @@
 FROM node:lts-alpine
 
-COPY src/react-app /usr/googledrive/app
 WORKDIR /usr/googledrive/app
 
+COPY src/react-app/package*.json ./
+
 RUN npm install
+
+COPY src/react-app .
+
 CMD npm run dev -- --host 0.0.0.0 --port $REACT_PORT

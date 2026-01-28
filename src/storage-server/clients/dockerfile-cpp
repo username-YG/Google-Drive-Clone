@@ -1,0 +1,11 @@
+FROM gcc:latest
+
+COPY src/storage-server /usr/googledrive/app
+WORKDIR /usr/googledrive/app
+
+RUN mkdir -p build
+WORKDIR /usr/googledrive/app/build
+
+RUN g++ $(find .. -name "*.cpp" ! -name "server.cpp") -o client -pthread
+
+CMD ./client storage-server $APP_PORT

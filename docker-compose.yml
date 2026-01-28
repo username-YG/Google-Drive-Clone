@@ -1,54 +1,81 @@
 x-env: &shared_env
-    APP_PORT: ${APP_PORT:-8080} # The port the cpp server listens on
-    APP_PATH: ${APP_PATH:-/app_path} # The path in which files will be saved
-    MAX_CLIENTS: ${MAX_CLIENTS:-2}
-    MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
-    WEB_PORT: ${WEB_PORT:-3000} # The port the web server listens on
-    JWT_SECRET: ${JWT_SECRET:-0c65905c90fc5bf2fa1bcef939b851c7} # Secret key for JWT authentication
-    REACT_PORT: ${REACT_PORT:-5173} # The port the react app runs on
+
+  # Ports services run on
+  APP_PORT: ${APP_PORT:-8080}
+  WEB_PORT: ${WEB_PORT:-3000}
+  REACT_PORT: ${REACT_PORT:-5173}
+  MONGO_PORT: ${MONGO_PORT:-27017} # For external access
+
+  # Client amount limitations
+  MAX_CLIENTS: ${MAX_CLIENTS:-2}
+  MAX_CLIENTS_AT_ONCE: ${MAX_CLIENTS_AT_ONCE:-3}
+
+  # IPs and URIs
+  HOST_IP: ${HOST_IP:-localhost} # Host computer IP
+  DB_NAME: ${DB_NAME:-google_drive_db}
+  MONGO_URI: mongodb://mongodb:27017/${DB_NAME:-google_drive_db} # Use 'mongodb' service
+  STORAGE_HOST: storage-server # Storage server
+  
+  # General
+  JWT_SECRET: ${JWT_SECRET:-0c65905c90fc5bf2fa1bcef939b851c7} # Secret key for JWT
+  APP_PATH: ${APP_PATH:-/app_path} # Folder to save all files to
 
 services:
-  server:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app_net
+
+  storage-server:
+    container_name: storage-server
     environment:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/servers/dockerfile
+      dockerfile: src/storage-server/servers/dockerfile
     volumes:
       - appfiles:${APP_PATH:-/app_path}
     networks:
       - app_net
 
   cpp-client:
-    # Defines a interactive shell
-    stdin_open: true
-    tty: true
     environment:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/clients/dockerfile-cpp
+      dockerfile: src/storage-server/clients/dockerfile-cpp
+    stdin_open: true
+    tty: true
     networks:
       - app_net
 
   py-client:
-    # Defines a interactive shell
-    stdin_open: true
-    tty: true
     environment:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/clients/dockerfile-py
+      dockerfile: src/storage-server/clients/dockerfile-py
+    stdin_open: true
+    tty: true
     networks:
       - app_net
 
   web-server:
+    container_name: web-server
     environment:
       <<: *shared_env
     build:
       context: .
-      dockerfile: src/MVC/dockerfile
+      dockerfile: src/web-server/dockerfile
+    depends_on:
+      - mongodb
+      - storage-server
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     networks:
@@ -66,6 +93,24 @@ services:
     networks:
       - app_net
 
+  mobile-app:
+    environment:
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${HOST_IP:-localhost} # IP the phone should connect to
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0 # Allows outside connection
+      - VITE_WEB_PORT=${WEB_PORT:-3000} # Web server port
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: src/mobile-app/dockerfile
+    networks:
+      - app_net
+
   gtests:
     environment:
       <<: *shared_env
@@ -75,6 +120,8 @@ services:
 
 volumes:
   appfiles:
+  mongo-data:
 
 networks:
   app_net:
+    driver: bridge

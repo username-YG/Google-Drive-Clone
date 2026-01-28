@@ -1,0 +1,11 @@
+FROM node:lts-slim
+
+WORKDIR /usr/googledrive/app
+
+COPY src/mobile-app/package*.json ./
+
+RUN npm install
+
+COPY src/mobile-app .
+
+CMD ["npx", "expo", "start"]

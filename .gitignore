@@ -1,4 +1,4 @@
 .vscode
 include
-src/MVC/node_modules
+src/web-server/node_modules
 src/react-app/node_modules
