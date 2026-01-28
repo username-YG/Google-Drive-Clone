@@ -138,7 +138,7 @@ export const ActionMenu = ({ file, close }) => {
                             icon={share}
                             text="Send a copy.."
                             whenDisabled={false}
-                            onPress={async() => { await ShareController(file.id); close(); }}////////////
+                            onPress={async() => { await ShareController(file.id); close(); }}
                         />
                     }
 

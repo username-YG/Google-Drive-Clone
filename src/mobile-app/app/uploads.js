@@ -17,6 +17,12 @@ function EmptyFolder() {
     )
 }
 
+/*
+Uploads screen shows:
+- Files you uploaded
+- Doesn't show files that are in trash
+- Items from all levels, not just root level
+*/
 export default function Uploads() {
     const { theme } = useTheme();
 

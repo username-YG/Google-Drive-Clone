@@ -81,6 +81,8 @@ function DrawerLayout() {
 
           <Drawer.Screen name="search" options={{
             headerTitle: () => <OpenSearchBar />,
+            headerTitleContainerStyle: { width: '100%' },
+            headerTitleAlign: 'left',
             headerStyle: { backgroundColor: theme.background },
             headerLeft: () => <TopBarButton router={router} img={require("../assets/icons/back.png")} target="/home" iconStyle={{ tintColor: theme.text }} />,
             swipeEnabled: false,

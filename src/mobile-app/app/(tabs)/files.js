@@ -17,6 +17,12 @@ function EmptyFolder() {
     )
 }
 
+/*
+Files (my drive) screen shows:
+- Files and folders owned by me
+- Only files and folders on root level
+- Doesn't show items that are in trash
+*/
 export default function Files() {
     const { theme } = useTheme();
 

@@ -26,7 +26,7 @@ Search screen shows:
 - Doesn't show items that are in trash
 */
 export default function Search() {
-    const { q, searched } = useLocalSearchParams();
+    const { q } = useLocalSearchParams();
     const { theme } = useTheme(); // Use the theme
 
     if (!q) {

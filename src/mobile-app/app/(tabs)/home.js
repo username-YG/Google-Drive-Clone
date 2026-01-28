@@ -10,33 +10,22 @@ function EmptyFolder() {
     return (
         <View style={styles.emptyFolder}>
             <Image style={styles.emptyFolderImage} source={empty_folder} />
-
-            <View style={{
-                backgroundColor: theme.actionsMenuColor,
-                paddingVertical: 30,
-                paddingHorizontal: 20,
-                borderRadius: 20,
-                width: '90%',
-                alignItems: 'center',
-                elevation: 4,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                borderWidth: 1,
-                borderColor: theme.border + '15',
-            }}>
-                <Text style={[styles.emptyFolderText, { color: theme.text, fontWeight: 'bold', fontSize: 20, marginBottom: 10 }]}>
-                    Welcome to google drive!
-                </Text>
-                <Text style={[styles.emptyFolderText, { color: theme.text, opacity: 0.7, fontSize: 16 }]}>
-                    This screen shows all your personal and shared files
-                </Text>
-            </View>
+            {/* Dynamic text color for dark mode visibility */}
+            <Text style={[styles.emptyFolderText, { color: theme.text }]}>Welcome to google drive!</Text>
+            <Text style={[styles.emptyFolderText, { color: theme.text }]}>
+                This screen shows all your personal and shared files
+            </Text>
         </View>
     )
 }
 
+/*
+The home screen shows:
+- Files and folders owned by me
+- Files and folders shared with me
+- Files from all levels, not just root
+- Doesn't show items that are in trash 
+*/
 export default function Home() {
     const { theme } = useTheme();
 

@@ -17,6 +17,9 @@ function EmptyFolder() {
     )
 }
 
+/*
+This screen shows the contents of a clicked folder
+*/
 export default function FolderContent() {
     const { folderName, folderId } = useLocalSearchParams();
     const { theme } = useTheme();

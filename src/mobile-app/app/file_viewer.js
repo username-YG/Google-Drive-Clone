@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     View,
     Text,
@@ -16,6 +16,7 @@ import backIcon from "../assets/icons/back.png";
 import { styles } from '../styles/viewerStyles';
 import { ActionMenu } from "../components/ActionMenu.js"
 import { useTheme } from '../components/ThemeContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function File_viewer() {
     const { fileId } = useLocalSearchParams();
@@ -30,32 +31,21 @@ export default function File_viewer() {
     const isImage = ['jpg', 'jpeg', 'png'].includes(fileType?.toLowerCase());
     const isText = fileType?.toLowerCase() === 'txt';
 
+
     // Get the file to display
-    useEffect(() => {
-        const loadFile = async () => {
-            // Reset state to avoid showing old file data
-            setFile(null);
-            setLoading(true);
+    const loadFile = async () => {
+        try {
+            const data = await getFile(fileId, "true");
+            if (data) setFile(data);
+            setLoading(false);
+        } catch (error) {
+            console.error("File Load Error:", error);
+            setLoading(false);
+        }
+    };
 
-            try {
-                const data = await getFile(fileId, "true");
-                if (data) setFile(data);
-
-                // Check for PDF after data is fetched to allow header to update with name
-                const currentFileType = data?.name.split('.').pop();
-                if (currentFileType?.toLowerCase() === 'pdf') {
-                    setLoading(false);
-                    return;
-                }
-
-                setLoading(false);
-            } catch (error) {
-                console.error("File Load Error:", error);
-                setLoading(false);
-            }
-        };
-        loadFile();
-    }, [fileId, reload]);
+    // Load when screen opens and when a dependency change
+    useFocusEffect(useCallback(() => { loadFile(); }, [fileId, reload]));
 
     if (loading) return (
         <View style={[styles.container, isImage ? styles.blackBg : { backgroundColor: theme.background }, styles.center]}>
@@ -91,7 +81,7 @@ export default function File_viewer() {
 
                 {isImage && file?.content && (
                     <Image
-                        source={{ uri: (file.content).startsWith('data:') ? (file.content) : `data:image/png;base64,${file.content}` }}
+                        source={{ uri: (file?.content).startsWith('data:') ? (file?.content) : `data:image/png;base64,${file?.content}` }}
                         style={styles.fullImage}
                         resizeMode="contain"
                     />
