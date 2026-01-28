@@ -55,5 +55,6 @@ The mobile app supports the same robust operation set as the web:
 ---
 
 ## Running Instructions
-Follow the entire Running Instructions part from the **[README](wiki/README.md)**
+Follow the entire Running Instructions part from the **[README](../README.md)**
+
 
