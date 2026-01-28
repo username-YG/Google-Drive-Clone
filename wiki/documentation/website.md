@@ -1,8 +1,6 @@
 # Google Drive System
-# Drive Website
-
-## Project Overview - Google Drive Application
-This project is a smart web application designed to emulate the core functionality and user experience of Google Drive. It is built as a modern Single Page Application that seamlessly integrates an interactive user interface with a dynamic backend server for real-time data management.
+## Drive Website
+This project contains a smart web site designed to emulate the core functionality and user experience of Google Drive. It is built as a modern Single Page Application that seamlessly integrates an interactive user interface with a dynamic backend server for real-time data management.
 
 ### System Architecture:
 #### Frontend (React):
@@ -222,3 +220,4 @@ And now everything will be in dark mode!
 <img width="1891" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
 
 Feel free to discover our app and enjoy!
+
