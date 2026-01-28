@@ -1,8 +1,8 @@
 # Google Drive System
-## Drive Website
+## 🌐 Drive Website
 This project contains a smart web site designed to emulate the core functionality and user experience of Google Drive. It is built as a modern Single Page Application that seamlessly integrates an interactive user interface with a dynamic backend server for real-time data management.
 
-### System Architecture:
+### 🛠️ System Architecture:
 #### Frontend (React):
 - **Component-Based Design:** The interface is built using React, where every element (Sidebar, File Grid, Preview Overlay) is an independent component managing its own state.  
 - **Client-Side Routing:** We utilized React Router to ensure the app loads once, allowing smooth transitions between Login, Registration, and the Main Dashboard without page refreshes.  
@@ -16,13 +16,13 @@ This project contains a smart web site designed to emulate the core functionalit
 storage facility.  
 - **HTTP requests format:** All the communcation is handled with an HTTP requests as well as responses and status codes.  
 
-### How It Works:
+### 🎯 How It Works:
 - **Security & Access:** Users can register (sign up) with validated credentials whose validation is enforced both on the front-end (client-side) and on the back-end (server side), and log in, in case of an already existant user to receive a secure Token and go to the personal main page. Additionaly, after havig gone to the main page of the app, users can log/sign out and go back to the registration screen.  
 - **Content Loading:** Upon entering the main screen, the app requests the specific list of files and folders belonging to that authenticated user from the back-end server.  
 - **State Management:** Using React Hooks like useState and useRef, the UI updates instantly when a user creates, renames, or deletes an item without needing to reload the entire site. The system provides a convenient and handy set of file management tools.  
 - **Hierarchical Management:** Users can create new folders and organize files as well as new folders within them to maintain a structured and nested workspace should they want to.  
 
-### File Preview Viewer:
+### 📁 File Preview Viewer:
 #### Double-clicking an item opens a professional Preview Overlay.
 - **Text Files:** View and edit raw text directly within the app with dynamic zoom capabilities.
 - **Images:** High-quality image rendering with dynamic zoom capabilities.
@@ -30,7 +30,7 @@ storage facility.
 - **Zoom:** Users can zoom in and out the preview.
 - **Toolbar:** Users can apply various actions, such as renaming, editing content, sharing, moving to..
 
-### Advanced UI Interactions:
+### 🕹️ UI Advanced UI Interactions:
 - **Selection:** Visual feedback for selected items to perform quick actions.
 - **Action Menus:** Context-sensitive menus for file operations (Edit, Delete, Rename..).
 - **Theme Customization:** A button to switch between Light and Dark themes, adjusting all UI elements from the sidebar to the file grid icons.
@@ -38,54 +38,54 @@ storage facility.
 - **Search & Filtering:** A dynamic search bar allows users to locate specific files or folders by name and content in real-time and shows the fisrt several files that contain either in their content or name the string searched so far.
 - **Permissions enforcement:** Users cannot perform actions on files and folders without the required permissions.
 
-### Login, register, multiple users:
+### 👥 Login, register, multiple users:
 - If you are not signed in, the first page you see is the login page.
 - Once you login you stay logged-in in this tab until you close it or click "sign out".
 - If you want to login to another user just open the app a second tab.
 
-## Explaining each screen
-### Home screen
+## 🖥 Explaining each screen
+### 🏠 Home screen
 - Files and folders owned by me.
 - Files and folders shared with me.
 - Files from all levels, not just root.
 - Doesn't show items that are in trash.
 
-### My drive screen shows:
+### 📁 My drive screen shows:
 - Files and folders owned by me.
 - Only files and folders on root level.
 - Doesn't show items that are in trash.
 - Clicking a folder automatically opens it in my drive.
 
-### Shared screen shows:
+### 👥 Shared screen shows:
 - Files and folders shared with me.
 - Items from all levels, not just root level.
 - Doesn't show items that are in trash.
 
-### Recent screen shows:
+### ⌚ Recent screen shows:
 - Owned or shared files recently accessed.
 - Doesn't show folders.
 - Shows files from all levels, not just root level.
 - Doesn't show files that are in trash.
 - Recently is defined as 'today' and accessed is defined as created \ patched.
 
-### Starred screen shows:
+### ⭐ Starred screen shows:
 - Starred files and folders.
 - Items from all levels, not just root level.
 - Doesn't show items that are in trash .
 
-### Trash screen shows:
+### 🥫 Trash screen shows:
 - Trashed files and folders.
 - Because of trashing logic, it shared items.
 - Items from all levels, not just root level.
 
-### After search screen shows:
+### 🔍 After search screen shows:
 - Files that contain the query in name \ content.
 - Folders that contains the query in name.
 - Shows both shared and owned items.
 - Shows items from all levels, not just root.
 - Doesn't show items that are in trash.
 
-### Actions on files and folder:
+### 📂 Actions on files and folder:
 - The user can rename, share, move to folder, star\unstar, trash\restore\delete files and folders.
 - Users can downalod files, edit text files and swap images.
 - Some actions require special permissions (owner, editor etc).
@@ -94,7 +94,7 @@ storage facility.
 - The user can manage permissions in the share popup.
 - You can only move items into folders you own.
 
-## Running Instructions
+## 🔥 Running Instructions
 1. Clone the repository and checkout to ex4-main:
 ```
 git clone https://github.com/username-YG/Google-Drive-Project-ASP
@@ -135,7 +135,7 @@ Note: you can run all the servers with one line using the command:
 docker compose up --build react-app server web-server
 ``` 
 
-## Running Examples:
+## ✈️ Running Examples:
 First of all, entering the site requires you to log in:
 <img width="1875" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
 
@@ -220,4 +220,5 @@ And now everything will be in dark mode!
 <img width="1891" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
 
 Feel free to discover our app and enjoy!
+
 
