@@ -171,8 +171,8 @@ Then, the website works like that:
 ### Registration and Authentication
 The Web interface provides a secure and seamless onboarding process.
 - Multi-step Registration: Users can create an account by providing a display name, username (the mail address), password, and a profile picture upload.
-<img width="1855" height="810" alt="image" src="https://github.com/user-attachments/assets/d4826053-c3d5-46e2-8244-4ee436418ea2" />
-<img width="1875" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
+<img width="800" height="810" alt="image" src="https://github.com/user-attachments/assets/d4826053-c3d5-46e2-8244-4ee436418ea2" />
+<img width="800" height="812" alt="image" src="https://github.com/user-attachments/assets/99a3d656-e190-4698-8928-72c66d120363" />
 
 - Secure Authentication: Powered by JWT (JSON Web Tokens). Once logged in, the token is stored securely to maintain the session across refreshes.
 - Validation: Real-time feedback for password strength and username availability.
