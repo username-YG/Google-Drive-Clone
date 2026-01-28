@@ -2,7 +2,7 @@
 
 ## 📑 Table of Contents
 
-1. **[System Overview](#system-overview)**
+1. **[System Overview](#-overview)**
 2. **[Requirements](#-requirements)**
 4. **[Running instructions](#-running-instructions)**
 5. **Website guide**
@@ -13,7 +13,6 @@
     - **[Registration and Authentication](#registration-and-authentication)**
     - **[Upload and view files](#upload-and-view-files)**
     - **[Files operations](#files-operations)**
----
 
 ## 📚 Detailed Documentation
 
@@ -22,6 +21,61 @@
 - **[API documentation](./documentation/API.md)**
 
 ---
+## 🧐 System Overview
+<a id="-overview"></a>
+### 🧩 Main components
+The google drive system consists of the following components:
+ 1.  **Storage server:** Multithreaded C++ server to store files.
+ 2.  **MongoDB:** Database for storing users and files metadata.
+ 3.  **Web Server:** Node.js (Express) API.
+ 4.  **Website:** React interactive frontend for users.
+ 5.  **Mobile app:** React Native (Expo) mobile app for Android/iOS.
+
+### 🛠️ Architecture Diagram
+```mermaid
+graph TD
+    classDef user fill:#ffcc00,stroke:#333,stroke-width:2px,color:black;
+    classDef front fill:#61dafb,stroke:#333,stroke-width:2px,color:black;
+    classDef back fill:#90cbf9,stroke:#333,stroke-width:2px,color:black;
+    classDef db fill:#81c784,stroke:#333,stroke-width:2px,color:black;
+
+    User((User)):::user
+    
+    Mobile[Mobile App<br>React Native]:::front
+    Web[Website<br>React]:::front
+    
+    API[Web Server<br>Node.js / Express]:::back
+    
+    DB[(MongoDB<br>Metadata)]:::db
+    Storage[Storage Server<br>C++]:::db
+
+    User -->|Uses| Mobile
+    User -->|Uses| Web
+    Mobile -->|HTTP Requests| API
+    Web -->|HTTP Requests| API
+    API -->|Manage metadata| DB
+    API -->|Manage Files| Storage
+```
+
+### 🔥 Features
+
+#### 📁 File Management
+- [x] **Upload Files:** Users can upload files to store in the storage server.
+- [x] **View & Download Files:** Users can view uploaded files and download them.
+- [x] **File Management:** Files can be edited, renamed, stared, trashed and more.
+- [X] **Files Sharing:** Users can share they files and folders with other users.
+- [X] **Folder Management:** Users can create and upload folders to handle many files.
+
+#### 🔐 User Registration & Authentication
+- [x] **Authentication:** Secure user registration and login using JWT (JSON Web Tokens).
+- [x] **Personal Storage:** Each user has their own private storage.
+- [x] **Permission Control:** Users control file access and sharing permissions.
+
+#### 📱 Cross-Platform Support
+- [x] **Web:** Interactive UI design for web users.
+- [x] **Mobile App:** Interactive mobile app for Android/iOs Users.
+- [x] **CLI:** Can interact with the storage server directly from the command line.
+
 ## ✅ Requirements
 <a id="-requirements"></a>
 Before we start, make sure you have the following 
@@ -37,19 +91,24 @@ Before we start, make sure you have the following
 
 ## 🚦 Running instructions
 <a id="-running-instructions"></a>
-### Step 1: Setup
+### 💻 Step 1: Setup
 Ensure Docker Desktop is running.
 Clone the repository and enter the folder:
 ```bash
 git clone https://github.com/username-YG/Google-Drive-Project-ASP
 cd Google-Drive-Project-ASP
 ```
-### Step 2: Backend and website
+### 🌐 Step 2: Backend and website
 Start the web server, storage server, mongo and website:
 ```bash
 docker-compose up --build mongodb storage-server web-server react-app
 ```
 Enter the website at [http://localhost:5173/](http://localhost:5173/).  
+<details>
+  <summary><strong>👇 You can also run each service separately</strong></summary>
+
+  <br>
+
 You can also run each service separately
   - **Start MongoDB:**
 ```bash
@@ -68,15 +127,20 @@ docker-compose up --build web-server
 docker-compose up --build react-app
 ```
 
-### Step 3: Mobile app
-**Option A - Emulator**  
+<br>
+
+</details>
+
+### 📱 Step 3: Mobile app (Option A - Emulator)
 ```bash
 HOST_IP=10.0.2.2 docker-compose run --service-ports --rm mobile-app
 ```
 Start the emulator, Install Expo Go and insert the URL "exp://10.0.2.2:8081".  
 
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/1b7b25bb-9ab2-48f0-9c65-b80141cd89df" />     
+<br>
 
-**Option B - physical device**  
+### 📱 Step 3: Mobile app (Option B - physical device)
 Your phone and computer must be on the same local network.
 Find your computer's IP by running:
 ```bash
