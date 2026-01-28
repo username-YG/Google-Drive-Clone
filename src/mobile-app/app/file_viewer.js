@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import {
     View,
     Text,
@@ -15,6 +15,7 @@ import dots from "../assets/icons/dots.png";
 import backIcon from "../assets/icons/back.png";
 import { styles } from '../styles/viewerStyles';
 import { ActionMenu } from "../components/ActionMenu.js"
+import { useTheme } from '../components/ThemeContext';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function File_viewer() {
@@ -24,10 +25,12 @@ export default function File_viewer() {
     const [file, setFile] = useState(null);
     const [reload, setReload] = useState(false);
     const router = useRouter();
+    const { theme } = useTheme();
 
     const fileType = file?.name.split('.').pop();
     const isImage = ['jpg', 'jpeg', 'png'].includes(fileType?.toLowerCase());
     const isText = fileType?.toLowerCase() === 'txt';
+
 
     // Get the file to display
     const loadFile = async () => {
@@ -45,47 +48,46 @@ export default function File_viewer() {
     useFocusEffect(useCallback(() => { loadFile(); }, [fileId, reload]));
 
     if (loading) return (
-        <View style={[styles.container, isImage && styles.blackBg, styles.center]}>
-            <ActivityIndicator size="large" color={isImage ? "#fff" : "#4285F4"} />
+        <View style={[styles.container, isImage ? styles.blackBg : { backgroundColor: theme.background }, styles.center]}>
+            <ActivityIndicator size="large" color={isImage ? "#fff" : theme.hard_selected} />
         </View>
     );
 
     return (
-        <View style={[styles.container, isImage && styles.blackBg]}>
-            <View style={[styles.topBar, isImage && styles.blackTopBar]}>
+        <View style={[styles.container, isImage ? styles.blackBg : { backgroundColor: theme.background }]}>
+            <View style={[styles.topBar, isImage ? styles.blackTopBar : { backgroundColor: theme.closedSearchBar, borderBottomColor: theme.border }]}>
                 <View style={styles.leftSection}>
                     <TopBarButton
                         router={router}
                         img={backIcon}
                         target="../"
-                        iconStyle={isImage ? { tintColor: '#fff' } : {}}
+                        iconStyle={isImage ? { tintColor: '#fff' } : { tintColor: theme.text }}
                     />
-                    <Text style={[styles.headerTitle, isImage && styles.whiteText]} numberOfLines={1}>
-                        {file?.name}
+                    <Text style={[styles.headerTitle, isImage ? styles.whiteText : { color: theme.text }]} numberOfLines={1}>
+                        {file?.name || ""}
                     </Text>
                 </View>
                 <TouchableOpacity onPress={(e) => { e.stopPropagation(); setActionsOpen(true); }} style={styles.menuButton}>
-                    <Image source={dots} style={[styles.menuIcon, isImage && { tintColor: '#fff' }]} />
+                    <Image source={dots} style={[styles.menuIcon, (isImage || isText) && { tintColor: isImage ? '#fff' : theme.text }]} />
                 </TouchableOpacity>
             </View>
 
             <View style={styles.viewer}>
                 {isText && (
-                    <ScrollView style={styles.whiteBg} contentContainerStyle={styles.textContainer}>
-                        <Text style={styles.textContent}>{file?.content}</Text>
+                    <ScrollView style={{ backgroundColor: theme.background }} contentContainerStyle={styles.textContainer}>
+                        <Text style={[styles.textContent, { color: theme.text }]}>{file?.content}</Text>
                     </ScrollView>
                 )}
 
-                {isImage && (
+                {isImage && file?.content && (
                     <Image
-                        source={{ uri: (file?.content)?.startsWith('data:') ? (file?.content) : `data:image/png;base64,${file?.content}` }}
+                        source={{ uri: (file?.content).startsWith('data:') ? (file?.content) : `data:image/png;base64,${file?.content}` }}
                         style={styles.fullImage}
                         resizeMode="contain"
                     />
                 )}
-
                 { (!isImage && !isText) && (
-                    <Text style={styles.unsupportedMsg}>No preview available</Text>
+                    <Text style={[styles.unsupportedMsg, { color: theme.text }]}>No preview available</Text>
                 )}
             </View>
 

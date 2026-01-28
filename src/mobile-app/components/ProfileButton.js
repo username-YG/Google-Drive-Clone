@@ -3,10 +3,12 @@ import { styles } from '../styles/ProfileButton.styles.js';
 import { useCallback, useState } from "react"
 import { getUser } from "../app/../_serverLogic.js"
 import { useFocusEffect } from 'expo-router';
+import { useTheme } from './ThemeContext';
 
 export default function ProfileButton({ router }) {
-
+    const { theme } = useTheme();
     const [user, setUser] = useState(null);
+
     useFocusEffect(
         useCallback(() => {
             getUser(setUser);
@@ -24,7 +26,10 @@ export default function ProfileButton({ router }) {
             {profilePic ? (
                 <Image style={styles.profileImage} source={{ uri: profilePic }} />
             ) : (
-                <Text style={styles.noProfileImage}>{displayName ? displayName[0] : "?"}</Text>
+                /* Apply themed background color to the no-profile placeholder */
+                <Text style={[styles.noProfileImage, { backgroundColor: theme.noProfile }]}>
+                    {displayName ? displayName[0] : "?"}
+                </Text>
             )}
         </TouchableOpacity>
     );

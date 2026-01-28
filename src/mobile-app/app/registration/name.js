@@ -40,16 +40,16 @@ export default function Name() {
   };
 
   return (
-    <NameStep
-      buttonTitle="Sign in"
-      firstName={firstName}
-      setFirstName={setFirstName}
-      lastName={lastName}
-      setLastName={setLastName}
-      onBack={onBack}
-      onNext={onNext}
-      error={error}
-      inputRef={firstNameRef}
-    />
+      <NameStep
+          buttonTitle="Sign in"
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          onBack={onBack}
+          onNext={onNext}
+          error={error}
+          inputRef={firstNameRef}
+      />
   );
 }

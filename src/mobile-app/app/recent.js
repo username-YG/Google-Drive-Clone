@@ -1,16 +1,22 @@
 import { View, Image, Text } from 'react-native';
 import { FilesList } from '../components/FilesList';
 import { styles } from '../styles/emptyFolder.styles';
+import { useTheme } from '../components/ThemeContext';
 import empty_folder from "../assets/emptyFolderImages/empty_folder_recent.png"
 
 function EmptyFolder() {
-  return (
-    <View style={styles.emptyFolder}>
-      <Image style={styles.emptyFolderImage} source={empty_folder} />
-      <Text style={styles.emptyFolderText}>No recent files</Text>
-      <Text style={styles.emptyFolderText}>"Time is relative" (Albert Einstein)</Text>
-    </View>
-  )
+    const { theme } = useTheme();
+
+    return (
+        <View style={styles.emptyFolder}>
+            <Image style={styles.emptyFolderImage} source={empty_folder} />
+            {/* Apply themed text color for visibility in dark mode */}
+            <Text style={[styles.emptyFolderText, { color: theme.text }]}>No recent files</Text>
+            <Text style={[styles.emptyFolderText, { color: theme.text }]}>
+                "Time is relative" (Albert Einstein)
+            </Text>
+        </View>
+    )
 }
 
 /*
@@ -22,8 +28,10 @@ Recent screen shows:
 - Recently is defined as 'today' and accessed is defined as created \ patched
 */
 export default function Recent() {
+    const { theme } = useTheme();
+
     return (
-        <View>
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
             <FilesList
                 filter={["NOT TRASHED", "ALL LEVELS", "NOT FOLDER", "RECENT"]}
                 emptyFolder={<EmptyFolder/>}

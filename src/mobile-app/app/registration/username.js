@@ -31,16 +31,16 @@ export default function Username() {
   };
 
   return (
-    <UserNameStep
-      title="How you'll sign in"
-      subtitle="Create a Gmail address for your new account"
-      buttonTitle="Back"
-      username={username}
-      setUsername={setUsername}
-      onNext={onNext}
-      onBack={() => router.back()}
-      error={error}
-      inputRef={usernameRef}
-    />
+      <UserNameStep
+          title="How you'll sign in"
+          subtitle="Create a Gmail address for your new account"
+          buttonTitle="Back"
+          username={username}
+          setUsername={setUsername}
+          onNext={onNext}
+          onBack={() => router.back()}
+          error={error}
+          inputRef={usernameRef}
+      />
   );
 }

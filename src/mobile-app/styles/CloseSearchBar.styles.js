@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     height: 55,
     backgroundColor: COLORS.closedSearchBar,
-    borderRadius: 30,
+    borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 25,
