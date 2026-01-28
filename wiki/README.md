@@ -144,3 +144,38 @@ Trash Management: Integrated safety net – files can be moved to the Trash and 
 <img width="849" height="754" alt="image" src="https://github.com/user-attachments/assets/8fea6577-ae5b-4b5d-be62-c480314523c5" />
 <img width="1153" height="699" alt="image" src="https://github.com/user-attachments/assets/11dd84eb-25b7-4f37-8da0-b6e802519002" />
 
+## Mobile-App guide
+### Registration and Authentication
+The mobile application offers a native, step-by-step onboarding experience designed for small screens.
+
+Guided Registration: A clean, sequential flow (Wizard pattern) that guides users through entering their username, password, display name, and selecting a profile picture from their gallery.
+
+Native Authentication: Secure login persistence using local storage, ensuring users stay logged in between app sessions.
+
+Dynamic Theme Support: The authentication screens automatically adapt to the user's system preferences, supporting both Light and Dark modes for a modern native feel.
+
+[INSERT: Mobile_Registration_Steps.png] Example of the step-by-step registration wizard on Android.
+
+9. Upload and View Files (Mobile)
+Optimized for on-the-go productivity, the mobile app provides full access to the cloud storage.
+
+Mobile File Picker: Integrated with the device's native file system, allowing users to upload documents, images, and other media directly from their phone.
+
+Custom File Viewers: High-performance preview components for various formats (PDF, Images, TXT) integrated directly into the app using a dedicated file_viewer.
+
+Visual Navigation: A tab-based navigation system (Home, Starred, Shared, Files) with custom icons that clearly distinguish between different file categories.
+
+[INSERT: Mobile_Drive_Home.png] The mobile dashboard featuring the Tab Bar and the quick-access files list.
+
+10. Mobile File Operations
+The app delivers a full suite of management tools via a mobile-optimized UI:
+
+Native Context Menus: Long-press or tap the "three dots" icon to trigger an ActionMenu, providing access to Rename, Share, Move, and Delete operations.
+
+Shared Workspace: Real-time access to the "Shared with Me" section, allowing users to collaborate on documents while mobile.
+
+Efficient Organization: Users can create new folders or move files between directories using a specialized MoveItemWindow built for touch interfaces.
+
+Search Integration: A dedicated search tab with real-time filtering, making it easy to locate specific files within a large cloud directory.
+
+[INSERT: Mobile_Action_Menu.png] Example of the mobile Action Menu and the folder organization interface.
