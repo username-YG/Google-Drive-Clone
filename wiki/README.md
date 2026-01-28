@@ -182,7 +182,7 @@ The Web interface provides a secure and seamless onboarding process.
 Efficient file management is at the core of the Google Drive project.
 - Universal Upload: Supports various file types (Images, Text and PDF). Files are transmitted from the React frontend to the Node.js server, which then streams them to the C++ Storage Server.
 <img width="600" height="832" alt="image" src="https://github.com/user-attachments/assets/5e9644eb-7c28-4d89-ab9e-5afff4ea4bcf" />
-<img width="609" height="352" alt="image" src="https://github.com/user-attachments/assets/1caf5610-b40c-4b44-a1dc-239013c9732d" />
+<img width="600" height="352" alt="image" src="https://github.com/user-attachments/assets/1caf5610-b40c-4b44-a1dc-239013c9732d" />
 
 - Grid & List Views: Organized layout showing file icons based on their type (e.g., custom icons for .pdf, .txt, and folders).
 <img width="600" height="834" alt="image" src="https://github.com/user-attachments/assets/a86b3ae6-d3ee-4fc9-a642-163980b60bf4" />
@@ -202,9 +202,11 @@ File Organization: Create folders, move items between directories, and rename fi
 <img width="600" height="825" alt="image" src="https://github.com/user-attachments/assets/cb5accc2-5282-4b7c-8691-e78f3f842e5c" />
 
 Sharing System: Collaborate by sharing files with other registered users. Shared items appear instantly in the "Shared with me" section.
+
 <img width="600" height="790" alt="image" src="https://github.com/user-attachments/assets/43ac137a-8b6b-4eee-a89c-44be259e8d9e" />
 
 Trash Management: Integrated safety net – files can be moved to the Trash and either restored or permanently deleted from the C++ storage.
+
 <img width="600" height="754" alt="image" src="https://github.com/user-attachments/assets/8fea6577-ae5b-4b5d-be62-c480314523c5" />
 <img width="600" height="699" alt="image" src="https://github.com/user-attachments/assets/11dd84eb-25b7-4f37-8da0-b6e802519002" />
 
@@ -254,9 +256,11 @@ The app delivers a full suite of management tools via a mobile-optimized UI:
 Both website and app are supporting dark mode theme for the entire system(!):
 
 click the settings button and then choose the toggle:
+
 <img width="393" height="167" alt="image" src="https://github.com/user-attachments/assets/6d323726-e81c-4c81-a387-b6a866a2d8be" />
 
 And now everything will be in dark mode!
+
 <img width="600" height="785" alt="image" src="https://github.com/user-attachments/assets/ee2d843a-5e64-450c-bcd5-c246c7a00e9a" />
 <img width="600" height="808" alt="image" src="https://github.com/user-attachments/assets/1bf030a2-43e5-46c6-abe4-4508281f7158" />
 <img width="600" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
@@ -266,4 +270,4 @@ And Also for the Mobile app:
 ![Screenshot_2026-01-28-18-21-41-811_host exp exponent](https://github.com/user-attachments/assets/380a22af-1132-477f-98ff-56141bd2152b)
 ![Screenshot_2026-01-28-18-21-57-525_host exp exponent](https://github.com/user-attachments/assets/0668cbb0-f072-46c9-a945-5de870ba623d)
 
-Enjoy our system!
+### Enjoy our system!
