@@ -33,13 +33,21 @@ export default function File_viewer() {
     // Get the file to display
     useEffect(() => {
         const loadFile = async () => {
-            if (fileType?.toLowerCase() === 'pdf') {
-                setLoading(false);
-                return;
-            }
+            // Reset state to avoid showing old file data
+            setFile(null);
+            setLoading(true);
+
             try {
                 const data = await getFile(fileId, "true");
                 if (data) setFile(data);
+
+                // Check for PDF after data is fetched to allow header to update with name
+                const currentFileType = data?.name.split('.').pop();
+                if (currentFileType?.toLowerCase() === 'pdf') {
+                    setLoading(false);
+                    return;
+                }
+
                 setLoading(false);
             } catch (error) {
                 console.error("File Load Error:", error);
@@ -66,7 +74,7 @@ export default function File_viewer() {
                         iconStyle={isImage ? { tintColor: '#fff' } : { tintColor: theme.text }}
                     />
                     <Text style={[styles.headerTitle, isImage ? styles.whiteText : { color: theme.text }]} numberOfLines={1}>
-                        {file.name}
+                        {file?.name || ""}
                     </Text>
                 </View>
                 <TouchableOpacity onPress={(e) => { e.stopPropagation(); setActionsOpen(true); }} style={styles.menuButton}>
@@ -77,16 +85,19 @@ export default function File_viewer() {
             <View style={styles.viewer}>
                 {isText && (
                     <ScrollView style={{ backgroundColor: theme.background }} contentContainerStyle={styles.textContainer}>
-                        <Text style={[styles.textContent, { color: theme.text }]}>{file.content}</Text>
+                        <Text style={[styles.textContent, { color: theme.text }]}>{file?.content}</Text>
                     </ScrollView>
                 )}
 
-                {isImage && (
+                {isImage && file?.content && (
                     <Image
-                        source={{ uri: (file.content)?.startsWith('data:') ? (file.content) : `data:image/png;base64,${file.content}` }}
+                        source={{ uri: (file.content).startsWith('data:') ? (file.content) : `data:image/png;base64,${file.content}` }}
                         style={styles.fullImage}
                         resizeMode="contain"
                     />
+                )}
+                { (!isImage && !isText) && (
+                    <Text style={[styles.unsupportedMsg, { color: theme.text }]}>No preview available</Text>
                 )}
             </View>
 

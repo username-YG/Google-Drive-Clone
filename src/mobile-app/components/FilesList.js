@@ -138,7 +138,14 @@ const FileListItem = ({ file, reload }) => {
             >
 
                 <View style={styles.iconBox}>
-                    <Image source={icon} style={styles.fileIcon} resizeMode="contain"></Image>
+                    <Image
+                        source={icon}
+                        style={[
+                            styles.fileIcon,
+                            file.isFolder && { tintColor: theme.text }
+                        ]}
+                        resizeMode="contain"
+                    ></Image>
                 </View>
 
                 <View style={styles.textList}>

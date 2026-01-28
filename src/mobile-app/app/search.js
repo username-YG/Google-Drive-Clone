@@ -14,7 +14,7 @@ function EmptyFolder() {
             <Text style={[styles.emptyFolderText, { color: theme.text }]}>No matching results</Text>
             <Text style={[styles.emptyFolderText, { color: theme.text }]}>Try another search</Text>
         </View>
-    )
+    );
 }
 
 /*
@@ -27,17 +27,23 @@ Search screen shows:
 */
 export default function Search() {
     const { q, searched } = useLocalSearchParams();
-    const { theme } = useTheme();
+    const { theme } = useTheme(); // Use the theme
 
-    if (!q) return (<></>);
+    if (!q) {
+        /* This View covers the screen when the search bar is open but no query is typed yet */
+        return (
+            <View style={{ flex: 1, backgroundColor: theme.background }} />
+        );
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <FilesList
                 filter={["ALL LEVELS", "NOT TRASHED"]}
-                emptyFolder={<EmptyFolder/>}
+                emptyFolder={<EmptyFolder />}
                 title="Search results"
                 query={q}
-            ></FilesList>
+            />
         </View>
     );
 }
