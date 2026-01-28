@@ -215,42 +215,42 @@ Trash Management: Integrated safety net – files can be moved to the Trash and 
 The mobile application offers a native, step-by-step onboarding experience designed for small screens.
 
 - Guided Registration: A clean, sequential flow that guides users through entering their username, password, display name, and selecting a profile picture from their gallery.
-![Screenshot_2026-01-28-18-09-26-029_host exp exponent](https://github.com/user-attachments/assets/9cbc3518-62e7-44f3-9f04-12b69e1b5056)
+<img src="https://github.com/user-attachments/assets/9cbc3518-62e7-44f3-9f04-12b69e1b5056" width="180" />
 
 - Native Authentication: Secure login persistence using local storage, ensuring users stay logged in between app sessions.
-![Screenshot_2026-01-28-18-05-00-345_host exp exponent](https://github.com/user-attachments/assets/cde0e9a3-0b6d-45ba-a03a-a41e7d022456)
+<img src="https://github.com/user-attachments/assets/cde0e9a3-0b6d-45ba-a03a-a41e7d022456" width="180" />
 
 ### Upload and View Files 
 Optimized for on-the-go productivity, the mobile app provides full access to the cloud storage.
-![Screenshot_2026-01-28-18-11-19-102_host exp exponent](https://github.com/user-attachments/assets/8fa628ac-d904-4a78-a3cb-0dfcef7b8dd2)
-![Screenshot_2026-01-28-18-15-03-334_host exp exponent](https://github.com/user-attachments/assets/59af9e5e-c548-479c-a1d0-c9529c11a5f0)
+<img src="https://github.com/user-attachments/assets/8fa628ac-d904-4a78-a3cb-0dfcef7b8dd2" width="180" />
+<img src="https://github.com/user-attachments/assets/59af9e5e-c548-479c-a1d0-c9529c11a5f0" width="180" />
 
 - Mobile File Picker: Integrated with the device's native file system, allowing users to upload documents, images, and other media directly from their phone.
 <img width="200" height="501" alt="image" src="https://github.com/user-attachments/assets/80f34703-e574-42ef-acea-6e1d1bc4a831" />
 
 - Custom File Viewers: High-performance preview components for various formats (Images and Text) integrated directly into the app using a dedicated file Viewer.
-![Screenshot_2026-01-28-18-17-09-327_host exp exponent](https://github.com/user-attachments/assets/6667b5ad-c956-42c3-9f25-a169912aee62)
-![Screenshot_2026-01-28-18-17-20-349_host exp exponent](https://github.com/user-attachments/assets/8be88644-f480-469c-8372-5aeeac48510e)
+<img src="https://github.com/user-attachments/assets/6667b5ad-c956-42c3-9f25-a169912aee62" width="180" />
+<img src="https://github.com/user-attachments/assets/8be88644-f480-469c-8372-5aeeac48510e" width="180" />
 
 Visual Navigation: A tab-based navigation system (Home, Starred, Shared, Files) with custom icons that clearly distinguish between different file categories.
-![Screenshot_2026-01-28-18-18-18-313_host exp exponent](https://github.com/user-attachments/assets/bfbf69a0-fbda-44bc-bcc0-e32346bceddf)
-![Screenshot_2026-01-28-18-18-29-475_host exp exponent](https://github.com/user-attachments/assets/df01ed18-96d3-44c4-b835-737961ab351f)
+<img src="https://github.com/user-attachments/assets/bfbf69a0-fbda-44bc-bcc0-e32346bceddf" width="180" />
+<img src="https://github.com/user-attachments/assets/df01ed18-96d3-44c4-b835-737961ab351f" width="180" />
 
 ### Mobile File Operations
 The app delivers a full suite of management tools via a mobile-optimized UI:
 
 - Native Context Menus: Long-press or tap the "three dots" icon to trigger an ActionMenu, providing access to Rename, Share, Move, and Delete operations.
-![Screenshot_2026-01-28-18-17-13-865_host exp exponent](https://github.com/user-attachments/assets/d8841eba-1d98-4bdf-baf8-0b4efad6a4ae)
-![Screenshot_2026-01-28-18-20-06-255_host exp exponent](https://github.com/user-attachments/assets/8f4d472b-d897-4c8f-8f3c-abcda7894b61)
-![Screenshot_2026-01-28-18-21-00-464_android](https://github.com/user-attachments/assets/f249051f-2e5b-4711-b9ae-42ecf2c40d6e)
+<img src="https://github.com/user-attachments/assets/d8841eba-1d98-4bdf-baf8-0b4efad6a4ae" width="180" />
+<img src="https://github.com/user-attachments/assets/8f4d472b-d897-4c8f-8f3c-abcda7894b61" width="180" />
+<img src="https://github.com/user-attachments/assets/f249051f-2e5b-4711-b9ae-42ecf2c40d6e" width="180" />
 
 - Shared Workspace: Real-time access to the "Shared with Me" section, allowing users to collaborate on documents while mobile.
 
 - Efficient Organization: Users can create new folders or move files between directories using a specialized window built for touch interfaces.
-![Screenshot_2026-01-28-18-11-47-717_host exp exponent](https://github.com/user-attachments/assets/1553d3fb-6c51-43b6-818a-1e04f359345a)
+<img src="https://github.com/user-attachments/assets/1553d3fb-6c51-43b6-818a-1e04f359345a" width="180" />
 
 - Search Integration: A dedicated search tab with real-time filtering, making it easy to locate specific files within a large cloud directory.
-![Screenshot_2026-01-28-18-21-12-936_host exp exponent](https://github.com/user-attachments/assets/853d9a58-c9c3-448c-9910-c5a79cb1832f)
+<img src="https://github.com/user-attachments/assets/853d9a58-c9c3-448c-9910-c5a79cb1832f" width="180" />
 
 #### Special Note - Dark Mode
 Both website and app are supporting dark mode theme for the entire system(!):
@@ -266,8 +266,8 @@ And now everything will be in dark mode!
 <img width="600" height="810" alt="image" src="https://github.com/user-attachments/assets/7f13a2e7-9a25-4187-bef5-f1d698f82825" />
 
 And Also for the Mobile app:
-![Screenshot_2026-01-28-18-22-37-094_host exp exponent](https://github.com/user-attachments/assets/893bcf7d-5371-41a2-95ba-3a246ab77d75)
-![Screenshot_2026-01-28-18-21-41-811_host exp exponent](https://github.com/user-attachments/assets/380a22af-1132-477f-98ff-56141bd2152b)
-![Screenshot_2026-01-28-18-21-57-525_host exp exponent](https://github.com/user-attachments/assets/0668cbb0-f072-46c9-a945-5de870ba623d)
+<img src="https://github.com/user-attachments/assets/893bcf7d-5371-41a2-95ba-3a246ab77d75" width="180" />
+<img src="https://github.com/user-attachments/assets/380a22af-1132-477f-98ff-56141bd2152b" width="180" />
+<img src="https://github.com/user-attachments/assets/0668cbb0-f072-46c9-a945-5de870ba623d" width="180" />
 
 ### Enjoy our system!
