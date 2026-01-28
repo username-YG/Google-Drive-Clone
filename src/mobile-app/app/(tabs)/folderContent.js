@@ -28,7 +28,7 @@ export default function FolderContent() {
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <FilesList
                 folderId={folderId}
-                filter={["NOT TRASHED", "ALL LEVELS"]}
+                filter={["OWNS", "NOT TRASHED"]}
                 emptyFolder={<EmptyFolder/>}
                 title={folderName}
             ></FilesList>
