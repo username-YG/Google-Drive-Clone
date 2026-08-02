@@ -12,8 +12,8 @@ x-env: &shared_env
 
   # IPs and URIs
   HOST_IP: ${HOST_IP:-localhost} # Host computer IP
-  DB_NAME: ${DB_NAME:-google_drive_db}
-  MONGO_URI: mongodb://mongodb:27017/${DB_NAME:-google_drive_db} # Use 'mongodb' service
+  DB_NAME: ${DB_NAME:-app_db}
+  MONGO_URI: mongodb://mongodb:27017/${DB_NAME:-app_db} # Use 'mongodb' service
   STORAGE_HOST: storage-server # Storage server
   
   # General

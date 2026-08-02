@@ -24,7 +24,7 @@ export function NameStep({ buttonTitle, firstName, setFirstName, lastName, setLa
           >
             <View style={styles.upperContent}>
               {/* Logo component now receives the theme internally */}
-              <Logo title="Create a Google Account" subtitle="Enter your name" />
+              <Logo title="Create an Account" subtitle="Enter your name" />
 
               <View style={styles.input}>
                 <Input

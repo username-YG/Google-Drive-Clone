@@ -1,4 +1,4 @@
-# ☁ Google Drive System
+# ☁ Cloud Storage System
 
 ## 📑 Table of Contents
 
@@ -24,7 +24,7 @@
 <a id="-overview"></a>
 ## 🧐 System Overview
 ### 🧩 Main components
-The google drive system consists of the following components:
+The cloud storage system consists of the following components:
  1.  **Storage server:** Multithreaded C++ server to store files.
  2.  **MongoDB:** Database for storing users and files metadata.
  3.  **Web Server:** Node.js (Express) API.
@@ -195,7 +195,7 @@ The Web interface provides a secure and seamless onboarding process.
 
 <a id="web-upload"></a>
 ### Upload and View Files
-Efficient file management is at the core of the Google Drive project.
+Efficient file management is at the core of this project.
 - Universal Upload: Supports various file types (Images, Text and PDF). Files are transmitted from the React frontend to the Node.js server, which then streams them to the C++ Storage Server.
 <img width="600" height="832" alt="image" src="https://github.com/user-attachments/assets/5e9644eb-7c28-4d89-ab9e-5afff4ea4bcf" />
 <img width="600" height="352" alt="image" src="https://github.com/user-attachments/assets/1caf5610-b40c-4b44-a1dc-239013c9732d" />

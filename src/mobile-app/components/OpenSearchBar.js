@@ -34,7 +34,7 @@ export default function OpenSearchBar() {
     return (
         <View style={{ flex: 1 }}>
             <TextInput
-                placeholder="Search in Drive"
+                placeholder="Search in files"
                 placeholderTextColor={theme.text + '80'}
                 value={query}
                 ref={ref}

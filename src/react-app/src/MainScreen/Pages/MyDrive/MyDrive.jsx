@@ -27,7 +27,7 @@ function MyDrive() {
     <FilesGrid
       filter={["OWNS", "NOT TRASHED"]}
       emptyFolder={<EmptyFolder/>}
-      title="My Drive"
+      title="My Storage"
       reload={reload}
       setReload={setReload}
     />

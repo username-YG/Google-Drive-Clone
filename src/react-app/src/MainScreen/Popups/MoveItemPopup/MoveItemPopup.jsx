@@ -44,7 +44,7 @@ const MoveItemPopup = ({ current, toggle, reload, setReload }) => {
           { /* The root folder "My drive" always appears */ }
           <li className="move-list-item" onClick={() => onMoveItem(null)}>
              <img src={driveIcon} alt="Drive" />
-             My Drive
+             My Storage
           </li>
 
           { /* The list of folders we can move our item into */ }

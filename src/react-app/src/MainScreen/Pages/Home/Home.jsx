@@ -9,7 +9,7 @@ function EmptyFolder() {
   return (
     <div className="empty-folder">
       <img src={empty_folder} />
-      <p id="empty-folder-title">Welcome to google drive!</p>
+      <p id="empty-folder-title">Welcome!</p>
       <p id="empty-folder-text">This screen shows all your personal and shared files</p>
     </div>
   )

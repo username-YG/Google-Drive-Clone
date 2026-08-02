@@ -31,7 +31,7 @@ export default function Files() {
             <FilesList
                 filter={["OWNS", "NOT TRASHED"]}
                 emptyFolder={<EmptyFolder/>}
-                title="My Drive"
+                title="My Storage"
             ></FilesList>
         </View>
     );

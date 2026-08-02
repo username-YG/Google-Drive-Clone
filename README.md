@@ -1,4 +1,4 @@
-# ☁️ Google Drive System
+# ☁️ Cloud Storage System
 
 <div align="center">
 
@@ -14,6 +14,8 @@
 </div>
 
 A full-stack cloud storage solution mimicking Google Drive's core functionality. Built with a **C++ Storage Server**, **Node.js API**, **React Website**, and **React Native Mobile App**.
+
+> **Disclaimer:** This project is strictly a personal, educational project. It is not affiliated with, endorsed by, sponsored by, or in any way associated with Google or Google Drive. All trademarks belong to their respective owners.
 
 ---
 

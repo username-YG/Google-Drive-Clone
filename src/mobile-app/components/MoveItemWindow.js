@@ -54,7 +54,7 @@ export const MoveItemWindow = ({ isOpen, setIsOpen, file, closeParent }) => {
                   {/* Apply tint color to the drive icon */}
                   <Image source={driveIcon} style={[styles.icon, { tintColor: theme.text }]} />
                   {/* Apply themed color to the list item text */}
-                  <Text style={[styles.listItemText, { color: theme.text }]}>My Drive</Text>
+                  <Text style={[styles.listItemText, { color: theme.text }]}>My Storage</Text>
                 </TouchableOpacity>
 
                 {folders.map((fold) => (

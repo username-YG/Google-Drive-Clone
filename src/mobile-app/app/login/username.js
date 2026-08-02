@@ -30,7 +30,7 @@ export default function Username() {
   return (
       <UserNameStep
           title="Sign in"
-          subtitle="Use your Google Account"
+          subtitle="Use your account"
           buttonTitle="Create Account"
           username={username}
           setUsername={setUsername}

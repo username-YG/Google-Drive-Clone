@@ -13,7 +13,7 @@ export default function Logo(props) {
             {/* Google Drive Logo Header */}
             <View style={logoStyles.logo}>
                 <Image style={logoStyles.logoImage} source={require("../assets/icons/google.png")} />
-                <Text style={[logoStyles.logoText, { color: theme.text }]}>Drive</Text>
+                <Text style={[logoStyles.logoText, { color: theme.text }]}>Storage</Text>
             </View>
             <View style={[logoStyles.separator, { backgroundColor: theme.border }]} />
 

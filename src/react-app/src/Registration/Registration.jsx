@@ -22,9 +22,9 @@ const ErrorDisplay = ({ error }) => {
  */
 const BrandingSection = () => (
     <div className="card-branding">
-        <img src={googleLogo} alt="Google Drive" className="google-custom-logo" />
-        <h1 className="display-title">Create a Google Account</h1>
-        <p className="display-subtitle">Please enter your details to sign up to Drive</p>
+        <img src={googleLogo} alt="Logo" className="google-custom-logo" />
+        <h1 className="display-title">Create an account</h1>
+        <p className="display-subtitle">Please enter your details to sign up to the app</p>
     </div>
 );
 

@@ -1,5 +1,5 @@
-# Google Drive System
-## 🌐 Drive Website
+# Cloud storage System
+## 🌐 Cloud Website
 This project contains a smart web site designed to emulate the core functionality and user experience of Google Drive. It is built as a modern Single Page Application that seamlessly integrates an interactive user interface with a dynamic backend server for real-time data management.
 
 ### 🛠️ System Architecture:
@@ -50,11 +50,11 @@ storage facility.
 - Files from all levels, not just root.
 - Doesn't show items that are in trash.
 
-### 📁 My drive screen shows:
+### 📁 My storage screen shows:
 - Files and folders owned by me.
 - Only files and folders on root level.
 - Doesn't show items that are in trash.
-- Clicking a folder automatically opens it in my drive.
+- Clicking a folder automatically opens it in my storage.
 
 ### 👥 Shared screen shows:
 - Files and folders shared with me.
@@ -185,7 +185,7 @@ You also have at the side bar several pages with unique attributes:
 Home: The home page of the app, you can see there all the files you have access to:
 <img width="1554" height="695" alt="image" src="https://github.com/user-attachments/assets/71b97c9c-a3b2-4755-a0c8-3423338efd64" />
 
-My drive: Presents only the files you are the owner of.
+My storage: Presents only the files you are the owner of.
 
 Shared with me: Presents all the files that other users gave you permission to:
 <img width="1900" height="824" alt="image" src="https://github.com/user-attachments/assets/ee2ede19-4d47-4e08-85e4-273fb48a579f" />

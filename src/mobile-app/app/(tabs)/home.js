@@ -11,7 +11,7 @@ function EmptyFolder() {
         <View style={styles.emptyFolder}>
             <Image style={styles.emptyFolderImage} source={empty_folder} />
             {/* Dynamic text color for dark mode visibility */}
-            <Text style={[styles.emptyFolderText, { color: theme.text }]}>Welcome to google drive!</Text>
+            <Text style={[styles.emptyFolderText, { color: theme.text }]}>Welcome!</Text>
             <Text style={[styles.emptyFolderText, { color: theme.text }]}>
                 This screen shows all your personal and shared files
             </Text>

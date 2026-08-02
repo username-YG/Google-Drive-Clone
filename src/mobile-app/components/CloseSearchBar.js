@@ -27,7 +27,7 @@ export default function CloseSearchBar() {
             onPress={() => router.push('/search')}
         >
           <Text style={[styles.bar, { color: theme.text, paddingHorizontal: 0, textAlign: 'center' }]}>
-            Search in Drive
+            Search in files
           </Text>
         </TouchableOpacity>
       </View>

@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "google-drive-clone",
+    "scheme": "storage-cloud",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",

@@ -183,7 +183,7 @@ function LoginRight({
 function LoginLeft({ step, translations, language }) {
   return (
     <div className="login-left">
-      <img className="google-logo" alt="Google" src={googlelogo} />
+      <img className="google-logo" alt="Logo" src={googlelogo} />
       {step === "username" && (
         <div>
           <h1>{translations[language].signIn}</h1>
@@ -270,7 +270,7 @@ function Login() {
 const translations = {
   en: {
     signIn: "Sign in",
-    continue: "to continue to Google Drive",
+    continue: "to continue to the app",
     username: "Username",
     password: "Enter your password",
     next: "Next",
@@ -287,7 +287,7 @@ const translations = {
   },
   he: {
     signIn: "כניסה",
-    continue: "המשך אל Google Drive",
+    continue: "המשך אל האפליקציה",
     username: "שם משתמש",
     password: "צריך להזין את הסיסמה",
     next: "הבא",

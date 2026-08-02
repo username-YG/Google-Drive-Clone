@@ -15,7 +15,7 @@ import FilePreviewPopup from "../Popups/FilePreviewPopup/FilePreviewPopup.jsx"
 import "./TopBar.css"
 
 const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
-const googleHelpLink = "https://support.google.com/drive/?hl=en#topic=14950478"
+const googleHelpLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
 function openLink(url) {
   window.open(url);
@@ -58,7 +58,7 @@ function TopBarList({ toggleDarkMode, darkMode }) {
       onClick: () => openLink(githubLink)
     },
     {
-      text: "Google drive help",
+      text: "App help",
       onClick: () => openLink(googleHelpLink)
     }
   ]
@@ -196,7 +196,7 @@ function SearchBar() {
       <input 
         type="text" 
         value={query}
-        placeholder="Search in Drive" 
+        placeholder="Search in files" 
         className="search"
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -209,7 +209,7 @@ function SearchBar() {
 
       <FilePreviewPopup file={selectedFile} isOpen={isPreviewOpen} setIsOpen={setIsPreviewOpen} />
 
-      { /* For the good look like in google drive. it doesn't do anything. */ }
+      { /* For the good look. it doesn't do anything. */ }
       <img title="Advanced search" className="search-icon" src={lines} alt="Options"/>
     </div>
   )

@@ -1,7 +1,7 @@
-# Google Drive System 
-## Drive Mobile App
+# Cloud Storage System 
+## Cloud Mobile App
 
-This mobile application is a high-performance cloud storage solution designed to bring the full Google Drive experience to mobile devices. Built using **React Native** and **Expo**, it delivers a native look and feel with seamless integration into the project's C++ and Node.js backend.
+This mobile application is a high-performance cloud storage solution designed to bring the full storage cloud experience to mobile devices. Built using **React Native** and **Expo**, it delivers a native look and feel with seamless integration into the project's C++ and Node.js backend.
 
 ### System Architecture:
 #### Frontend (React Native & Expo):
@@ -27,7 +27,7 @@ This mobile application is a high-performance cloud storage solution designed to
 - Displays a unified view of all accessible items (Owned & Shared).
 - Optimized list view with custom icons for Folders, Images, and Text files.
 
-### 2. My Drive
+### 2. My Storage
 - Shows only the items owned by the authenticated user at the root level.
 - Supports folder navigation; tapping a folder opens its contents in a nested view.
 

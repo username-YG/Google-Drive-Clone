@@ -269,7 +269,7 @@ Possible status codes:
 
 
 ## 📝 Notes
-- The pId in permission endpoints is the same as the userID, exactly like in Google Drive.
+- The pId in permission endpoints is the same as the userID, like in Google Drive.
 - If you want to create a new file under the root directory, insert "null" in the field asking for the parentID.
 - Authentication is now handled via JWT tokens obtained from the `/api/tokens` endpoint.
 - All error responses are returned as:

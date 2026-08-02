@@ -24,7 +24,7 @@ const listButtons = [
     img: house
   },
   {
-    title: "My Drive",
+    title: "My Storage",
     link: "/my-drive",
     img: drive
   },
@@ -55,7 +55,7 @@ function Logo() {
   return (
     <div className="logo" onClick={() => navigate("/home")}>
       <img title="Drive" src={logo} />
-      <span>Drive</span>
+      <span>Storage</span>
     </div>
   )
 }
