@@ -5,7 +5,7 @@ import googlelogo from "../../assets/googleLogo.png"
 
 import "./Login.css"
 
-const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
+const githubLink = "https://github.com/username-YG/Google-Drive-Clone"
 
 function UsernameInput({ username, setUsername, error, translations, language }) {
   return (

@@ -94,8 +94,8 @@ Before we start, make sure you have the following
 ### 💻 Step 1: Setup
 Open Docker Desktop, clone the repository and enter the folder:
 ```bash
-git clone https://github.com/username-YG/Google-Drive-Project-ASP
-cd Google-Drive-Project-ASP
+git clone https://github.com/username-YG/Google-Drive-Clone
+cd Google-Drive-Clone
 ```
 ### 🌐 Step 2: Backend and website
 Start the web server, storage server, mongo and website:

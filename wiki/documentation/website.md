@@ -97,8 +97,8 @@ storage facility.
 ## 🔥 Running Instructions
 1. Clone the repository and checkout to ex4-main:
 ```
-git clone https://github.com/username-YG/Google-Drive-Project-ASP
-cd Google-Drive-Project-ASP
+git clone https://github.com/username-YG/Google-Drive-Clone
+cd Google-Drive-Clone
 git checkout ex4-main
 ```
 2. Open Docker Desktop.

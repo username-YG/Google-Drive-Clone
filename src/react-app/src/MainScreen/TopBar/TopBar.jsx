@@ -14,7 +14,7 @@ import FilePreviewPopup from "../Popups/FilePreviewPopup/FilePreviewPopup.jsx"
 
 import "./TopBar.css"
 
-const githubLink = "https://github.com/username-YG/Google-Drive-Project-ASP"
+const githubLink = "https://github.com/username-YG/Google-Drive-Clone"
 const googleHelpLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
 function openLink(url) {

@@ -92,8 +92,8 @@ graph TD
 ### Step 1: Clone & Start Backend
 
 ```bash
-git clone https://github.com/username-YG/Google-Drive-Project-ASP
-cd Google-Drive-Project-ASP
+git clone https://github.com/username-YG/Google-Drive-Clone
+cd Google-Drive-Clone
 
 # Start all backend services + website
 docker-compose up --build mongodb storage-server web-server react-app
