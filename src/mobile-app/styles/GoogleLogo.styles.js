@@ -6,11 +6,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     marginBottom: 20,
-    width: '100%',
   },
   logoImage: {
-    width: 75,
+    width: 60,
     height: 30,
+    resizeMode: 'center',
     marginBottom: 15,
   },
   title: {

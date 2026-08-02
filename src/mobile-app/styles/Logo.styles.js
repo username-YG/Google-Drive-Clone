@@ -9,10 +9,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logoImage: {
-    width: 70,
-    height: 50,
-    resizeMode: 'cover',
-    marginRight: 7
+    width: 30,
+    height: 30,
+    resizeMode: 'center',
+    marginRight: 15
   },
   logoText: {
     fontSize: 20,
