@@ -142,7 +142,7 @@ $env:HOST_IP="10.0.2.2"; docker-compose run --service-ports --rm mobile-app
 ```
 **When done:** Start the emulator, Install Expo Go and insert the URL "exp://10.0.2.2:8081".  
 
-<img width="600" alt="image" src="https://github.com/user-attachments/assets/1b7b25bb-9ab2-48f0-9c65-b80141cd89df" />     
+<img width="600" src="https://github.com/user-attachments/assets/b51d2874-c79e-45a3-9e08-c57614124bde" />
 <br>
 
 ### 🅱 Option B - physical device
