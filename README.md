@@ -21,15 +21,14 @@ A full-stack cloud storage solution mimicking Google Drive's core functionality.
 
 ## 📚 Documentation
 
-Everything you need is in our detailed guides:  
-👉 [Full documentation](./wiki/README.md)
+[Full documentation](./wiki/README.md)
 
 | Guide | Description |
 |-------|-------------|
-| 🚀 [Running Instructions](./wiki/README.md#-running-instructions) | Quick setup with Docker |
-| 🖥️ [Website Guide](./wiki/documentation/website.md) | Complete website guide |
-| 📱 [Mobile Guide](./wiki/documentation/mobile.md) | Complete mobile app guide |
-| 🛠️ [API Reference](./wiki/documentation/API.md) | Backend API documentation |
+| [Running Instructions](./wiki/README.md#-running-instructions) | Quick setup with Docker |
+| [Website Guide](./wiki/documentation/website.md) | Complete website guide |
+| [Mobile Guide](./wiki/documentation/mobile.md) | Complete mobile app guide |
+| [API Reference](./wiki/documentation/API.md) | Backend API documentation |
 
 ---
 
@@ -61,24 +60,24 @@ graph TD
 ```
 
 **Components:**
-- 🗄️ **C++ Storage Server** - Multithreaded file storage
-- 🌐 **Node.js API** - Express backend with JWT authentication
-- 💾 **MongoDB** - User and metadata storage
-- ⚛️ **React Website** - Interactive web interface
-- 📱 **React Native App** - Cross-platform mobile app
+- **C++ Storage Server** - Multithreaded file storage
+- **Node.js API** - Express backend with JWT authentication
+- **MongoDB** - User and metadata storage
+- **React Website** - Interactive web interface
+- **React Native App** - Cross-platform mobile app
 
 ---
 
 ## ✨ Features
 
-- **📂 File Management** - Upload, view and edit files.
-- **📂 Folder Management** - Create and upload folders to handle many files.
-- **🔐 JWT Authentication** - Users must prove their identity to access files
-- **🤝 File Sharing** - Share files and folders with other users
-- **⭐ Starred & Trash** - Star important files, restore deleted from trash
-- **🔍 Search** - Search text in filename or content
-- **📱 Web + Mobile** - Works on browsers and phones (Android/iOS)
-- **🌗 Dark Mode** - Easy on the eyes at night
+- **File Management** - Upload, view and edit files.
+- **Folder Management** - Create and upload folders to handle many files.
+- **JWT Authentication** - Users must prove their identity to access files
+- **File Sharing** - Share files and folders with other users
+- **Starred & Trash** - Star important files, restore deleted from trash
+- **Search** - Search text in filename or content
+- **Web + Mobile** - Works on browsers and phones (Android/iOS)
+- **Dark Mode** - Easy on the eyes at night
 
 ---
 
